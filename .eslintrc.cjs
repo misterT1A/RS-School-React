@@ -1,0 +1,51 @@
+module.exports = {
+  root: true,
+  env: { browser: true, es2020: true },
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
+    'airbnb',
+    'airbnb-typescript',
+    'eslint-config-prettier',
+  ],
+  ignorePatterns: ['dist', 'vite.config.ts', 'vitest.config.ts', 'tests', '*.cjs'],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
+  },
+  plugins: ['react-refresh', 'prettier', '@typescript-eslint', 'react-compiler'],
+  rules: {
+    'react/prefer-stateless-function': 'off',
+    'react-compiler/react-compiler': 'error',
+    'no-console': 0,
+    '@typescript-eslint/no-explicit-any': 'error',
+    'max-lines': ['error', 300],
+    '@typescript-eslint/no-inferrable-types': 'error',
+    'prettier/prettier': 'error',
+    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off',
+    'react/jsx-no-bind': 'off',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        '': 'never',
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+        mjs: 'never',
+      },
+    ],
+    'react/function-component-definition': [
+      2,
+      {
+        namedComponents: 'arrow-function',
+        unnamedComponents: 'arrow-function',
+      },
+    ],
+  },
+};
