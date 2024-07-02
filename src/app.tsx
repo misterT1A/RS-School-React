@@ -6,9 +6,16 @@ import fetchData from './services/fetchData';
 import SeacrhPanel from './Components/search-panel/searchPanel';
 import List from './Components/list-panel/list';
 import Loader from './utils/loader/loader';
+import ErrorBoundary from './Components/ErrorBoundary/ErrorBoundary';
+import BuggyComponent from './Components/buggy/Buggy';
+import debounce from './utils/debounce';
+
+import './styles/App.css';
 
 export default class App extends Component<object, IState> {
   protected AbortController: MutableRefObject<AbortController | null>;
+
+  protected handleSearchDeb: () => void;
 
   constructor(props: object) {
     super(props);
@@ -19,6 +26,7 @@ export default class App extends Component<object, IState> {
     };
 
     this.AbortController = createRef<AbortController>();
+    this.handleSearchDeb = debounce(this.handleStartSearch.bind(this), 300);
   }
 
   componentDidMount() {
@@ -58,18 +66,21 @@ export default class App extends Component<object, IState> {
 
   render(): ReactNode {
     const { isLoad, searchValue, data } = this.state;
-    console.log(isLoad, data, searchValue, this.handleSearchChange);
+
     return (
-      <>
-        <button type="button" onClick={this.handleStartSearch}>
-          Search
-        </button>
-        <SeacrhPanel value={searchValue} callback={this.handleSearchChange} />
-        <button type="button" onClick={this.handleStartSearch}>
-          Search
-        </button>
-        {!isLoad && data ? <List products={data} /> : <Loader />}
-      </>
+      <ErrorBoundary>
+        <header>
+          <h1>Planet search</h1>
+        </header>
+        <main>
+          <SeacrhPanel value={searchValue} callback={this.handleSearchChange} />
+          <button type="button" onClick={this.handleSearchDeb}>
+            Search
+          </button>
+          <BuggyComponent />
+          {!isLoad && data ? <List products={data} /> : <Loader />}
+        </main>
+      </ErrorBoundary>
     );
   }
 }
