@@ -3,6 +3,9 @@ import { ChangeEvent, Component, MutableRefObject, ReactNode, createRef } from '
 import { IState } from './types/appTypes';
 import LSService from './services/localStorageService';
 import fetchData from './services/fetchData';
+import SeacrhPanel from './Components/search-panel/searchPanel';
+import List from './Components/list-panel/list';
+import Loader from './utils/loader/loader';
 
 export default class App extends Component<object, IState> {
   protected AbortController: MutableRefObject<AbortController | null>;
@@ -57,9 +60,16 @@ export default class App extends Component<object, IState> {
     const { isLoad, searchValue, data } = this.state;
     console.log(isLoad, data, searchValue, this.handleSearchChange);
     return (
-      <button type="button" onClick={this.handleStartSearch}>
-        Search
-      </button>
+      <>
+        <button type="button" onClick={this.handleStartSearch}>
+          Search
+        </button>
+        <SeacrhPanel value={searchValue} callback={this.handleSearchChange} />
+        <button type="button" onClick={this.handleStartSearch}>
+          Search
+        </button>
+        {!isLoad && data ? <List products={data} /> : <Loader />}
+      </>
     );
   }
 }
