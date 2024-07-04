@@ -17,6 +17,8 @@ module.exports = {
   },
   plugins: ['react-refresh', 'prettier', '@typescript-eslint', 'react-compiler'],
   rules: {
+    'no-underscore-dangle': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'error',
     'react/prefer-stateless-function': 'off',
     'react-compiler/react-compiler': 'error',
     'no-console': 0,

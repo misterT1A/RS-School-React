@@ -8,7 +8,6 @@ export default class List extends Component<IListProps> {
     const { products } = this.props;
     return (
       <ul className="list_wrapper">
-        {' '}
         {products.map((elem) => (
           <li key={elem.id} className="list_item">
             <p className="title">Planet: {elem.name}</p>

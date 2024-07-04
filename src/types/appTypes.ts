@@ -1,17 +1,17 @@
 export interface IState {
   isLoad: boolean;
   searchValue: string;
-  data: Iproduct[] | null;
+  data: IProduct[] | null;
 }
 
 export interface IResponse {
   count: number;
   newxt: string;
   previous: null | string;
-  results: Iproduct[];
+  results: IProduct[];
 }
 
-export interface Iproduct {
+export interface IProduct {
   id?: number;
   climate: string;
   created: string;

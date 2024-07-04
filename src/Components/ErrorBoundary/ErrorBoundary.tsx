@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, ReactNode } from 'react';
 import { ErrorBoundaryProps, ErrorBoundaryState } from '../../types/errorBoundaryTypes';
 
 export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
@@ -7,7 +7,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
     this.state = { hasError: false };
   }
 
-  componentDidCatch(error: Error) {
+  componentDidCatch(error: Error): void {
     console.log('ErrorBoundary', error);
 
     this.setState({
@@ -15,7 +15,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
     });
   }
 
-  render() {
+  render(): ReactNode {
     const { hasError } = this.state;
     const { children } = this.props;
     if (hasError) {

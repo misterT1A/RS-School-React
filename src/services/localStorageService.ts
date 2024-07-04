@@ -1,9 +1,15 @@
-export default class LSService {
-  static setDataToLS(data: string) {
-    localStorage.setItem('task', data);
+class Service {
+  private _value = '';
+
+  set value(data: string) {
+    this._value = data;
+    localStorage.setItem('task', this._value);
   }
 
-  static getDataLS(): string | null {
-    return localStorage.getItem('task');
+  get value(): string {
+    this._value = localStorage.getItem('task') || '';
+    return this._value;
   }
 }
+const LSService = new Service();
+export default LSService;
