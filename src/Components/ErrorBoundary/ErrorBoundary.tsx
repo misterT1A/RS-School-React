@@ -1,8 +1,10 @@
-import { Component, ReactNode } from 'react';
-import { ErrorBoundaryProps, ErrorBoundaryState } from '../../types/errorBoundaryTypes';
+import { Component } from 'react';
+import type { ReactNode } from 'react';
 
-export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
+import type { IErrorBoundaryProps, IErrorBoundaryState } from '../../types/errorBoundaryTypes';
+
+export default class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundaryState> {
+  constructor(props: IErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }

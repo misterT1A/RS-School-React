@@ -1,20 +1,22 @@
-import { Component, ReactNode } from 'react';
-import IBugComponent from '../../types/buggyTypes';
+import type { ReactNode } from 'react';
+import { Component } from 'react';
+
+import type IBugComponent from '../../types/buggyTypes';
 
 export default class BuggyComponent extends Component<object, IBugComponent> {
   constructor(props: object) {
     super(props);
-    this.state = { error: false };
+    this.state = { hasError: false };
   }
 
   render(): ReactNode {
-    const { error } = this.state;
-    if (error) throw new Error('crash');
+    const { hasError } = this.state;
+    if (hasError) throw new Error('crash');
     return (
       <button
         type="button"
         onClick={() => {
-          this.setState({ error: true });
+          this.setState({ hasError: true });
         }}
       >
         Click me to crash

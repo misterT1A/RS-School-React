@@ -12,7 +12,7 @@ export interface IResponse {
 }
 
 export interface IProduct {
-  id?: number;
+  id?: string;
   climate: string;
   created: string;
   diameter: string;

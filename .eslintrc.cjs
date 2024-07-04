@@ -9,14 +9,17 @@ module.exports = {
     'airbnb-typescript',
     'eslint-config-prettier',
   ],
-  ignorePatterns: ['dist', 'vite.config.ts', 'vitest.config.ts', 'tests', '*.cjs'],
+  ignorePatterns: ['dist', 'vite.config.ts', 'tests', '*.cjs'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    sourceType: 'module',
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
   },
-  plugins: ['react-refresh', 'prettier', '@typescript-eslint', 'react-compiler'],
+  plugins: ['import', 'react-refresh', 'prettier', '@typescript-eslint', 'react-compiler'],
   rules: {
+    '@typescript-eslint/consistent-type-exports': 'error', // Ensures consistent use of type exports
+    '@typescript-eslint/consistent-type-imports': 'error', // Enforces consistent style for importing types
     'no-underscore-dangle': 'off',
     '@typescript-eslint/explicit-function-return-type': 'error',
     'react/prefer-stateless-function': 'off',
@@ -42,11 +45,39 @@ module.exports = {
         mjs: 'never',
       },
     ],
+    'import/named': 'error',
     'react/function-component-definition': [
       2,
       {
         namedComponents: 'arrow-function',
         unnamedComponents: 'arrow-function',
+      },
+    ],
+    'import/order': [
+      // Enforces a consistent order for import declarations
+      'error',
+      {
+        groups: ['builtin', 'external', 'internal', ['sibling', 'parent'], 'index', 'unknown'],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
+    '@typescript-eslint/naming-convention': [
+      // Enforces naming conventions for variables and interfaces
+      'error',
+      {
+        selector: 'variable',
+        types: ['boolean'],
+        format: ['PascalCase'],
+        prefix: ['is', 'should', 'has', 'can', 'did', 'will'], // Allows specific prefixes for boolean variables
+      },
+      {
+        selector: 'interface',
+        format: ['PascalCase'],
+        prefix: ['I'], // Requires interfaces to start with 'I'
       },
     ],
   },

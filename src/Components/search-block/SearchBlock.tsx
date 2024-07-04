@@ -1,5 +1,7 @@
-import { Component, ReactNode } from 'react';
-import IInputProps from '../../types/searchPanelTypes';
+import type { ReactNode } from 'react';
+import { Component } from 'react';
+
+import type IInputProps from '../../types/searchPanelTypes';
 
 export default class SearchPanel extends Component<IInputProps> {
   render(): ReactNode {

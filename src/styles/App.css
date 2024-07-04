@@ -3,6 +3,7 @@
   width: 100%;
   margin: 0 auto;
   padding: 2rem;
+  color: rgba(255, 255, 255, 0.87);
 }
 
 header {
@@ -19,12 +20,4 @@ main {
   align-items: center;
   flex-direction: column;
   gap: 10px;
-}
-
-input {
-  max-width: 200px;
-}
-
-button {
-  max-width: 200px;
 }

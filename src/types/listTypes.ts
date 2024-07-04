@@ -1,5 +1,5 @@
-import { Iproduct } from './appTypes';
+import type { IProduct } from './appTypes';
 
 export default interface IListProps {
-  products: Iproduct[];
+  products: IProduct[];
 }

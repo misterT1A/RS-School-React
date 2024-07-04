@@ -1,16 +1,17 @@
-import { ChangeEvent, Component, MutableRefObject, ReactNode, createRef } from 'react';
+import type { ChangeEvent, MutableRefObject, ReactNode } from 'react';
+import { Component, createRef } from 'react';
 
-import { IState } from './types/appTypes';
-import LSService from './services/localStorageService';
-import fetchData from './services/fetchData';
-import Loader from './utils/loader/loader';
-import ErrorBoundary from './Components/ErrorBoundary/ErrorBoundary';
 import BuggyComponent from './Components/buggy/Buggy';
+import ErrorBoundary from './Components/ErrorBoundary/ErrorBoundary';
+import List from './Components/list-block/ListBlock';
+import SearchPanel from './Components/search-block/SearchBlock';
+import fetchData from './services/fetchData';
+import LSService from './services/localStorageService';
+import type { IState } from './types/appTypes';
 import debounce from './utils/debounce';
+import Loader from './utils/loader/loader';
 
 import './styles/App.css';
-import SearchPanel from './Components/search-block/SearchBlock';
-import List from './Components/list-block/ListBlock';
 
 export default class App extends Component<object, IState> {
   protected AbortController: MutableRefObject<AbortController | null>;

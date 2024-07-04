@@ -1,4 +1,4 @@
-import { IResponse, IProduct } from '../types/appTypes';
+import type { IResponse, IProduct } from '../types/appTypes';
 
 const fetchData = async (searchValue: string, signal: AbortSignal): Promise<IProduct[]> => {
   const baseUrl = 'https://swapi.dev/api/planets';
@@ -7,7 +7,7 @@ const fetchData = async (searchValue: string, signal: AbortSignal): Promise<IPro
 
   const response = await fetch(url, { signal });
   const data: IResponse = await response.json();
-  const upgradeData = data.results.map((elem, index) => ({ ...elem, id: index }));
+  const upgradeData = data.results.map((elem) => ({ ...elem, id: elem.url }));
   return upgradeData;
 };
 

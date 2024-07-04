@@ -1,3 +1,3 @@
 export default interface IBugComponent {
-  error: boolean;
+  hasError: boolean;
 }
