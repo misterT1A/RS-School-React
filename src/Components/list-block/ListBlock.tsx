@@ -14,7 +14,7 @@ export default class List extends Component<IListProps> {
             <li key={elem.id} className="list_item">
               <p className="title">Planet: {elem.name}</p>
               <p className="decription">Climate: {elem.climate}</p>
-              <p className="decription">Population: {elem.terrain}</p>
+              <p className="decription">Terrain: {elem.terrain}</p>
             </li>
           ))
         ) : (

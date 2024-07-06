@@ -20,7 +20,7 @@
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [
-      "eslint --max-warnings=0 --no-ignore",
+      "npm run lint",
       "prettier --write"
     ],
     "**/*.{html,json,js,css,scss,md}": [

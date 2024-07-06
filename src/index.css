@@ -1,3 +1,14 @@
+body {
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  background-color: #242424;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -23,18 +34,8 @@ input {
   max-width: 200px;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  min-height: 100vh;
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-  background-color: #242424;
-}
-
-h1 {
+h1,
+h2 {
   text-align: center;
 }
 
@@ -55,19 +56,4 @@ button {
 
 button:hover {
   border-color: #646cff;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
 }

@@ -2,8 +2,7 @@ import type { IResponse, IProduct } from '../types/appTypes';
 
 const fetchData = async (searchValue: string, signal: AbortSignal): Promise<IProduct[]> => {
   const baseUrl = 'https://swapi.dev/api/planets';
-  const page = '/?page=1';
-  const url = searchValue ? `${baseUrl}/?search=${searchValue.trim()}` : baseUrl + page;
+  const url = searchValue ? `${baseUrl}/?search=${searchValue.trim()}&page=1` : `${baseUrl}/?page=1`;
 
   const response = await fetch(url, { signal });
   const data: IResponse = await response.json();
