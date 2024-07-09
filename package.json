@@ -12,7 +12,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
-    "format": "prettier .  --write",
+    "format:fix": "prettier .  --write",
     "preview": "vite preview",
     "test": "jest --config ./jest.config.cjs",
     "deploy": "npm run build && npx gh-pages -d dist -e class-components",
