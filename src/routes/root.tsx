@@ -6,6 +6,7 @@ import { getCurrentPage, getMaxPage } from './root-helpers';
 import PaginationBlock from '../Components/result-list/Pagination';
 import ResultList from '../Components/result-list/Result-list';
 import SearchBlock from '../Components/search-block/SearchBlock';
+import useSetToLS from '../hooks/useFromLS';
 import { fetchDataService } from '../services/fetchDataService';
 import type { IState } from '../types/rootTypes';
 import Loader from '../utils/loader/loader';
@@ -23,9 +24,10 @@ const Root = (): ReactNode => {
   });
   const navigate = useNavigate();
   const navigation = useNavigation();
+  const [searchValueLS, setSearchValueLS] = useSetToLS('Task');
 
   useEffect(() => {
-    const querySearch = searchParams.get('q') || '';
+    const querySearch = searchParams.get('q') || searchValueLS || '';
     const currentPage = Number(searchParams.get('page') || 1);
 
     const fetchData = async (search: string, page: number): Promise<void> => {
@@ -49,7 +51,7 @@ const Root = (): ReactNode => {
     };
 
     fetchData(querySearch, currentPage);
-  }, [searchParams]);
+  }, [searchParams, searchValueLS]);
 
   const handleWKeyDown = (event: React.KeyboardEvent): void => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -80,7 +82,7 @@ const Root = (): ReactNode => {
     >
       <header className={styles.header}>
         <h1 className={styles.title}>Planet search</h1>
-        <SearchBlock searchParams={searchParams} setSearchParams={setSearchParams} />
+        <SearchBlock searchParams={searchParams} setSearchParams={setSearchParams} setValueLS={setSearchValueLS} />
       </header>
       <main className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
         <ResultList

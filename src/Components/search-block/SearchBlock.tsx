@@ -4,12 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import styles from './_SearchBlock.module.scss';
 import type IInputProps from '../../types/searchPanelTypes';
 
-const SearchBlock = ({ searchParams, setSearchParams }: IInputProps): ReactNode => {
+const SearchBlock = ({ searchParams, setSearchParams, setValueLS }: IInputProps): ReactNode => {
   const navigate = useNavigate();
+
   const handleSearchSubmit = (event: React.FormEvent): void => {
     event.preventDefault();
     const form = event.currentTarget as HTMLFormElement;
     const query = new FormData(form).get('q') as string;
+    console.log(query);
+    setValueLS(() => query);
+
     setSearchParams((prevSearchParams) => {
       const updatedParams = new URLSearchParams(prevSearchParams);
       updatedParams.set('q', query);
