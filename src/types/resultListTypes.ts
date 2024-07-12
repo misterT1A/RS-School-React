@@ -1,9 +1,18 @@
 import type { Dispatch } from 'react';
+import type React from 'react';
 
 import type { IState } from './rootTypes';
 
-export default interface IResultListProps {
+export interface IResultListProps {
   state: IState;
   searchParams: URLSearchParams;
-  setIsProductVisible: Dispatch<React.SetStateAction<boolean>>;
+  isDetailedVisible: boolean;
+  setIsDetailedVisible: Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface IPagination {
+  state: IState;
+  setState: React.Dispatch<React.SetStateAction<IState>>;
+  searchParams: URLSearchParams;
+  handleClickVisible: (event: React.MouseEvent) => void;
 }

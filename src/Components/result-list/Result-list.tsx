@@ -1,42 +1,46 @@
-/* eslint-disable no-nested-ternary */
+import classNames from 'classnames';
 import type { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import styles from './_Products-block.module.scss';
+import styles from './_Result-list.module.scss';
 import { extractLastNumber, getClassName } from './result-list-helpers';
-import type IResultListProps from '../../types/resultListTypes';
+import type { IResultListProps } from '../../types/resultListTypes';
 import Loader from '../../utils/loader/loader';
 
-const ResultList = ({ state, searchParams, setIsProductVisible }: IResultListProps): ReactNode => {
-  console.log('g');
+const ResultList = ({ state, searchParams, isDetailedVisible, setIsDetailedVisible }: IResultListProps): ReactNode => {
+  const sectionClass = classNames({
+    [styles.wrapper_load]: state.isLoad && isDetailedVisible,
+  });
+
   return (
-    <section className={styles.list_wrapper}>
+    <section className={sectionClass}>
       {state.isLoad ? (
         <Loader />
-      ) : state.data?.length ? (
-        <>
-          <nav>
-            <ul className={styles.list}>
-              {state.data.map((elem) => (
-                <li key={elem.url}>
-                  <NavLink
-                    to={`products/${extractLastNumber(elem.url ? elem.url : '')}?q=${searchParams.get('q') || ''}&page=${searchParams.get('page') || '1'}`}
-                    className={getClassName}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsProductVisible(true);
-                    }}
-                  >
-                    <p className={styles.title}>Planet: {elem.name}</p>
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          {/* pagination */}
-        </>
       ) : (
-        <h2>No results</h2>
+        <div>
+          {state.data?.length ? (
+            <nav>
+              <ul className={isDetailedVisible ? styles.list_column : styles.list_center}>
+                {state.data.map((elem) => (
+                  <li id="planets" key={elem.url}>
+                    <NavLink
+                      to={`planets/${extractLastNumber(elem.url ? elem.url : '')}?q=${searchParams.get('q') || ''}&page=${searchParams.get('page') || '1'}`}
+                      className={getClassName}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsDetailedVisible(true);
+                      }}
+                    >
+                      <p className={styles.title}>{elem.name}</p>
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : (
+            <h2>No results</h2>
+          )}
+        </div>
       )}
     </section>
   );

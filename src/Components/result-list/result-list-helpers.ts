@@ -1,4 +1,4 @@
-import styles from './_Products-block.module.scss';
+import styles from './_Result-list.module.scss';
 
 const extractLastNumber = (url: string): string => {
   const match = url.match(/\/(\d+)\/$/);

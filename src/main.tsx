@@ -3,18 +3,20 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+import DetailedBlock from './Components/detailed-block/Detailed-block';
+import detailedLoader from './Components/detailed-block/Detailed-block-helpers';
 import Root from './routes/root';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
+    errorElement: <h2>Something went wrong</h2>,
     children: [
-      // { index: true, element: <DefaultTitle /> },
       {
-        path: 'products/:productId',
-        // element: <Product />,
-        // loader: productLoader,
+        path: 'planets/:productId',
+        element: <DetailedBlock />,
+        loader: detailedLoader,
       },
     ],
   },

@@ -1,34 +1,24 @@
-.list_wrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  flex: 1;
+.wrapper_load {
+  min-width: 100px;
 }
 
-.list {
+.list_center {
+  padding: 10px 5px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.list_column {
   padding: 0 5px;
   width: 100%;
-  height: 94%;
   display: flex;
   flex-direction: column;
   gap: 10px;
   overflow-y: auto;
-}
-
-.list::-webkit-scrollbar {
-  width: 10px;
-}
-
-.list::-webkit-scrollbar-thumb {
-  background: #f7c900;
-  border-radius: 9px;
-}
-
-.list::-webkit-scrollbar-track-piece {
-  background: #fff;
-  border-radius: 2px;
 }
 
 .list_item {
@@ -61,10 +51,6 @@
   color: #000000;
 }
 
-.decription {
-  width: 100%;
-}
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -74,16 +60,18 @@
 .pagination_btn {
   border-radius: 5px;
   padding: 2px 10px;
-  /* width: 10px;
-    height: 10px; */
   background-color: #f7c900;
   cursor: pointer;
 
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
   &.active {
-    background-color: rgb(153, 153, 153);
+    background-color: #999999;
   }
 
   &.pending {
-    background-color: rgb(24, 24, 24);
+    background-color: #181818;
   }
 }

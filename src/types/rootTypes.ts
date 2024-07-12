@@ -8,7 +8,7 @@ export interface IState {
 
 export interface IResponse {
   count: number;
-  newxt: string;
+  next: string;
   previous: null | string;
   results: IProduct[];
 }
