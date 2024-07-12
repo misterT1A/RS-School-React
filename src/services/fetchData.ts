@@ -1,4 +1,4 @@
-import type { IResponse, IProduct } from '../types/appTypes';
+import type { IResponse, IProduct } from '../types/rootTypes';
 
 const fetchData = async (searchValue: string, signal: AbortSignal): Promise<IProduct[]> => {
   const baseUrl = 'https://swapi.dev/api/planets';

@@ -1,7 +1,6 @@
-import type { ChangeEvent } from 'react';
+import type { SetURLSearchParams } from 'react-router-dom';
 
 export default interface IInputProps {
-  value: string;
-  onSearchInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onSearchSubmit: () => void;
+  searchParams: URLSearchParams;
+  setSearchParams: SetURLSearchParams;
 }

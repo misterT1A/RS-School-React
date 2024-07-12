@@ -2,6 +2,8 @@ export interface IState {
   isLoad: boolean;
   searchValue: string;
   data: IProduct[] | null;
+  page: number;
+  maxPage: number;
 }
 
 export interface IResponse {
