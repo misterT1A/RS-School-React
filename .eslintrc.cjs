@@ -9,7 +9,7 @@ module.exports = {
     'airbnb-typescript',
     'eslint-config-prettier',
   ],
-  ignorePatterns: ['dist', 'vite.config.ts', 'tests', '*.cjs'],
+  ignorePatterns: ['dist', 'tests', '*.cjs'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     sourceType: 'module',
@@ -18,6 +18,7 @@ module.exports = {
   },
   plugins: ['import', 'react-refresh', 'prettier', '@typescript-eslint', 'react-compiler'],
   rules: {
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     '@typescript-eslint/consistent-type-exports': 'error', // Ensures consistent use of type exports
     '@typescript-eslint/consistent-type-imports': 'error', // Enforces consistent style for importing types
     'no-underscore-dangle': 'off',
