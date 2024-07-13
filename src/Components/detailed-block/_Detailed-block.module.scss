@@ -28,3 +28,10 @@
     border-color: $searchBlock_button_color_hover;
   }
 }
+
+@media screen and (max-width: 500px) {
+  .wrapper {
+    flex-direction: column;
+    font-size: 14px;
+  }
+}
