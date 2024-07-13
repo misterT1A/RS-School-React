@@ -1,10 +1,22 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), eslint()],
+  plugins: [
+    react(),
+    eslint(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'netlify.toml',
+          dest: '',
+        },
+      ],
+    }),
+  ],
   resolve: {
     alias: [
       { find: '@/Assets', replacement: '/src/Assets' },
