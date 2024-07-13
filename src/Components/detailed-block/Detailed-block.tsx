@@ -7,10 +7,11 @@ import type { IProduct } from '../../types/rootTypes';
 const DetailedBlock = (): ReactNode => {
   const { handleClickVisible } = useOutletContext<{ handleClickVisible: () => void }>();
 
-  const product = useLoaderData() as IProduct;
+  const product = useLoaderData();
+  if (!product) return <h2>error</h2>;
+
   const newData = Object.entries(product as IProduct);
   const filteredData = newData.filter((elem) => elem[0] !== 'residents' && elem[0] !== 'films' && elem[0] !== 'url');
-  if (!product) return <h2>error</h2>;
 
   return (
     <div id="detailed" className={styles.wrapper}>

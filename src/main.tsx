@@ -5,13 +5,14 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import DetailedBlock from './Components/detailed-block/Detailed-block';
 import detailedLoader from './Components/detailed-block/Detailed-block-helpers';
+import ErrorPage from './Components/ErrorBoundary/ErrorPage';
 import Root from './routes/root';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
-    errorElement: <h2>Something went wrong</h2>,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: 'planets/:productId',

@@ -5,11 +5,6 @@ import { MemoryRouter } from 'react-router-dom';
 
 import SearchBlock from '../../Components/search-block/SearchBlock';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: (): jest.Mock => jest.fn(),
-}));
-
 describe('SearchBlock', () => {
   const setup = (): {
     searchParams: URLSearchParams;
