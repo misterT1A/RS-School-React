@@ -11,7 +11,6 @@ const SearchBlock = ({ searchParams, setSearchParams, setValueLS }: IInputProps)
     event.preventDefault();
     const form = event.currentTarget as HTMLFormElement;
     const query = new FormData(form).get('q') as string;
-    console.log(query);
     setValueLS(() => query);
 
     setSearchParams((prevSearchParams) => {

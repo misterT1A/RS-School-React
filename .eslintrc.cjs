@@ -9,7 +9,7 @@ module.exports = {
     'airbnb-typescript',
     'eslint-config-prettier',
   ],
-  ignorePatterns: ['dist', 'tests', '*.cjs'],
+  ignorePatterns: ['dist', '*.cjs'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     sourceType: 'module',

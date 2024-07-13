@@ -10,12 +10,12 @@ module.exports = {
   transform: {
     '^.+\\.ts?$': 'ts-jest',
   },
-  // moduleNameMapper: {
-  //   '\\.(css|scss)$': 'identity-obj-proxy',
-  // },
+  moduleNameMapper: {
+    '\\.(css|scss)$': 'identity-obj-proxy',
+  },
   testMatch: ['**/tests/**/*.+(js|ts|tsx)'],
   // testMatch: ['<rootDir>/src/**/*.test.tsx'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   moduleFileExtensions: ['ts', 'js', 'tsx'],
-  collectCoverageFrom: ['./src/**', '!src/**/*.d.ts'],
+  // collectCoverageFrom: ['./src/**', '!src/**/*.d.ts'],
 };
