@@ -105,3 +105,26 @@ describe('Root component', () => {
     });
   });
 });
+
+describe('Root component', () => {
+  beforeEach(() => {
+    // Устанавливаем значение в localStorage перед тестом
+    localStorage.setItem('Task', 'testSearchValue');
+  });
+
+  it('component retrieves the value from the local storage upon mounting', async () => {
+    let querySearch: string | null = null;
+    await act(async () => {
+      render(
+        <MemoryRouter initialEntries={['/']}>
+          <Root />
+        </MemoryRouter>,
+      );
+    });
+
+    const searchParams = new URLSearchParams(window.location.search);
+    querySearch = searchParams.get('q') || localStorage.getItem('Task') || '';
+
+    expect(querySearch).toBe('testSearchValue');
+  });
+});

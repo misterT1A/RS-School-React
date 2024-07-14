@@ -5,9 +5,6 @@ function useSetToLS(key: string): readonly [string, React.Dispatch<React.SetStat
 
   useEffect(() => {
     localStorage[key] = value;
-    return () => {
-      localStorage[key] = value;
-    };
   }, [value, key]);
 
   return [value, setValue] as const;

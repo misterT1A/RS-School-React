@@ -42,7 +42,7 @@ describe('SearchBlock', () => {
     expect(input.value).toBe('test query');
   });
 
-  it('calls setSearchParams and setValueLS on form submit', async () => {
+  it('calls setSearchParams and setValueLS on form submit and saves the entered value to the local storage', async () => {
     const { setSearchParams, setValueLS } = setup();
     const input = screen.getByPlaceholderText('Search') as HTMLInputElement;
     const form = screen.getByRole('search');
