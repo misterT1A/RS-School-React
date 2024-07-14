@@ -31,7 +31,7 @@ const Root = (): ReactNode => {
     const currentPage = Number(searchParams.get('page') || 1);
 
     if (!currentPage) {
-      navigate('/error'); // Assuming '/error' is your error page route
+      navigate('/error');
       return;
     }
 

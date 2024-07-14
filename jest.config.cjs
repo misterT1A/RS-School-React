@@ -14,7 +14,6 @@ module.exports = {
     '\\.(css|scss)$': 'identity-obj-proxy',
   },
   testMatch: ['**/tests/**/*.+(js|ts|tsx)'],
-  // testMatch: ['<rootDir>/src/**/*.test.tsx'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   moduleFileExtensions: ['ts', 'js', 'tsx'],
   collectCoverageFrom: ['./src/**', '!src/**/*.d.ts'],
