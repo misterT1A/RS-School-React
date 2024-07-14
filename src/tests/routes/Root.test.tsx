@@ -1,111 +1,79 @@
-// // Root.test.tsx
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 
-// // import React from 'react';
+import '@testing-library/jest-dom';
+import Root from '../../routes/root/root';
 
-// import '@testing-library/jest-dom';
+const TestProduct = {
+  id: 'test',
+  climate: 'test',
+  created: 'test',
+  diameter: 'test',
+  edited: 'test',
+  films: ['test', 'test'],
+  gravity: 'test',
+  name: 'Test Planet',
+  orbital_period: 'test',
+  population: 'test',
+  residents: ['test', 'test'],
+  rotation_period: 'test',
+  surface_water: 'test',
+  terrain: 'test',
+  url: '',
+};
 
-// // import PaginationBlock from '../../Components/result-list/Pagination';
-// // import ResultList from '../../Components/result-list/Result-list';
-// // import SearchBlock from '../../Components/search-block/SearchBlock';
-// import { render, screen } from '@testing-library/react';
-// import { MemoryRouter } from 'react-router-dom';
+const response = {
+  count: 10,
+  next: '//1',
+  previous: null,
+  results: [TestProduct],
+};
 
-// import Root from '../../routes/root';
-// // // import { fetchDataService } from '../../services/fetchDataService';
-// // import Loader from '../../utils/loader/loader';
+jest.mock('../../services/fetchDataService.ts', () => ({
+  fetchDataService: jest.fn().mockImplementation(() => Promise.resolve(response)),
+}));
 
-// // Mock SearchBlock component
-// jest.mock('../../Components/search-block/SearchBlock', () => ({
-//   __esModule: true,
-//   default: jest.fn(() => <div data-testid="mockedSearchBlock">Mocked Search Block</div>),
-// }));
+describe('Root component', () => {
+  test('renders Root component and fetches data', async () => {
+    const router = createMemoryRouter([
+      {
+        path: '/',
+        element: <Root />,
+      },
+    ]);
 
-// // Mock ResultList component
-// jest.mock('../../Components/result-list/Result-list', () => ({
-//   __esModule: true,
-//   default: jest.fn(() => <div data-testid="mockedResultList">Mocked Result List</div>),
-// }));
+    await act(async () => {
+      render(<RouterProvider router={router} />);
+    });
 
-// // Mock PaginationBlock component
-// jest.mock('../../Components/result-list/Pagination', () => ({
-//   __esModule: true,
-//   default: jest.fn(() => <div data-testid="mockedPaginationBlock">Mocked Pagination Block</div>),
-// }));
+    expect(screen.getByTestId('rootComponent')).toBeInTheDocument();
+    expect(screen.getByText('Planet search')).toBeInTheDocument();
+  });
 
-// // Mock Loader component
-// jest.mock('../../utils/loader/loader', () => ({
-//   __esModule: true,
-//   default: jest.fn(() => <div data-testid="mockedLoader">Mocked Loader</div>),
-// }));
+  test('hides detailed view on Enter or Space keydown', async () => {
+    const router = createMemoryRouter([
+      {
+        path: '/',
+        element: <Root />,
+      },
+    ]);
 
-// // Mock useSetToLS hook
-// jest.mock('../../hooks/useSetToLS', () => ({
-//   __esModule: true,
-//   default: jest.fn(() => ['', jest.fn()]),
-// }));
+    await act(async () => {
+      render(<RouterProvider router={router} />);
+    });
 
-// // Mock fetchDataService function
-// jest.mock('../../services/fetchDataService', () => ({
-//   __esModule: true,
-//   fetchDataService: jest.fn(() => Promise.resolve({ results: [], count: 0 })),
-// }));
+    const rootComponent = screen.getByTestId('rootComponent');
+    rootComponent.focus();
+    fireEvent.keyDown(rootComponent, { key: 'Enter' });
 
-// const mockUsedNavigate = jest.fn();
-// jest.mock('react-router-dom', () => ({
-//   ...jest.requireActual('react-router-dom'),
-//   useNavigate: (): jest.Mock => mockUsedNavigate,
-//   //   useSearchParams: (): jest.Mock => jest.fn(),
-// }));
+    await waitFor(() => {
+      expect(screen.queryByText('Test Planet')).toBeVisible();
+    });
 
-// describe('Root component', () => {
-//   beforeEach(() => {
-//     jest.clearAllMocks();
-//   });
+    fireEvent.keyDown(rootComponent, { key: ' ' });
 
-//   it('renders SearchBlock, ResultList, PaginationBlock, and Loader components', () => {
-//     render(
-//       <MemoryRouter initialEntries={['/']}>
-//         <Root />
-//       </MemoryRouter>,
-//     );
-
-//     // Ждем, пока данные загрузятся
-
-//     // Проверка наличия SearchBlock
-//     expect(screen.getByTestId('searchBlock')).toBeInTheDocument();
-
-//     // Проверка наличия ResultList
-//     expect(screen.getByTestId('resultList')).toBeInTheDocument();
-
-//     // Проверка наличия PaginationBlock (или его отсутствия в случае загрузки)
-//     if (screen.queryByTestId('paginationBlock')) {
-//       expect(screen.getByTestId('paginationBlock')).toBeInTheDocument();
-//     }
-
-//     // Проверка наличия Loader при загрузке данных
-//     expect(screen.getByTestId('loader')).toBeInTheDocument();
-//   });
-
-//   //   test('renders SearchBlock, ResultList, PaginationBlock, and Loader components', () => {
-//   //     render(
-//   //       <MemoryRouter initialEntries={['/']}>
-//   //         <Routes>
-//   //           <Route path="/" element={<Root />} />
-//   //         </Routes>
-//   //       </MemoryRouter>,
-//   //     );
-
-//   // expect(SearchBlock).toHaveBeenCalled();
-//   // expect(ResultList).toHaveBeenCalled();
-//   // expect(PaginationBlock).toHaveBeenCalled();
-//   // expect(Loader).toHaveBeenCalled();
-//   //   });
-
-//   //   test('fetches data on mount', () => {
-//   //     render(<Root />);
-
-//   //     expect(fetchDataService).toHaveBeenCalled();
-//   //   });
-
-//   // Add more tests as needed
-// });
+    await waitFor(() => {
+      expect(screen.queryByText('Test Planet')).toBeVisible();
+    });
+  });
+});
