@@ -1,26 +1,26 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
-import '@testing-library/jest-dom';
-import ErrorPage from '../../Components/ErrorBoundary/ErrorPage';
+import NotFoundPage from '../../routes/not-found-page/NotFoundPage';
 
-describe('ErrorPage', () => {
-  test('renders the error message', () => {
+describe('NotFoundPage', () => {
+  test('renders 404 message', () => {
     render(
       <MemoryRouter initialEntries={['/non-existent-route']}>
         <Routes>
-          <Route path="*" element={<ErrorPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </MemoryRouter>,
     );
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    expect(screen.getByText('404 Page not found')).toBeInTheDocument();
   });
 
   test('has a button to return to the main page', () => {
     render(
       <MemoryRouter initialEntries={['/non-existent-route']}>
         <Routes>
-          <Route path="*" element={<ErrorPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </MemoryRouter>,
     );
@@ -31,7 +31,7 @@ describe('ErrorPage', () => {
     render(
       <MemoryRouter initialEntries={['/non-existent-route']}>
         <Routes>
-          <Route path="*" element={<ErrorPage />} />
+          <Route path="*" element={<NotFoundPage />} />
           <Route path="/" element={<div>Main Page</div>} />
         </Routes>
       </MemoryRouter>,

@@ -6,7 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import DetailedBlock from './Components/detailed-block/Detailed-block';
 import detailedLoader from './Components/detailed-block/Detailed-block-helpers';
 import ErrorPage from './Components/ErrorBoundary/ErrorPage';
-import Root from './routes/root';
+import NotFoundPage from './routes/not-found-page/NotFoundPage';
+import Root from './routes/root/root';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
         loader: detailedLoader,
       },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
   },
 ]);
 

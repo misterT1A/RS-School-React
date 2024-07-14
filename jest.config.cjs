@@ -17,5 +17,5 @@ module.exports = {
   // testMatch: ['<rootDir>/src/**/*.test.tsx'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   moduleFileExtensions: ['ts', 'js', 'tsx'],
-  // collectCoverageFrom: ['./src/**', '!src/**/*.d.ts'],
+  collectCoverageFrom: ['./src/**', '!src/**/*.d.ts'],
 };

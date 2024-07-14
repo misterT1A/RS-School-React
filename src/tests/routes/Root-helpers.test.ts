@@ -1,5 +1,5 @@
 import { extractLastNumber } from '../../Components/result-list/result-list-helpers';
-import { getCurrentPage, getMaxPage } from '../../routes/root-helpers';
+import { getCurrentPage, getMaxPage } from '../../routes/root/root-helpers';
 
 jest.mock('../../Components/result-list/result-list-helpers', () => ({
   extractLastNumber: jest.fn(),

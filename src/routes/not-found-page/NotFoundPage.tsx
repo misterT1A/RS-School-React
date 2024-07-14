@@ -1,13 +1,13 @@
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import styles from './_Error-page.module.scss';
+import styles from '../../Components/ErrorBoundary/_Error-page.module.scss';
 
-const ErrorPage = (): ReactNode => {
+const NotFoundPage = (): ReactNode => {
   const navigate = useNavigate();
   return (
     <section className={styles.wrapper}>
-      <h1 className={styles.title}>Something went wrong</h1>
+      <h1 className={styles.title}>404 Page not found</h1>
       <button data-testid="return-button" type="button" className={styles.button} onClick={() => navigate('/')}>
         return to main page
       </button>
@@ -15,4 +15,4 @@ const ErrorPage = (): ReactNode => {
   );
 };
 
-export default ErrorPage;
+export default NotFoundPage;

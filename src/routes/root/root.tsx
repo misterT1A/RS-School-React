@@ -3,13 +3,13 @@ import { Outlet, useLocation, useNavigate, useNavigation, useSearchParams } from
 
 import styles from './_root.module.scss';
 import { getCurrentPage, getMaxPage } from './root-helpers';
-import PaginationBlock from '../Components/result-list/Pagination';
-import ResultList from '../Components/result-list/Result-list';
-import SearchBlock from '../Components/search-block/SearchBlock';
-import useSetToLS from '../hooks/useSetToLS';
-import { fetchDataService } from '../services/fetchDataService';
-import type { IState } from '../types/rootTypes';
-import Loader from '../utils/loader/loader';
+import PaginationBlock from '../../Components/result-list/Pagination';
+import ResultList from '../../Components/result-list/Result-list';
+import SearchBlock from '../../Components/search-block/SearchBlock';
+import useSetToLS from '../../hooks/useSetToLS';
+import { fetchDataService } from '../../services/fetchDataService';
+import type { IState } from '../../types/rootTypes';
+import Loader from '../../utils/loader/loader';
 
 const Root = (): ReactNode => {
   const location = useLocation();
