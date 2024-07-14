@@ -5,9 +5,16 @@ jest.mock('../../Components/result-list/result-list-helpers', () => ({
   extractLastNumber: jest.fn(),
 }));
 
-const data = {
+const dataNext = {
   count: 1,
   next: 'https://swapi.dev/api/planets/?page=3',
+  previous: 'https://swapi.dev/api/planets/?page=1',
+  results: [],
+};
+
+const dataPrev = {
+  count: 1,
+  next: '',
   previous: 'https://swapi.dev/api/planets/?page=1',
   results: [],
 };
@@ -16,22 +23,22 @@ describe('getCurrentPage', () => {
   it('should return the correct page number when next URL is provided', () => {
     (extractLastNumber as jest.Mock).mockReturnValue('3');
 
-    const page = getCurrentPage(data);
+    const page = getCurrentPage(dataNext);
 
     expect(page).toBe(2);
   });
 
   it('should return the correct page number when previous URL is provided', () => {
-    (extractLastNumber as jest.Mock).mockReturnValue('2');
+    (extractLastNumber as jest.Mock).mockReturnValue('1');
 
-    const page = getCurrentPage(data);
+    const page = getCurrentPage(dataPrev);
 
-    expect(page).toBe(1);
+    expect(page).toBe(2);
   });
 
   it('should return 1 when neither next nor previous URL is provided', () => {
     const dataNull = {
-      ...data,
+      ...dataNext,
       next: null,
       previous: null,
     };

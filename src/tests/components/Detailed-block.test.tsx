@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import type { LoaderFunctionArgs } from 'react-router-dom';
 import { useLoaderData, useOutletContext, MemoryRouter } from 'react-router-dom';
 
@@ -37,6 +37,7 @@ describe('DetailedBlock', () => {
 
   beforeEach(() => {
     (useOutletContext as jest.Mock).mockReturnValue({ handleClickVisible: mockHandleClickVisible });
+    (useLoaderData as jest.Mock).mockReturnValue(mockProduct); // Устанавливаем mockProduct как данные по умолчанию
   });
 
   afterEach(() => {
@@ -70,6 +71,20 @@ describe('DetailedBlock', () => {
       const valueElement = screen.getByText(new RegExp(`${key}: ------${mockProduct[key as keyof IProduct]}`, 'i'));
       expect(valueElement).toBeInTheDocument();
     });
+  });
+
+  test('handles close button click', () => {
+    render(
+      <MemoryRouter>
+        <DetailedBlock />
+      </MemoryRouter>,
+    );
+
+    const button = screen.getByRole('button', { name: /close/i });
+    expect(button).toBeInTheDocument();
+
+    fireEvent.click(button);
+    expect(mockHandleClickVisible).toHaveBeenCalled();
   });
 });
 

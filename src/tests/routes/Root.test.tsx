@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import type { ReactNode } from 'react';
+import { createMemoryRouter, MemoryRouter, RouterProvider, useNavigation } from 'react-router-dom';
 
 import '@testing-library/jest-dom';
 import Root from '../../routes/root/root';
@@ -29,11 +30,23 @@ const response = {
   results: [TestProduct],
 };
 
+jest.mock('../../utils/loader/loader', () => (): ReactNode => <div data-testid="loader">Loader</div>);
+
 jest.mock('../../services/fetchDataService.ts', () => ({
   fetchDataService: jest.fn().mockImplementation(() => Promise.resolve(response)),
 }));
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigation: jest.fn(),
+}));
+
 describe('Root component', () => {
+  beforeEach(() => {
+    // Устанавливаем значение по умолчанию для useNavigation мока
+    (useNavigation as jest.Mock).mockReturnValue({ state: 'idle' });
+  });
+
   test('renders Root component and fetches data', async () => {
     const router = createMemoryRouter([
       {
@@ -74,6 +87,21 @@ describe('Root component', () => {
 
     await waitFor(() => {
       expect(screen.queryByText('Test Planet')).toBeVisible();
+    });
+  });
+
+  test('shows Loader for detailed when navigation state is loading', async () => {
+    (useNavigation as jest.Mock).mockReturnValue({ state: 'loading' });
+
+    render(
+      <MemoryRouter>
+        <Root />
+      </MemoryRouter>,
+    );
+
+    await waitFor(() => {
+      const loader = screen.getByTestId('loader');
+      expect(loader).toBeInTheDocument();
     });
   });
 });

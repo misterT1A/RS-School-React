@@ -23,7 +23,7 @@ const DetailedBlock = (): ReactNode => {
         ))}
       </ul>
       <div>
-        <button className={styles.button} type="button" onClick={handleClickVisible}>
+        <button className={styles.button} name="close" type="button" onClick={handleClickVisible}>
           Close
         </button>
       </div>
