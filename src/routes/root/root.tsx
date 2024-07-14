@@ -30,6 +30,11 @@ const Root = (): ReactNode => {
     const querySearch = searchParams.get('q') || searchValueLS || '';
     const currentPage = Number(searchParams.get('page') || 1);
 
+    if (!currentPage) {
+      navigate('/error'); // Assuming '/error' is your error page route
+      return;
+    }
+
     const fetchData = async (search: string, page: number): Promise<void> => {
       setState((prevState) => ({
         ...prevState,
@@ -51,7 +56,7 @@ const Root = (): ReactNode => {
     };
 
     fetchData(querySearch, currentPage);
-  }, [searchParams, searchValueLS]);
+  }, [searchParams, searchValueLS, navigate]);
 
   const handleWKeyDown = (event: React.KeyboardEvent): void => {
     if (event.key === 'Enter' || event.key === ' ') {

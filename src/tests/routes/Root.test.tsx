@@ -108,7 +108,6 @@ describe('Root component', () => {
 
 describe('Root component', () => {
   beforeEach(() => {
-    // Устанавливаем значение в localStorage перед тестом
     localStorage.setItem('Task', 'testSearchValue');
   });
 

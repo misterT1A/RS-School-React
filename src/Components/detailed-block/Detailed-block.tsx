@@ -3,6 +3,7 @@ import { useLoaderData, useOutletContext } from 'react-router-dom';
 
 import styles from './_Detailed-block.module.scss';
 import type { IProduct } from '../../types/rootTypes';
+import btnStyles from '../../utils/button/_button.module.scss';
 
 const DetailedBlock = (): ReactNode => {
   const { handleClickVisible } = useOutletContext<{ handleClickVisible: () => void }>();
@@ -23,7 +24,7 @@ const DetailedBlock = (): ReactNode => {
         ))}
       </ul>
       <div>
-        <button className={styles.button} name="close" type="button" onClick={handleClickVisible}>
+        <button className={btnStyles.button} name="close" type="button" onClick={handleClickVisible}>
           Close
         </button>
       </div>

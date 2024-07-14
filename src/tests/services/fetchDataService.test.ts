@@ -85,7 +85,7 @@ describe('fetchDetailedService', () => {
       status: mockStatus,
     });
 
-    const searchValue = 'test'; // Пример значения для поиска
+    const searchValue = 'test';
 
     await expect(fetchDetailedService(searchValue)).rejects.toThrowError(`HTTP error! Status: ${mockStatus}`);
 

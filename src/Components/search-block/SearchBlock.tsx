@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './_SearchBlock.module.scss';
 import type IInputProps from '../../types/searchPanelTypes';
+import btnStyles from '../../utils/button/_button.module.scss';
 
 const SearchBlock = ({ searchParams, setSearchParams, setValueLS }: IInputProps): ReactNode => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const SearchBlock = ({ searchParams, setSearchParams, setValueLS }: IInputProps)
         className={styles.input}
         defaultValue={searchParams.get('q') || ''}
       />
-      <button className={styles.button} type="submit">
+      <button className={btnStyles.button} type="submit">
         Search
       </button>
     </form>
