@@ -6,6 +6,7 @@ import { getCurrentPage, getMaxPage } from './root-helpers';
 import PaginationBlock from '../../Components/result-list/Pagination';
 import ResultList from '../../Components/result-list/Result-list';
 import SearchBlock from '../../Components/search-block/SearchBlock';
+import { ThemeProvider } from '../../context/index';
 import useSetToLS from '../../hooks/useSetToLS';
 import { fetchDataService } from '../../services/fetchDataService';
 import type { IState } from '../../types/rootTypes';
@@ -78,41 +79,43 @@ const Root = (): ReactNode => {
   };
 
   return (
-    <section
-      className={styles.wrapper}
-      data-testid="rootComponent"
-      role="button"
-      tabIndex={0}
-      onClick={handleClickVisibleWithEvent}
-      onKeyDown={handleWKeyDown}
-    >
-      <header className={styles.header}>
-        <h1 className={styles.title}>Planet search</h1>
-        <SearchBlock searchParams={searchParams} setSearchParams={setSearchParams} setValueLS={setSearchValueLS} />
-      </header>
-      <main className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
-        <ResultList
-          state={state}
-          searchParams={searchParams}
-          isDetailedVisible={isDetailedVisible}
-          setIsDetailedVisible={setIsDetailedVisible}
-        />
-        <div className={styles.detailed_wrapper}>
-          {isDetailedVisible &&
-            (navigation.state === 'loading' ? <Loader /> : <Outlet context={{ handleClickVisible }} />)}
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        {state.isLoad || (
-          <PaginationBlock
+    <ThemeProvider>
+      <section
+        className={styles.wrapper}
+        data-testid="rootComponent"
+        role="button"
+        tabIndex={0}
+        onClick={handleClickVisibleWithEvent}
+        onKeyDown={handleWKeyDown}
+      >
+        <header className={styles.header}>
+          <h1 className={styles.title}>Planet search</h1>
+          <SearchBlock searchParams={searchParams} setSearchParams={setSearchParams} setValueLS={setSearchValueLS} />
+        </header>
+        <main className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
+          <ResultList
             state={state}
-            setState={setState}
             searchParams={searchParams}
-            handleClickVisible={handleClickVisible}
+            isDetailedVisible={isDetailedVisible}
+            setIsDetailedVisible={setIsDetailedVisible}
           />
-        )}
-      </footer>
-    </section>
+          <div className={styles.detailed_wrapper}>
+            {isDetailedVisible &&
+              (navigation.state === 'loading' ? <Loader /> : <Outlet context={{ handleClickVisible }} />)}
+          </div>
+        </main>
+        <footer className={styles.footer}>
+          {state.isLoad || (
+            <PaginationBlock
+              state={state}
+              setState={setState}
+              searchParams={searchParams}
+              handleClickVisible={handleClickVisible}
+            />
+          )}
+        </footer>
+      </section>
+    </ThemeProvider>
   );
 };
 
