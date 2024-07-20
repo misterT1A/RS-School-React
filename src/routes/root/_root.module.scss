@@ -9,6 +9,14 @@
   border-radius: 10px;
 }
 
+.wrapper.light {
+  background-color: rgb(146, 146, 146);
+}
+
+.wrapper.dark {
+  background-color: rgb(34, 34, 34);
+}
+
 .header {
   @include flex(center, flex-start, column);
   gap: 20px;

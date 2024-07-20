@@ -6,9 +6,9 @@ import { ThemeEnum } from './types';
 import type { IThemeProviderProps } from './types';
 
 const ThemeProvider: React.FC<IThemeProviderProps> = ({ children }): ReactNode => {
-  const [state, setState] = useState<ThemeEnum>(ThemeEnum.Light);
+  const [theme, setTheme] = useState<ThemeEnum>(ThemeEnum.Light);
 
-  const value = useMemo(() => ({ state, setState }), [state, setState]);
+  const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };

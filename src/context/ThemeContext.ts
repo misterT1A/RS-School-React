@@ -3,8 +3,8 @@ import React from 'react';
 import { ThemeEnum, type IThemeContextType } from './types';
 
 const defaultState: IThemeContextType = {
-  state: ThemeEnum.Light,
-  setState: () => {},
+  theme: ThemeEnum.Light,
+  setTheme: () => {},
 };
 
 const ThemeContext = React.createContext<IThemeContextType>(defaultState);

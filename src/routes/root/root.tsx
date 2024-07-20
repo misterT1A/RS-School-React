@@ -1,4 +1,5 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import classNames from 'classnames';
+import { useContext, useEffect, useState, type ReactNode } from 'react';
 import { Outlet, useLocation, useNavigate, useNavigation, useSearchParams } from 'react-router-dom';
 
 import styles from './_root.module.scss';
@@ -6,13 +7,17 @@ import { getCurrentPage, getMaxPage } from './root-helpers';
 import PaginationBlock from '../../Components/result-list/Pagination';
 import ResultList from '../../Components/result-list/Result-list';
 import SearchBlock from '../../Components/search-block/SearchBlock';
-import { ThemeProvider } from '../../context/index';
+import ThemeTogler from '../../Components/theme-button/Theme-button';
+import { ThemeContext, ThemeEnum } from '../../context/index';
 import useSetToLS from '../../hooks/useSetToLS';
 import { fetchDataService } from '../../services/fetchDataService';
 import type { IState } from '../../types/rootTypes';
 import Loader from '../../utils/loader/loader';
 
 const Root = (): ReactNode => {
+  const { theme, setTheme } = useContext(ThemeContext);
+  console.log(theme, setTheme);
+
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isDetailedVisible, setIsDetailedVisible] = useState<boolean>(!!location.pathname.slice(1));
@@ -78,44 +83,48 @@ const Root = (): ReactNode => {
     setIsDetailedVisible(false);
   };
 
+  const sectionClass = classNames(styles.wrapper, {
+    [styles.light]: theme === ThemeEnum.Light,
+    [styles.dark]: theme === ThemeEnum.Dark,
+  });
+
   return (
-    <ThemeProvider>
-      <section
-        className={styles.wrapper}
-        data-testid="rootComponent"
-        role="button"
-        tabIndex={0}
-        onClick={handleClickVisibleWithEvent}
-        onKeyDown={handleWKeyDown}
-      >
-        <header className={styles.header}>
-          <h1 className={styles.title}>Planet search</h1>
-          <SearchBlock searchParams={searchParams} setSearchParams={setSearchParams} setValueLS={setSearchValueLS} />
-        </header>
-        <main className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
-          <ResultList
+    <section
+      className={sectionClass}
+      data-testid="rootComponent"
+      role="button"
+      tabIndex={0}
+      onClick={handleClickVisibleWithEvent}
+      onKeyDown={handleWKeyDown}
+    >
+      <header className={styles.header}>
+        <h1 className={styles.title}>Planet search</h1>
+        <SearchBlock searchParams={searchParams} setSearchParams={setSearchParams} setValueLS={setSearchValueLS} />
+        <ThemeTogler />
+      </header>
+      <main className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
+        <ResultList
+          state={state}
+          searchParams={searchParams}
+          isDetailedVisible={isDetailedVisible}
+          setIsDetailedVisible={setIsDetailedVisible}
+        />
+        <div className={styles.detailed_wrapper}>
+          {isDetailedVisible &&
+            (navigation.state === 'loading' ? <Loader /> : <Outlet context={{ handleClickVisible }} />)}
+        </div>
+      </main>
+      <footer className={styles.footer}>
+        {state.isLoad || (
+          <PaginationBlock
             state={state}
+            setState={setState}
             searchParams={searchParams}
-            isDetailedVisible={isDetailedVisible}
-            setIsDetailedVisible={setIsDetailedVisible}
+            handleClickVisible={handleClickVisible}
           />
-          <div className={styles.detailed_wrapper}>
-            {isDetailedVisible &&
-              (navigation.state === 'loading' ? <Loader /> : <Outlet context={{ handleClickVisible }} />)}
-          </div>
-        </main>
-        <footer className={styles.footer}>
-          {state.isLoad || (
-            <PaginationBlock
-              state={state}
-              setState={setState}
-              searchParams={searchParams}
-              handleClickVisible={handleClickVisible}
-            />
-          )}
-        </footer>
-      </section>
-    </ThemeProvider>
+        )}
+      </footer>
+    </section>
   );
 };
 

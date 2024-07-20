@@ -6,8 +6,8 @@ export enum ThemeEnum {
 }
 
 export interface IThemeContextType {
-  state: ThemeEnum;
-  setState: Dispatch<SetStateAction<ThemeEnum>>;
+  theme: ThemeEnum;
+  setTheme: Dispatch<SetStateAction<ThemeEnum>>;
 }
 
 export interface IThemeProviderProps {
