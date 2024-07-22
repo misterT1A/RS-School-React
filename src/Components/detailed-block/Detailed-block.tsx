@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { useLoaderData, useOutletContext } from 'react-router-dom';
 
 import styles from './_Detailed-block.module.scss';
-import type { IProduct } from '../../types/rootTypes';
+import type { IPlanet } from '../../types/rootTypes';
 import btnStyles from '../../utils/button/_button.module.scss';
 
 const DetailedBlock = (): ReactNode => {
@@ -11,7 +11,7 @@ const DetailedBlock = (): ReactNode => {
   const product = useLoaderData();
   if (!product) return <h2>error</h2>;
 
-  const newData = Object.entries(product as IProduct);
+  const newData = Object.entries(product as IPlanet);
   const filteredData = newData.filter((elem) => elem[0] !== 'residents' && elem[0] !== 'films' && elem[0] !== 'url');
 
   return (

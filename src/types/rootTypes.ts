@@ -1,7 +1,7 @@
 export interface IState {
   isLoad: boolean;
   searchValue: string;
-  data: IProduct[] | null;
+  data: IPlanet[] | null;
   page: number;
   maxPage: number;
 }
@@ -10,10 +10,10 @@ export interface IResponse {
   count: number;
   next: string | null;
   previous: null | string;
-  results: IProduct[];
+  results: IPlanet[];
 }
 
-export interface IProduct {
+export interface IPlanet {
   id?: string;
   climate: string;
   created: string;

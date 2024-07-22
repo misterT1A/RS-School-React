@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Provider } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import DetailedBlock from './Components/detailed-block/Detailed-block';
@@ -7,6 +8,7 @@ import ErrorPage from './Components/ErrorBoundary/ErrorPage';
 import { ThemeProvider } from './context/index';
 import NotFoundPage from './routes/not-found-page/NotFoundPage';
 import Root from './routes/root/root';
+import store from './store/store';
 
 const router = createBrowserRouter([
   {
@@ -28,9 +30,11 @@ const router = createBrowserRouter([
 ]);
 
 const App = (): ReactNode => (
-  <ThemeProvider>
-    <RouterProvider router={router} />
-  </ThemeProvider>
+  <Provider store={store}>
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  </Provider>
 );
 
 export default App;

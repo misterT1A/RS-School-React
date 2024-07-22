@@ -3,20 +3,33 @@ import { useContext, useEffect, useState, type ReactNode } from 'react';
 import { Outlet, useLocation, useNavigate, useNavigation, useSearchParams } from 'react-router-dom';
 
 import styles from './_root.module.scss';
-import { getCurrentPage, getMaxPage } from './root-helpers';
+// import { getCurrentPage, getMaxPage } from './root-helpers';
 import PaginationBlock from '../../Components/result-list/Pagination';
 import ResultList from '../../Components/result-list/Result-list';
 import SearchBlock from '../../Components/search-block/SearchBlock';
 import ThemeTogler from '../../Components/theme-button/Theme-button';
 import { ThemeContext, ThemeEnum } from '../../context/index';
-import useSetToLS from '../../hooks/useSetToLS';
-import { fetchDataService } from '../../services/fetchDataService';
+// import useSetToLS from '../../hooks/useSetToLS';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
+import { useGetPlanetsQuery } from '../../services/apiSlice';
+import { setPlanets } from '../../services/planetsSlice';
 import type { IState } from '../../types/rootTypes';
 import Loader from '../../utils/loader/loader';
 
 const Root = (): ReactNode => {
-  const { theme, setTheme } = useContext(ThemeContext);
-  console.log(theme, setTheme);
+  const { theme } = useContext(ThemeContext);
+  const dispatch = useAppDispatch();
+  const planetsStore = useAppSelector((state) => state.planets.planets);
+
+  // const [page, setPage] = useState<number>(1);
+
+  const { data: planets, isLoading } = useGetPlanetsQuery();
+
+  useEffect(() => {
+    if (planets?.results) {
+      dispatch(setPlanets(planets.results));
+    }
+  }, [planets, dispatch]);
 
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -30,39 +43,7 @@ const Root = (): ReactNode => {
   });
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const [searchValueLS, setSearchValueLS] = useSetToLS('Task');
-
-  useEffect(() => {
-    const querySearch = searchParams.get('q') || searchValueLS || '';
-    const currentPage = Number(searchParams.get('page') || 1);
-
-    if (!currentPage) {
-      navigate('/error');
-      return;
-    }
-
-    const fetchData = async (search: string, page: number): Promise<void> => {
-      setState((prevState) => ({
-        ...prevState,
-        isLoad: true,
-      }));
-      try {
-        const data = await fetchDataService(search, page);
-
-        setState((prevState) => ({
-          ...prevState,
-          data: data.results,
-          isLoad: false,
-          page: getCurrentPage(data),
-          maxPage: getMaxPage(data.count),
-        }));
-      } catch (error) {
-        console.error('Fetch error');
-      }
-    };
-
-    fetchData(querySearch, currentPage);
-  }, [searchParams, searchValueLS, navigate]);
+  // const [searchValueLS, setSearchValueLS] = useSetToLS('Task');
 
   const handleWKeyDown = (event: React.KeyboardEvent): void => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -99,16 +80,30 @@ const Root = (): ReactNode => {
     >
       <header className={styles.header}>
         <h1 className={styles.title}>Planet search</h1>
-        <SearchBlock searchParams={searchParams} setSearchParams={setSearchParams} setValueLS={setSearchValueLS} />
+        {/* <SearchBlock searchParams={searchParams} setSearchParams={setSearchParams} setValueLS={setSearchValueLS} /> */}
+        <SearchBlock
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+          setValueLS={() => console.log('df')}
+        />
         <ThemeTogler />
       </header>
       <main className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
-        <ResultList
-          state={state}
-          searchParams={searchParams}
-          isDetailedVisible={isDetailedVisible}
-          setIsDetailedVisible={setIsDetailedVisible}
-        />
+        {planets && (
+          <ResultList
+            state={{
+              isLoad: isLoading,
+              searchValue: '',
+              page: 1,
+              maxPage: 1,
+              data: planetsStore,
+            }}
+            searchParams={searchParams}
+            isDetailedVisible={isDetailedVisible}
+            setIsDetailedVisible={setIsDetailedVisible}
+          />
+        )}
+
         <div className={styles.detailed_wrapper}>
           {isDetailedVisible &&
             (navigation.state === 'loading' ? <Loader /> : <Outlet context={{ handleClickVisible }} />)}
