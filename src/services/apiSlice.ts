@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import type { IResponse } from '../types/rootTypes';
+import type { IPlanet, IResponse } from '../types/rootTypes';
 
 export const apiSlice = createApi({
   reducerPath: 'api',
@@ -9,7 +9,7 @@ export const apiSlice = createApi({
     getPlanets: builder.query<IResponse, void>({
       query: () => 'planets',
     }),
-    getPlanet: builder.query<IResponse, string>({
+    getPlanet: builder.query<IPlanet, string>({
       query: (searchValue) => `planets/${searchValue}`,
     }),
   }),

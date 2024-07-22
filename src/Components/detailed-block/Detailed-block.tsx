@@ -1,17 +1,35 @@
-import type { ReactNode } from 'react';
-import { useLoaderData, useOutletContext } from 'react-router-dom';
+import { useEffect, type ReactNode } from 'react';
+import { useOutletContext, useParams } from 'react-router-dom';
 
 import styles from './_Detailed-block.module.scss';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
+import { useGetPlanetQuery } from '../../services/apiSlice';
+import { setPlanet } from '../../services/detailedSlice';
 import type { IPlanet } from '../../types/rootTypes';
 import btnStyles from '../../utils/button/_button.module.scss';
+import Loader from '../../utils/loader/loader';
 
 const DetailedBlock = (): ReactNode => {
+  const { productId } = useParams();
+  const dispatch = useAppDispatch();
+
+  const { data, isFetching } = useGetPlanetQuery(productId || '');
   const { handleClickVisible } = useOutletContext<{ handleClickVisible: () => void }>();
+  const planetStore = useAppSelector((state) => state.planet.currentPlanet);
 
-  const product = useLoaderData();
-  if (!product) return <h2>error</h2>;
+  useEffect(() => {
+    if (data) {
+      dispatch(setPlanet(data));
+    }
+  }, [data, dispatch]);
 
-  const newData = Object.entries(product as IPlanet);
+  if (!data && !isFetching) return <h2>error</h2>;
+
+  if (isFetching || !planetStore) {
+    return <Loader />;
+  }
+
+  const newData = Object.entries(planetStore as IPlanet);
   const filteredData = newData.filter((elem) => elem[0] !== 'residents' && elem[0] !== 'films' && elem[0] !== 'url');
 
   return (

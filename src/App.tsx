@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import DetailedBlock from './Components/detailed-block/Detailed-block';
-import detailedLoader from './Components/detailed-block/Detailed-block-helpers';
+// import detailedLoader from './Components/detailed-block/Detailed-block-helpers';
 import ErrorPage from './Components/ErrorBoundary/ErrorPage';
 import { ThemeProvider } from './context/index';
 import NotFoundPage from './routes/not-found-page/NotFoundPage';
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       {
         path: 'planets/:productId',
         element: <DetailedBlock />,
-        loader: detailedLoader,
+        // loader: detailedLoader,
       },
     ],
   },

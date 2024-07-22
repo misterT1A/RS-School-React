@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useContext, useEffect, useState, type ReactNode } from 'react';
-import { Outlet, useLocation, useNavigate, useNavigation, useSearchParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './_root.module.scss';
 // import { getCurrentPage, getMaxPage } from './root-helpers';
@@ -14,7 +14,6 @@ import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import { useGetPlanetsQuery } from '../../services/apiSlice';
 import { setPlanets } from '../../services/planetsSlice';
 import type { IState } from '../../types/rootTypes';
-import Loader from '../../utils/loader/loader';
 
 const Root = (): ReactNode => {
   const { theme } = useContext(ThemeContext);
@@ -23,7 +22,7 @@ const Root = (): ReactNode => {
 
   // const [page, setPage] = useState<number>(1);
 
-  const { data: planets, isLoading } = useGetPlanetsQuery();
+  const { data: planets, isLoading: isLoadingPlanets } = useGetPlanetsQuery();
 
   useEffect(() => {
     if (planets?.results) {
@@ -42,7 +41,7 @@ const Root = (): ReactNode => {
     data: null,
   });
   const navigate = useNavigate();
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   // const [searchValueLS, setSearchValueLS] = useSetToLS('Task');
 
   const handleWKeyDown = (event: React.KeyboardEvent): void => {
@@ -92,7 +91,7 @@ const Root = (): ReactNode => {
         {planets && (
           <ResultList
             state={{
-              isLoad: isLoading,
+              isLoad: isLoadingPlanets,
               searchValue: '',
               page: 1,
               maxPage: 1,
@@ -105,8 +104,7 @@ const Root = (): ReactNode => {
         )}
 
         <div className={styles.detailed_wrapper}>
-          {isDetailedVisible &&
-            (navigation.state === 'loading' ? <Loader /> : <Outlet context={{ handleClickVisible }} />)}
+          {isDetailedVisible && <Outlet context={{ handleClickVisible }} />}
         </div>
       </main>
       <footer className={styles.footer}>
