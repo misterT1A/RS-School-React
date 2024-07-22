@@ -5,6 +5,7 @@ import styles from './_Detailed-block.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import { useGetPlanetQuery } from '../../services/apiSlice';
 import { setPlanet } from '../../services/detailedSlice';
+import { addFavorite, deleteFavorite } from '../../services/favoriteSlice';
 import type { IPlanet } from '../../types/rootTypes';
 import btnStyles from '../../utils/button/_button.module.scss';
 import Loader from '../../utils/loader/loader';
@@ -16,6 +17,9 @@ const DetailedBlock = (): ReactNode => {
   const { data, isFetching } = useGetPlanetQuery(productId || '');
   const { handleClickVisible } = useOutletContext<{ handleClickVisible: () => void }>();
   const planetStore = useAppSelector((state) => state.planet.currentPlanet);
+  const isFavoritePlanet = useAppSelector(
+    (state) => !!state.favorite.planets.find((planet) => planet.name === planetStore?.name),
+  );
 
   useEffect(() => {
     if (data) {
@@ -32,6 +36,14 @@ const DetailedBlock = (): ReactNode => {
   const newData = Object.entries(planetStore as IPlanet);
   const filteredData = newData.filter((elem) => elem[0] !== 'residents' && elem[0] !== 'films' && elem[0] !== 'url');
 
+  const addToFavorite = (): void => {
+    dispatch(addFavorite(planetStore));
+  };
+
+  const deleteFromFavorite = (): void => {
+    dispatch(deleteFavorite(planetStore));
+  };
+
   return (
     <div id="detailed" className={styles.wrapper}>
       <ul className={styles.list}>
@@ -44,6 +56,14 @@ const DetailedBlock = (): ReactNode => {
       <div>
         <button className={btnStyles.button} name="close" type="button" onClick={handleClickVisible}>
           Close
+        </button>
+        <button
+          type="button"
+          name="favorite"
+          className={styles.favoriteBtn}
+          onClick={isFavoritePlanet ? deleteFromFavorite : addToFavorite}
+        >
+          {isFavoritePlanet ? '★' : '☆'}
         </button>
       </div>
     </div>

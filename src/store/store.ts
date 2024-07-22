@@ -3,6 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 
 import { apiSlice } from '../services/apiSlice';
 import detailedReducer from '../services/detailedSlice';
+import favoriteReducer from '../services/favoriteSlice';
 import planetsReducer from '../services/planetsSlice';
 
 const store = configureStore({
@@ -10,6 +11,7 @@ const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
     planets: planetsReducer,
     planet: detailedReducer,
+    favorite: favoriteReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
 });
