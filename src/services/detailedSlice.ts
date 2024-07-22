@@ -18,8 +18,11 @@ const detailedSlice = createSlice({
     setPlanet(state, action: PayloadAction<IPlanet>) {
       state.currentPlanet = action.payload;
     },
+    deletePlanet(state) {
+      state.currentPlanet = null;
+    },
   },
 });
 
-export const { setPlanet } = detailedSlice.actions;
+export const { setPlanet, deletePlanet } = detailedSlice.actions;
 export default detailedSlice.reducer;

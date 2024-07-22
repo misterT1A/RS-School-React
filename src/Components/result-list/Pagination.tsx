@@ -8,11 +8,12 @@ import type { IPagination } from '../../types/resultListTypes';
 const PaginationBlock = ({ state, setState, searchParams, handleClickVisible }: IPagination): ReactNode => {
   const navigate = useNavigate();
 
-  const handleStateLoader = (): void => {
+  const handleStateLoader = (pageNumber: number): void => {
     setState((prevState) => ({
       ...prevState,
-      isLoad: true,
+      currentPage: pageNumber,
     }));
+
     navigate(`/?${searchParams.toString()}`);
   };
 
@@ -27,7 +28,7 @@ const PaginationBlock = ({ state, setState, searchParams, handleClickVisible }: 
             })}
             onClick={(e) => {
               e.stopPropagation();
-              handleStateLoader();
+              handleStateLoader(elem);
               handleClickVisible(e);
             }}
           >

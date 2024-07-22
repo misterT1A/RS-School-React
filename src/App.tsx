@@ -19,7 +19,6 @@ const router = createBrowserRouter([
       {
         path: 'planets/:productId',
         element: <DetailedBlock />,
-        // loader: detailedLoader,
       },
     ],
   },

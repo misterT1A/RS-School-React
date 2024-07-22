@@ -1,6 +1,6 @@
-.wrapper_load {
-  min-width: 100px;
-}
+// .wrapper_load {
+//   // min-width: 100px;
+// }
 
 .list_center {
   padding: 10px 5px;
@@ -21,11 +21,20 @@
   overflow-y: auto;
 }
 
+.favoriteBtn {
+  background-color: transparent;
+  font-size: 30px;
+  color: #eeb004;
+
+  cursor: pointer;
+}
+
 .list_item {
   padding: 5px;
   display: flex;
   align-items: center;
-  flex-direction: column;
+  justify-content: space-between;
+  flex-direction: row;
   gap: 5px;
   border: 1px solid #fff;
   border-radius: 10px;

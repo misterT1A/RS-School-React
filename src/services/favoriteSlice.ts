@@ -19,7 +19,7 @@ const favoritSlice = createSlice({
       state.planets.push(action.payload);
     },
     deleteFavorite(state, action: PayloadAction<IPlanet>) {
-      state.planets = state.planets.filter((favorite) => favorite.name !== action.payload.name) && [];
+      state.planets = state.planets.filter((favorite) => favorite.name !== action.payload.name);
     },
   },
 });

@@ -6,6 +6,16 @@ export interface IState {
   maxPage: number;
 }
 
+export interface IPageState {
+  currentPage: number;
+  maxPage: number;
+}
+
+export interface ISearchParams {
+  searchValue: string;
+  pageNumber: number;
+}
+
 export interface IResponse {
   count: number;
   next: string | null;
