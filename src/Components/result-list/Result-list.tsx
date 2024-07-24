@@ -1,10 +1,13 @@
 // import classNames from 'classnames';
+// import type { RootState } from '@reduxjs/toolkit/query';
 import { type ReactNode } from 'react';
+// import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import styles from './_Result-list.module.scss';
 import { extractLastNumber, getClassName } from './result-list-helpers';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
+// import { apiSlice } from '../../store/apiSlice';
 import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
 import type { IResultListProps } from '../../types/resultListTypes';
 import type { IPlanet } from '../../types/rootTypes';
@@ -31,10 +34,6 @@ const ResultList = ({
     e.preventDefault();
     dispatch(deleteFavorite(planet));
   };
-
-  // const sectionClass = classNames({
-  //   [styles.wrapper_load]: isDetailedVisible,
-  // });
 
   return (
     <section className={styles.wrapper_load}>

@@ -1,10 +1,9 @@
-import { useEffect, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 
 import styles from './_Detailed-block.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-import { useGetPlanetQuery } from '../../store/apiSlice';
-import { setPlanet } from '../../store/detailedSlice';
+import useGetCurrentPlanet from '../../hooks/useGetCurrentPlanet';
 import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
 import btnStyles from '../../utils/button/_button.module.scss';
 import filterPlanet from '../../utils/filterPlanet';
@@ -14,33 +13,28 @@ const DetailedBlock = (): ReactNode => {
   const { productId } = useParams();
   const dispatch = useAppDispatch();
 
-  const { data, isFetching } = useGetPlanetQuery(productId || '');
   const { handleClickVisible } = useOutletContext<{ handleClickVisible: () => void }>();
-  const planetStore = useAppSelector((state) => state.planet.currentPlanet);
+
+  const [planet, isFetching] = useGetCurrentPlanet(productId);
+
   const isFavoritePlanet = useAppSelector(
-    (state) => !!state.favorite.planets.find((planet) => planet.name === planetStore?.name),
+    (state) => !!state.favorite.planets.find((elem) => elem.name === planet?.name),
   );
 
-  useEffect(() => {
-    if (data) {
-      dispatch(setPlanet(data));
-    }
-  }, [data, dispatch]);
+  if (!planet && !isFetching) return <h2>error</h2>;
 
-  if (!data && !isFetching) return <h2>error</h2>;
-
-  if (isFetching || !planetStore) {
+  if (isFetching || !planet) {
     return <Loader />;
   }
 
-  const filteredData = filterPlanet(planetStore);
+  const filteredData = filterPlanet(planet);
 
   const addToFavorite = (): void => {
-    dispatch(addFavorite(planetStore));
+    dispatch(addFavorite(planet));
   };
 
   const deleteFromFavorite = (): void => {
-    dispatch(deleteFavorite(planetStore));
+    dispatch(deleteFavorite(planet));
   };
 
   return (

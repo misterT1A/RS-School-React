@@ -15,7 +15,6 @@ const FlyoutPanel = (): ReactNode => {
   };
 
   const downloadCSV = (): string => {
-    console.log(favoritePlanets);
     if (favoritePlanets.length) {
       const headers = Object.keys(favoritePlanets[0]);
       const data = favoritePlanets.map((planet) => Object.values(planet));

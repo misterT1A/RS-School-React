@@ -1,6 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
+import { apiSlice } from './apiSlice';
 import type { IPlanet } from '../types/rootTypes';
 
 interface IInitialDetailedPlanet {
@@ -21,6 +22,11 @@ const detailedSlice = createSlice({
     deletePlanet(state) {
       state.currentPlanet = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(apiSlice.endpoints.getPlanet.matchFulfilled, (state, action: PayloadAction<IPlanet>) => {
+      state.currentPlanet = action.payload;
+    });
   },
 });
 

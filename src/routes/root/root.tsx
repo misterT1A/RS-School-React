@@ -1,21 +1,17 @@
 import classNames from 'classnames';
-import { useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './_root.module.scss';
-import { getCurrentPage, getMaxPage } from './root-helpers';
 import FlyoutPanel from '../../Components/flyout-panel/Flyout-panel';
 import PaginationBlock from '../../Components/result-list/Pagination';
 import ResultList from '../../Components/result-list/Result-list';
 import SearchBlock from '../../Components/search-block/SearchBlock';
 import ThemeTogler from '../../Components/theme-button/Theme-button';
 import { ThemeContext, ThemeEnum } from '../../context/index';
-import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-import useSetToLS from '../../hooks/useSetToLS';
-import { useGetPlanetsQuery } from '../../store/apiSlice';
+import { useAppDispatch, useGetPlanets, useSetToLS } from '../../hooks';
 import { deletePlanet } from '../../store/detailedSlice';
-import { setPlanets } from '../../store/planetsSlice';
-import type { IPageState, ISearchParams } from '../../types/rootTypes';
+import type { IPageState } from '../../types/rootTypes';
 import Loader from '../../utils/loader/loader';
 
 const Root = (): ReactNode => {
@@ -24,29 +20,14 @@ const Root = (): ReactNode => {
   const navigate = useNavigate();
   const { theme } = useContext(ThemeContext);
   const [searchParams, setSearchParams] = useSearchParams();
-  const planetsStore = useAppSelector((state) => state.planets.planets);
 
   const [searchValueLS, setSearchValueLS] = useSetToLS('Task');
+  console.log(searchValueLS);
 
   const [pageState, setPageState] = useState<IPageState>({ currentPage: 1, maxPage: 1 });
   const [isDetailedVisible, setIsDetailedVisible] = useState<boolean>(!!location.pathname.slice(1));
 
-  const fetchParam: ISearchParams = useMemo(
-    () => ({
-      searchValue: searchValueLS,
-      pageNumber: Number(searchParams.get('page')) || 1,
-    }),
-    [searchValueLS, searchParams],
-  );
-
-  const { data: response, isLoading, isFetching } = useGetPlanetsQuery(fetchParam);
-
-  useEffect(() => {
-    if (response?.results) {
-      dispatch(setPlanets(response.results));
-      setPageState((prev) => ({ ...prev, currentPage: getCurrentPage(response), maxPage: getMaxPage(response.count) }));
-    }
-  }, [response, dispatch]);
+  const [planets, isLoading, isFetching] = useGetPlanets(setPageState);
 
   const handleWKeyDown = useCallback(
     (event: React.KeyboardEvent): void => {
@@ -106,12 +87,12 @@ const Root = (): ReactNode => {
         <ThemeTogler />
       </header>
       <main className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
-        {response &&
+        {planets &&
           (isLoading || isFetching ? (
             <Loader />
           ) : (
             <ResultList
-              planets={planetsStore}
+              planets={planets.results}
               searchParams={searchParams}
               isDetailedVisible={isDetailedVisible}
               setIsDetailedVisible={setIsDetailedVisible}
