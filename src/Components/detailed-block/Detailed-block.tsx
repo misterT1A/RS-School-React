@@ -3,11 +3,11 @@ import { useOutletContext, useParams } from 'react-router-dom';
 
 import styles from './_Detailed-block.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-import { useGetPlanetQuery } from '../../services/apiSlice';
-import { setPlanet } from '../../services/detailedSlice';
-import { addFavorite, deleteFavorite } from '../../services/favoriteSlice';
-import type { IPlanet } from '../../types/rootTypes';
+import { useGetPlanetQuery } from '../../store/apiSlice';
+import { setPlanet } from '../../store/detailedSlice';
+import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
 import btnStyles from '../../utils/button/_button.module.scss';
+import filterPlanet from '../../utils/filterPlanet';
 import Loader from '../../utils/loader/loader';
 
 const DetailedBlock = (): ReactNode => {
@@ -33,8 +33,7 @@ const DetailedBlock = (): ReactNode => {
     return <Loader />;
   }
 
-  const newData = Object.entries(planetStore as IPlanet);
-  const filteredData = newData.filter((elem) => elem[0] !== 'residents' && elem[0] !== 'films' && elem[0] !== 'url');
+  const filteredData = filterPlanet(planetStore);
 
   const addToFavorite = (): void => {
     dispatch(addFavorite(planetStore));

@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import styles from './_Result-list.module.scss';
 import { extractLastNumber, getClassName } from './result-list-helpers';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-import { addFavorite, deleteFavorite } from '../../services/favoriteSlice';
+import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
 import type { IResultListProps } from '../../types/resultListTypes';
 import type { IPlanet } from '../../types/rootTypes';
 

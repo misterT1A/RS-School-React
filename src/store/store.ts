@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
-import { apiSlice } from '../services/apiSlice';
-import detailedReducer from '../services/detailedSlice';
-import favoriteReducer from '../services/favoriteSlice';
-import planetsReducer from '../services/planetsSlice';
+import { apiSlice } from './apiSlice';
+import detailedReducer from './detailedSlice';
+import favoriteReducer from './favoriteSlice';
+import planetsReducer from './planetsSlice';
 
 const store = configureStore({
   reducer: {

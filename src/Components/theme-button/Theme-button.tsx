@@ -14,7 +14,7 @@ const ThemeTogler = (): ReactNode => {
   });
 
   return (
-    <div className={styles.container}>
+    <div id="themeTogler" className={styles.container}>
       <button
         aria-label="button"
         type="button"
