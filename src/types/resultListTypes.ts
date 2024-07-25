@@ -4,7 +4,6 @@ import type React from 'react';
 import type { IPageState, IPlanet } from './rootTypes';
 
 export interface IResultListProps {
-  // state: IState;
   planets: IPlanet[];
   searchParams: URLSearchParams;
   isDetailedVisible: boolean;

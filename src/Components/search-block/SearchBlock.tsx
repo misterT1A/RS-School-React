@@ -1,18 +1,20 @@
 import { type ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './_SearchBlock.module.scss';
-import type IInputProps from '../../types/searchPanelTypes';
+import { useSetToLS } from '../../hooks';
 import btnStyles from '../../utils/button/_button.module.scss';
 
-const SearchBlock = ({ searchParams, setSearchParams, setValueLS }: IInputProps): ReactNode => {
+const SearchBlock = (): ReactNode => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchValueLS] = useSetToLS('Task');
 
   const handleSearchSubmit = (event: React.FormEvent): void => {
     event.preventDefault();
     const form = event.currentTarget as HTMLFormElement;
     const query = new FormData(form).get('q') as string;
-    setValueLS(() => query);
+    setSearchValueLS(() => query);
 
     setSearchParams((prevSearchParams) => {
       const updatedParams = new URLSearchParams(prevSearchParams);

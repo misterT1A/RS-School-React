@@ -1,13 +1,10 @@
-// import classNames from 'classnames';
-// import type { RootState } from '@reduxjs/toolkit/query';
-import { type ReactNode } from 'react';
-// import { useSelector } from 'react-redux';
+import { useContext, type ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import styles from './_Result-list.module.scss';
 import { extractLastNumber, getClassName } from './result-list-helpers';
+import { ThemeContext, ThemeEnum } from '../../context';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-// import { apiSlice } from '../../store/apiSlice';
 import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
 import type { IResultListProps } from '../../types/resultListTypes';
 import type { IPlanet } from '../../types/rootTypes';
@@ -19,6 +16,7 @@ const ResultList = ({
   setIsDetailedVisible,
 }: IResultListProps): ReactNode => {
   const dispatch = useAppDispatch();
+  const { theme } = useContext(ThemeContext);
   const favoritePlanets = useAppSelector((state) => state.favorite.planets);
 
   const isFavorite = (planetName: string): boolean => favoritePlanets.some((planet) => planet.name === planetName);
@@ -51,7 +49,9 @@ const ResultList = ({
                       setIsDetailedVisible(true);
                     }}
                   >
-                    <p className={styles.title}>{elem.name}</p>
+                    <p className={theme === ThemeEnum.Light ? styles.title : `${styles.title} ${styles.dark}`}>
+                      {elem.name}
+                    </p>
                     <button
                       type="button"
                       name="favorite"
