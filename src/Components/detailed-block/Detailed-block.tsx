@@ -49,7 +49,7 @@ const DetailedBlock = (): ReactNode => {
           </li>
         ))}
       </ul>
-      <div>
+      <div className={styles.controls}>
         <button className={btnStyles.button} name="close" type="button" onClick={handleClickVisible}>
           Close
         </button>

@@ -76,17 +76,18 @@ const Root = (): ReactNode => {
           </div>
         </header>
         <main className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
-          {planets &&
-            (isLoading || isFetching ? (
-              <Loader />
-            ) : (
+          {isLoading || isFetching ? (
+            <Loader />
+          ) : (
+            planets && (
               <ResultList
                 planets={planets.results}
                 searchParams={searchParams}
                 isDetailedVisible={isDetailedVisible}
                 setIsDetailedVisible={setIsDetailedVisible}
               />
-            ))}
+            )
+          )}
 
           <div className={styles.detailed_wrapper}>
             {isDetailedVisible && <Outlet context={{ handleClickVisible }} />}

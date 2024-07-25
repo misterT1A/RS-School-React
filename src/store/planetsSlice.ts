@@ -19,11 +19,6 @@ const planetsSlice = createSlice({
       state.planets = action.payload;
     },
   },
-  // extraReducers: (builder) => {
-  //   builder.addMatcher(apiSlice.endpoints.getPlanets.matchFulfilled, (state, action: PayloadAction<IResponse>) => {
-  //     state.planets = action.payload.results;
-  //   });
-  // },
 });
 
 export const { setPlanets } = planetsSlice.actions;

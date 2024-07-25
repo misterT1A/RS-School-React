@@ -35,42 +35,40 @@ const ResultList = ({
 
   return (
     <section className={styles.wrapper_load}>
-      <div>
-        {planets?.length ? (
-          <nav>
-            <ul className={isDetailedVisible ? styles.list_column : styles.list_center}>
-              {planets.map((elem) => (
-                <li id="planets" key={elem.url}>
-                  <NavLink
-                    to={`planets/${extractLastNumber(elem.url ? elem.url : '')}?q=${searchParams.get('q') || ''}&page=${searchParams.get('page') || '1'}`}
-                    className={getClassName}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsDetailedVisible(true);
-                    }}
+      {planets?.length ? (
+        <nav className={styles.wrapper_load}>
+          <ul className={isDetailedVisible ? styles.list_column : styles.list_center}>
+            {planets.map((elem) => (
+              <li id="planets" key={elem.url}>
+                <NavLink
+                  to={`planets/${extractLastNumber(elem.url ? elem.url : '')}?q=${searchParams.get('q') || ''}&page=${searchParams.get('page') || '1'}`}
+                  className={getClassName}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsDetailedVisible(true);
+                  }}
+                >
+                  <p className={theme === ThemeEnum.Light ? styles.title : `${styles.title} ${styles.dark}`}>
+                    {elem.name}
+                  </p>
+                  <button
+                    type="button"
+                    name="favorite"
+                    className={styles.favoriteBtn}
+                    onClick={(e: React.MouseEvent) =>
+                      isFavorite(elem.name) ? deleteFromFavorite(e, elem) : addToFavorite(e, elem)
+                    }
                   >
-                    <p className={theme === ThemeEnum.Light ? styles.title : `${styles.title} ${styles.dark}`}>
-                      {elem.name}
-                    </p>
-                    <button
-                      type="button"
-                      name="favorite"
-                      className={styles.favoriteBtn}
-                      onClick={(e: React.MouseEvent) =>
-                        isFavorite(elem.name) ? deleteFromFavorite(e, elem) : addToFavorite(e, elem)
-                      }
-                    >
-                      {isFavorite(elem.name) ? '★' : '☆'}
-                    </button>
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ) : (
-          <h2>No results</h2>
-        )}
-      </div>
+                    {isFavorite(elem.name) ? '★' : '☆'}
+                  </button>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ) : (
+        <h2>No results</h2>
+      )}
     </section>
   );
 };

@@ -72,5 +72,5 @@
 
 .detailed_wrapper {
   width: 100%;
-  @include flex(center, center, column);
+  @include flex(normal, center, column);
 }

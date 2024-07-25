@@ -13,16 +13,14 @@
   border-color: #eeb004;
 }
 
-.list {
-  @include flex(flex-start, flex-start, column);
+.controls {
+  @include flex(center, center, row);
   gap: 10px;
 }
 
-@media screen and (max-width: 500px) {
-  .wrapper {
-    flex-direction: column;
-    font-size: 14px;
-  }
+.list {
+  @include flex(flex-start, flex-start, column);
+  gap: 10px;
 }
 
 .favoriteBtn {
@@ -31,4 +29,11 @@
   color: #eeb004;
 
   cursor: pointer;
+}
+
+@media screen and (max-width: 500px) {
+  .wrapper {
+    flex-direction: column;
+    font-size: 14px;
+  }
 }

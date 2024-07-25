@@ -1,3 +1,7 @@
+.wrapper_load {
+  min-width: 150px;
+}
+
 .list_center {
   padding: 10px 5px;
   width: 100%;
@@ -43,7 +47,7 @@
   }
 
   &.active {
-    background-color: rgb(92, 92, 92);
+    background-color: rgb(106, 106, 106);
   }
 }
 
