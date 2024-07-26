@@ -8,7 +8,7 @@ import ResultList from '../../Components/result-list/Result-list';
 import SearchBlock from '../../Components/search-block/SearchBlock';
 import ThemeTogler from '../../Components/theme-button/Theme-button';
 import { useAppDispatch, useGetPlanets } from '../../hooks';
-import useClassThemeTogler from '../../hooks/useClassThemTogler';
+import useClassThemeToggler from '../../hooks/useClassThemTogler';
 import { deletePlanet } from '../../store/detailedSlice';
 import type { IPageState } from '../../types/rootTypes';
 import Loader from '../../utils/loader/loader';
@@ -60,16 +60,16 @@ const Root = (): ReactNode => {
 
   return (
     <section
-      className={useClassThemeTogler(styles.wrapper, styles.dark)}
+      className={useClassThemeToggler(styles.wrapper, styles.dark)}
       data-testid="rootComponent"
       role="button"
       tabIndex={0}
       onClick={handleClickVisibleWithEvent}
       onKeyDown={handleWKeyDown}
     >
-      <div className={useClassThemeTogler(styles.app, styles.dark)}>
+      <div className={useClassThemeToggler(styles.app, styles.dark)}>
         <header className={styles.header}>
-          <h1 className={useClassThemeTogler(styles.title, styles.dark)}>Planet search</h1>
+          <h1 className={useClassThemeToggler(styles.title, styles.dark)}>Planet search</h1>
           <div className={styles.controlBlock}>
             <SearchBlock />
             <ThemeTogler />

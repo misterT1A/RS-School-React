@@ -1,129 +1,78 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import type { RenderResult } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import { createMemoryRouter, MemoryRouter, RouterProvider, useNavigation } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import '@testing-library/jest-dom';
+import { ThemeProvider } from '../../context';
 import Root from '../../routes/root/root';
-
-const TestProduct = {
-  id: 'test',
-  climate: 'test',
-  created: 'test',
-  diameter: 'test',
-  edited: 'test',
-  films: ['test', 'test'],
-  gravity: 'test',
-  name: 'Test Planet',
-  orbital_period: 'test',
-  population: 'test',
-  residents: ['test', 'test'],
-  rotation_period: 'test',
-  surface_water: 'test',
-  terrain: 'test',
-  url: '',
-};
-
-const response = {
-  count: 10,
-  next: '//1',
-  previous: null,
-  results: [TestProduct],
-};
+import { deletePlanet } from '../../store/detailedSlice';
+import store from '../../store/store';
 
 jest.mock('../../utils/loader/loader', () => (): ReactNode => <div data-testid="loader">Loader</div>);
 
-jest.mock('../../services/fetchDataService.ts', () => ({
-  fetchDataService: jest.fn().mockImplementation(() => Promise.resolve(response)),
-}));
+describe('Root Component', () => {
+  const spy = jest.spyOn(store, 'dispatch');
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigation: jest.fn(),
-}));
+  const renderRoot = (): RenderResult =>
+    render(
+      <Provider store={store}>
+        <ThemeProvider>
+          <MemoryRouter initialEntries={['/']}>
+            <Routes>
+              <Route path="/" element={<Root />} />
+            </Routes>
+          </MemoryRouter>
+        </ThemeProvider>
+      </Provider>,
+    );
 
-describe('Root component', () => {
-  beforeEach(() => {
-    // Устанавливаем значение по умолчанию для useNavigation мока
-    (useNavigation as jest.Mock).mockReturnValue({ state: 'idle' });
+  it('should render the title', () => {
+    renderRoot();
+    expect(screen.getByText(/Planet search/i)).toBeInTheDocument();
   });
 
-  test('renders Root component and fetches data', async () => {
-    const router = createMemoryRouter([
-      {
-        path: '/',
-        element: <Root />,
-      },
-    ]);
-
-    await act(async () => {
-      render(<RouterProvider router={router} />);
-    });
-
-    expect(screen.getByTestId('rootComponent')).toBeInTheDocument();
-    expect(screen.getByText('Planet search')).toBeInTheDocument();
+  it('should display list of planets after data is fetched', async () => {
+    renderRoot();
+    expect(await screen.findByText(/test/i)).toBeInTheDocument();
   });
 
-  test('hides detailed view on Enter or Space keydown', async () => {
-    const router = createMemoryRouter([
-      {
-        path: '/',
-        element: <Root />,
-      },
-    ]);
-
-    await act(async () => {
-      render(<RouterProvider router={router} />);
-    });
+  it('hides detailed view on Enter or Space keydown', async () => {
+    renderRoot();
 
     const rootComponent = screen.getByTestId('rootComponent');
     rootComponent.focus();
     fireEvent.keyDown(rootComponent, { key: 'Enter' });
 
     await waitFor(() => {
-      expect(screen.queryByText('Test Planet')).toBeVisible();
+      expect(screen.queryByText('test')).toBeVisible();
     });
 
     fireEvent.keyDown(rootComponent, { key: ' ' });
 
     await waitFor(() => {
-      expect(screen.queryByText('Test Planet')).toBeVisible();
+      expect(screen.queryByText('test')).toBeVisible();
     });
   });
 
-  test('shows Loader for detailed when navigation state is loading', async () => {
-    (useNavigation as jest.Mock).mockReturnValue({ state: 'loading' });
+  it('calls navigate and dispatch when clicking outside specific elements', () => {
+    renderRoot();
 
-    render(
-      <MemoryRouter>
-        <Root />
-      </MemoryRouter>,
-    );
+    const rootComponent = screen.getByTestId('rootComponent');
 
-    await waitFor(() => {
-      const loader = screen.getByTestId('loader');
-      expect(loader).toBeInTheDocument();
-    });
-  });
-});
+    fireEvent.click(rootComponent);
 
-describe('Root component', () => {
-  beforeEach(() => {
-    localStorage.setItem('Task', 'testSearchValue');
+    expect(spy).toHaveBeenCalledWith(deletePlanet());
   });
 
-  it('component retrieves the value from the local storage upon mounting', async () => {
-    let querySearch: string | null = null;
-    await act(async () => {
-      render(
-        <MemoryRouter initialEntries={['/']}>
-          <Root />
-        </MemoryRouter>,
-      );
-    });
+  it('does not call navigate and dispatch when clicking on specific elements', () => {
+    renderRoot();
 
-    const searchParams = new URLSearchParams(window.location.search);
-    querySearch = searchParams.get('q') || localStorage.getItem('Task') || '';
+    fireEvent.click(screen.getByPlaceholderText('Search'));
+    fireEvent.click(screen.getByText('0 items are selected'));
+    fireEvent.click(screen.getByTestId('theme-toggle-button'));
 
-    expect(querySearch).toBe('testSearchValue');
+    expect(spy).not.toHaveBeenCalledWith(deletePlanet());
   });
 });

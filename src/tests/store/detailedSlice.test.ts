@@ -1,6 +1,5 @@
 import reducer, { setPlanet, deletePlanet } from '../../store/detailedSlice';
 import type { IPlanet } from '../../types/rootTypes';
-// import type { IPlanet } from '../../types/rootTypes';
 
 describe('FavoritesSlice', () => {
   it('should return default state', () => {

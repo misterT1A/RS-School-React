@@ -1,6 +1,5 @@
 import reducer, { addFavorite, deleteFavorite, deleteAllFavorites } from '../../store/favoriteSlice';
 import type { IPlanet } from '../../types/rootTypes';
-// import type { IPlanet } from '../../types/rootTypes';
 
 describe('FavoritesSlice', () => {
   it('should return default state', () => {

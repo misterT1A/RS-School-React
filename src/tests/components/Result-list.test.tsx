@@ -1,170 +1,111 @@
+import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 
+import styles from '../../Components/result-list/_Result-list.module.scss';
 import ResultList from '../../Components/result-list/Result-list';
 import '@testing-library/jest-dom';
+import { getClassName } from '../../Components/result-list/result-list-helpers';
+import { ThemeContext, ThemeEnum } from '../../context';
+import { mockPlanet } from '../../mock/handlers';
+import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
+import store from '../../store/store';
+import type { IPlanet } from '../../types/rootTypes';
 
 describe('ResultList', () => {
-  const TestProduct = {
-    id: 'test',
-    climate: 'test',
-    created: 'test',
-    diameter: 'test',
-    edited: 'test',
-    films: ['test', 'test'],
-    gravity: 'test',
-    name: 'test',
-    orbital_period: 'test',
-    population: 'test',
-    residents: ['test', 'test'],
-    rotation_period: 'test',
-    surface_water: 'test',
-    terrain: 'test',
-    url: '',
-  };
+  const planet1 = { ...mockPlanet, url: '/planets/1' };
+  const planet2 = { ...mockPlanet, name: 'test', url: '/planets/2' };
+  const planets = [planet1, planet2];
+  const searchParams = new URLSearchParams();
+  const isDetailedVisible = false;
+  const setIsDetailedVisible = jest.fn();
 
-  const TestProduct1 = {
-    ...TestProduct,
-    url: '/api/planets/1/',
-  };
-  const TestProduct2 = {
-    ...TestProduct,
-    url: '/api/planets/2/',
-  };
+  const spy = jest.spyOn(store, 'dispatch');
 
-  const mockState = {
-    searchValue: '',
-    page: 1,
-    isLoad: false,
-    maxPage: 1,
-    data: [TestProduct1, TestProduct2],
-  };
-
-  const mockStateProductNoUrl = {
-    ...mockState,
-    data: [TestProduct1, TestProduct],
-  };
-
-  const mockStateNull = {
-    ...mockState,
-    data: null,
-  };
-
-  const mockSearchParams = new URLSearchParams({
-    q: 'test',
-    page: '1',
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  const mockSearchParamsWithoutParam = new URLSearchParams({
-    q: '',
-    page: '',
-  });
-
-  const mockSetIsDetailedVisible = jest.fn();
-
-  it('renders loader when state is loading', () => {
-    const { container } = render(
-      <ResultList
-        state={{ isLoad: true, searchValue: '', page: 1, maxPage: 1, data: [] }}
-        searchParams={mockSearchParams}
-        isDetailedVisible={false}
-        setIsDetailedVisible={jest.fn()}
-      />,
-    );
-
-    expect(container.querySelector('.loader')).toBeInTheDocument();
-  });
-
-  it('renders list items when state data is present', () => {
+  const setup = (planetsArray: IPlanet[]): RenderResult =>
     render(
-      <BrowserRouter>
-        <ResultList
-          state={mockState}
-          searchParams={mockSearchParams}
-          isDetailedVisible={false}
-          setIsDetailedVisible={jest.fn()}
-        />
-      </BrowserRouter>,
+      <Provider store={store}>
+        <MemoryRouter>
+          <ThemeContext.Provider value={{ theme: ThemeEnum.Light, setTheme: jest.fn() }}>
+            <ResultList
+              planets={planetsArray}
+              searchParams={searchParams}
+              isDetailedVisible={isDetailedVisible}
+              setIsDetailedVisible={setIsDetailedVisible}
+            />
+          </ThemeContext.Provider>
+        </MemoryRouter>
+      </Provider>,
     );
 
-    const listItems = screen.getAllByRole('listitem');
-    expect(listItems).toHaveLength(mockState.data.length);
+  it('renders a list of planets', () => {
+    setup(planets);
 
-    const navLinks = screen.getAllByRole('link');
-    expect(navLinks).toHaveLength(mockState.data.length);
-    navLinks.forEach((link, index) => {
-      const expectedTo = `/planets/${index + 1}?q=test&page=1`;
-      expect(link.getAttribute('href')).toBe(expectedTo);
-    });
+    expect(screen.getByText('Tatooine')).toBeInTheDocument();
+    expect(screen.getByText('test')).toBeInTheDocument();
   });
 
-  it('renders NavLink with correct "to" attribute', () => {
-    render(
-      <BrowserRouter>
-        <ResultList
-          state={mockStateProductNoUrl}
-          searchParams={mockSearchParamsWithoutParam}
-          isDetailedVisible={false}
-          setIsDetailedVisible={mockSetIsDetailedVisible}
-        />
-      </BrowserRouter>,
-    );
+  it('renders "No results" when no planets are provided', () => {
+    setup([]);
 
-    const items = screen.getAllByRole('link');
-    expect(items.length).toBe(2);
-
-    expect(items[0]).toHaveAttribute('href', '/planets/1?q=&page=1');
-    expect(items[1]).toHaveAttribute('href', '/planets/?q=&page=1');
+    expect(screen.getByText('No results')).toBeInTheDocument();
   });
 
-  it('renders list with correct class when isDetailedVisible is true', () => {
-    render(
-      <BrowserRouter>
-        <ResultList
-          state={mockState}
-          searchParams={mockSearchParams}
-          isDetailedVisible
-          setIsDetailedVisible={mockSetIsDetailedVisible}
-        />
-      </BrowserRouter>,
-    );
+  it('calls setIsDetailedVisible when a planet is clicked', () => {
+    setup(planets);
 
-    const list = screen.getByRole('list');
-    expect(list).toHaveClass('list_column');
+    const planetLink = screen.getByText('Tatooine').closest('a') as HTMLAnchorElement;
+    fireEvent.click(planetLink);
+
+    expect(setIsDetailedVisible).toHaveBeenCalledWith(true);
   });
 
-  it('renders "No results" when state data is empty', () => {
-    render(
-      <ResultList
-        state={mockStateNull}
-        searchParams={mockSearchParams}
-        isDetailedVisible={false}
-        setIsDetailedVisible={jest.fn()}
-      />,
-    );
+  it('dispatches addFavorite action when the favorite button is clicked', () => {
+    setup(planets);
 
-    const noResultsText = screen.getByRole('heading', { name: /no results/i });
-    expect(noResultsText).toBeInTheDocument();
+    const addFavoriteButton = screen.getAllByRole('button')[0];
+    fireEvent.click(addFavoriteButton);
+
+    expect(store.getState().favorite.planets).toContainEqual(mockPlanet);
+    expect(spy).toHaveBeenCalledWith(addFavorite(planet1));
   });
 
-  it('calls setIsDetailedVisible on item click', () => {
-    render(
-      <BrowserRouter>
-        <ResultList
-          state={mockState}
-          searchParams={mockSearchParams}
-          isDetailedVisible={false}
-          setIsDetailedVisible={mockSetIsDetailedVisible}
-        />
-      </BrowserRouter>,
-    );
+  it('dispatches deleteFavorite action when the favorite button is clicked', () => {
+    store.dispatch(addFavorite(mockPlanet));
 
-    const navLinks = screen.getAllByText('test').map((link) => link.closest('a'));
+    setup(planets);
 
-    if (navLinks[0]) {
-      fireEvent.click(navLinks[0]);
-    }
+    const removeFavoriteButton = screen.getAllByRole('button')[0];
+    fireEvent.click(removeFavoriteButton);
 
-    expect(mockSetIsDetailedVisible).toHaveBeenCalledWith(true);
+    expect(store.getState().favorite.planets).not.toContainEqual(mockPlanet);
+    expect(spy).toHaveBeenCalledWith(deleteFavorite(planet1));
+  });
+});
+
+describe('getClassName', () => {
+  it('should return the correct class when isActive is true', () => {
+    const className = getClassName({ isActive: true, isPending: false });
+    expect(className).toBe(`${styles.list_item} ${styles.active}`);
+  });
+
+  it('should return the correct class when isPending is true', () => {
+    const className = getClassName({ isActive: false, isPending: true });
+    expect(className).toBe(`${styles.list_item} ${styles.pending}`);
+  });
+
+  it('should return the default class when both isActive and isPending are false', () => {
+    const className = getClassName({ isActive: false, isPending: false });
+    expect(className).toBe(styles.list_item);
+  });
+
+  it('should prioritize isActive over isPending', () => {
+    const className = getClassName({ isActive: true, isPending: true });
+    expect(className).toBe(`${styles.list_item} ${styles.active}`);
   });
 });

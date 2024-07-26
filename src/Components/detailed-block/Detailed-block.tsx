@@ -3,7 +3,7 @@ import { useOutletContext, useParams } from 'react-router-dom';
 
 import styles from './_Detailed-block.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-import useClassThemeTogler from '../../hooks/useClassThemTogler';
+import useClassThemeToggler from '../../hooks/useClassThemTogler';
 import useGetCurrentPlanet from '../../hooks/useGetCurrentPlanet';
 import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
 import btnStyles from '../../utils/button/_button.module.scss';
@@ -22,7 +22,7 @@ const DetailedBlock = (): ReactNode => {
     (state) => !!state.favorite.planets.find((elem) => elem.name === planet?.name),
   );
 
-  const wrapperClass = useClassThemeTogler(styles.wrapper, styles.dark);
+  const wrapperClass = useClassThemeToggler(styles.wrapper, styles.dark);
 
   if (!planet && !isFetching) return <h2>error</h2>;
 

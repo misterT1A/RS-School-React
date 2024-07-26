@@ -18,7 +18,6 @@ const favoritSlice = createSlice({
   reducers: {
     addFavorite(state, action: PayloadAction<IPlanet>) {
       const filteredData = Object.fromEntries(filterPlanet(action.payload)) as unknown as IPlanet;
-      console.log(filteredData);
       state.planets.push(filteredData);
     },
     deleteFavorite(state, action: PayloadAction<IPlanet>) {

@@ -16,8 +16,10 @@ const ThemeTogler = (): ReactNode => {
   return (
     <div id="themeTogler" className={styles.container}>
       <button
+        name="button"
         aria-label="button"
         type="button"
+        data-testid="theme-toggle-button"
         className={styles.switch}
         onClick={() => setTheme(theme === ThemeEnum.Light ? ThemeEnum.Dark : ThemeEnum.Light)}
       >
