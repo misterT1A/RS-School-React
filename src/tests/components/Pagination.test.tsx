@@ -2,16 +2,11 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import '@testing-library/jest-dom';
+import styles from '../../Components/result-list/_Result-list.module.scss';
 import PaginationBlock from '../../Components/result-list/Pagination';
 
 describe('PaginationBlock', () => {
-  const mockState = {
-    searchValue: '',
-    page: 1,
-    isLoad: false,
-    maxPage: 2,
-    data: [],
-  };
+  const mockState = { currentPage: 1, maxPage: 2 };
 
   const mockSetState = jest.fn();
   const mockSearchParams = new URLSearchParams('?q=test&page=1');
@@ -85,5 +80,23 @@ describe('PaginationBlock', () => {
       'href',
       `/?q=${mockSearchParams.get('q')}&page=${paginationLink.textContent}`,
     );
+  });
+
+  it('generates classname for nav link', () => {
+    render(
+      <MemoryRouter>
+        <PaginationBlock
+          state={mockState}
+          setState={mockSetState}
+          searchParams={mockSearchParams}
+          handleClickVisible={mockHandleClickVisible}
+        />
+      </MemoryRouter>,
+    );
+
+    const paginationLink = screen.getAllByRole('link')[0];
+    const paginationLink2 = screen.getAllByRole('link')[1];
+    expect(paginationLink).toHaveClass(`${styles.pagination_btn} ${styles.active}`);
+    expect(paginationLink2).toHaveClass(styles.pagination_btn);
   });
 });

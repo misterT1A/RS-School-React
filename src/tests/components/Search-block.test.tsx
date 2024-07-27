@@ -1,32 +1,36 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import type { RenderResult } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 
 import SearchBlock from '../../Components/search-block/SearchBlock';
+import { useSetToLS } from '../../hooks';
+
+jest.mock('../../hooks', () => ({
+  useSetToLS: jest.fn(),
+}));
 
 describe('SearchBlock', () => {
-  const setup = (): {
-    searchParams: URLSearchParams;
-    setSearchParams: jest.Mock;
-    setValueLS: jest.Mock;
-  } => {
-    const searchParams = new URLSearchParams();
-    const setSearchParams = jest.fn();
-    const setValueLS = jest.fn();
+  let setSearchValueLS: jest.Mock;
+  let mockUseSetToLS: jest.Mock;
 
+  beforeEach(() => {
+    setSearchValueLS = jest.fn();
+    mockUseSetToLS = useSetToLS as jest.Mock;
+    mockUseSetToLS.mockReturnValue(['', setSearchValueLS]);
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  const setup = (): RenderResult =>
     render(
       <MemoryRouter>
-        <SearchBlock searchParams={searchParams} setSearchParams={setSearchParams} setValueLS={setValueLS} />
+        <SearchBlock />
       </MemoryRouter>,
     );
-
-    return {
-      searchParams,
-      setSearchParams,
-      setValueLS,
-    };
-  };
 
   it('renders the search form', () => {
     setup();
@@ -42,15 +46,17 @@ describe('SearchBlock', () => {
     expect(input.value).toBe('test query');
   });
 
-  it('calls setSearchParams and setValueLS on form submit and saves the entered value to the local storage', async () => {
-    const { setSearchParams, setValueLS } = setup();
+  it('calls setSearchValueLS and updates URL on form submit', async () => {
+    setup();
+
     const input = screen.getByPlaceholderText('Search') as HTMLInputElement;
     const form = screen.getByRole('search');
 
     await userEvent.type(input, 'test query');
     fireEvent.submit(form);
 
-    expect(setValueLS).toHaveBeenCalledWith(expect.any(Function));
-    expect(setSearchParams).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(setSearchValueLS).toHaveBeenCalledWith(expect.any(Function));
+    });
   });
 });

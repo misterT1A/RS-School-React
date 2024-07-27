@@ -18,6 +18,13 @@ module.exports = {
   },
   plugins: ['import', 'react-refresh', 'prettier', '@typescript-eslint', 'react-compiler'],
   rules: {
+    'no-param-reassign': [
+      'error',
+      {
+        props: true,
+        ignorePropertyModificationsFor: ['state'],
+      },
+    ],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     '@typescript-eslint/consistent-type-exports': 'error', // Ensures consistent use of type exports
     '@typescript-eslint/consistent-type-imports': 'error', // Enforces consistent style for importing types

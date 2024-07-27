@@ -1,18 +1,18 @@
 import type { Dispatch } from 'react';
 import type React from 'react';
 
-import type { IState } from './rootTypes';
+import type { IPageState, IPlanet } from './rootTypes';
 
 export interface IResultListProps {
-  state: IState;
+  planets: IPlanet[];
   searchParams: URLSearchParams;
   isDetailedVisible: boolean;
   setIsDetailedVisible: Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface IPagination {
-  state: IState;
-  setState: React.Dispatch<React.SetStateAction<IState>>;
+  state: IPageState;
+  setState: React.Dispatch<React.SetStateAction<IPageState>>;
   searchParams: URLSearchParams;
   handleClickVisible: (event: React.MouseEvent) => void;
 }

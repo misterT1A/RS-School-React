@@ -1,117 +1,112 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import { Outlet, useLocation, useNavigate, useNavigation, useSearchParams } from 'react-router-dom';
+import { useCallback, useState, type ReactNode } from 'react';
+import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './_root.module.scss';
-import { getCurrentPage, getMaxPage } from './root-helpers';
+import FlyoutPanel from '../../Components/flyout-panel/Flyout-panel';
 import PaginationBlock from '../../Components/result-list/Pagination';
 import ResultList from '../../Components/result-list/Result-list';
 import SearchBlock from '../../Components/search-block/SearchBlock';
-import useSetToLS from '../../hooks/useSetToLS';
-import { fetchDataService } from '../../services/fetchDataService';
-import type { IState } from '../../types/rootTypes';
-import Loader from '../../utils/loader/loader';
+import ThemeTogler from '../../Components/theme-button/Theme-button';
+import { useAppDispatch, useGetPlanets } from '../../hooks';
+import useClassThemeToggler from '../../hooks/useClassThemTogler';
+import { deletePlanet } from '../../store/detailedSlice';
+import type { IPageState } from '../../types/rootTypes';
+import Loader from '../../UI/loader/loader';
 
 const Root = (): ReactNode => {
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [isDetailedVisible, setIsDetailedVisible] = useState<boolean>(!!location.pathname.slice(1));
-  const [state, setState] = useState<IState>({
-    isLoad: true,
-    searchValue: '',
-    page: 1,
-    maxPage: 1,
-    data: null,
-  });
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const navigation = useNavigation();
-  const [searchValueLS, setSearchValueLS] = useSetToLS('Task');
+  const [searchParams] = useSearchParams();
 
-  useEffect(() => {
-    const querySearch = searchParams.get('q') || searchValueLS || '';
-    const currentPage = Number(searchParams.get('page') || 1);
+  const [pageState, setPageState] = useState<IPageState>({ currentPage: 1, maxPage: 1 });
+  const [isDetailedVisible, setIsDetailedVisible] = useState<boolean>(!!location.pathname.slice(1));
 
-    if (!currentPage) {
-      navigate('/error');
-      return;
-    }
+  const [planets, isLoading, isFetching, isError] = useGetPlanets(setPageState);
 
-    const fetchData = async (search: string, page: number): Promise<void> => {
-      setState((prevState) => ({
-        ...prevState,
-        isLoad: true,
-      }));
-      try {
-        const data = await fetchDataService(search, page);
-
-        setState((prevState) => ({
-          ...prevState,
-          data: data.results,
-          isLoad: false,
-          page: getCurrentPage(data),
-          maxPage: getMaxPage(data.count),
-        }));
-      } catch (error) {
-        console.error('Fetch error');
+  const handleWKeyDown = useCallback(
+    (event: React.KeyboardEvent): void => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        setIsDetailedVisible(false);
+        dispatch(deletePlanet());
       }
-    };
+    },
+    [dispatch],
+  );
 
-    fetchData(querySearch, currentPage);
-  }, [searchParams, searchValueLS, navigate]);
+  const handleClickVisibleWithEvent = useCallback(
+    (event: React.MouseEvent): void => {
+      const target = event.target as HTMLElement;
 
-  const handleWKeyDown = (event: React.KeyboardEvent): void => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      setIsDetailedVisible(false);
-    }
-  };
-
-  const handleClickVisibleWithEvent = (event: React.MouseEvent): void => {
-    const target = event.target as HTMLElement;
-    if (!target.closest('#detailed') && !target.closest('#planets') && !target.closest('#input')) {
-      navigate(`/?${searchParams.toString()}`);
-      setIsDetailedVisible(false);
-    }
-  };
-  const handleClickVisible = (): void => {
+      if (
+        !target.closest('#detailed') &&
+        !target.closest('#planets') &&
+        !target.closest('#input') &&
+        !target.closest('#flyout') &&
+        !target.closest('#themeTogler')
+      ) {
+        navigate(`/?${searchParams.toString()}`);
+        setIsDetailedVisible(false);
+        dispatch(deletePlanet());
+      }
+    },
+    [navigate, searchParams, dispatch],
+  );
+  const handleClickVisible = useCallback((): void => {
     navigate(`/?${searchParams.toString()}`);
     setIsDetailedVisible(false);
+    dispatch(deletePlanet());
+  }, [navigate, searchParams, dispatch]);
+
+  const mainContent = (): ReactNode => {
+    if (isError || !planets) return <div>Fetch Error</div>;
+    if (isLoading || isFetching) return <Loader />;
+    return (
+      <ResultList
+        planets={planets.results}
+        searchParams={searchParams}
+        isDetailedVisible={isDetailedVisible}
+        setIsDetailedVisible={setIsDetailedVisible}
+      />
+    );
   };
 
   return (
     <section
-      className={styles.wrapper}
+      className={useClassThemeToggler(styles.wrapper, styles.dark)}
       data-testid="rootComponent"
       role="button"
       tabIndex={0}
       onClick={handleClickVisibleWithEvent}
       onKeyDown={handleWKeyDown}
     >
-      <header className={styles.header}>
-        <h1 className={styles.title}>Planet search</h1>
-        <SearchBlock searchParams={searchParams} setSearchParams={setSearchParams} setValueLS={setSearchValueLS} />
-      </header>
-      <main className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
-        <ResultList
-          state={state}
-          searchParams={searchParams}
-          isDetailedVisible={isDetailedVisible}
-          setIsDetailedVisible={setIsDetailedVisible}
-        />
-        <div className={styles.detailed_wrapper}>
-          {isDetailedVisible &&
-            (navigation.state === 'loading' ? <Loader /> : <Outlet context={{ handleClickVisible }} />)}
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        {state.isLoad || (
-          <PaginationBlock
-            state={state}
-            setState={setState}
-            searchParams={searchParams}
-            handleClickVisible={handleClickVisible}
-          />
-        )}
-      </footer>
+      <div className={useClassThemeToggler(styles.app, styles.dark)}>
+        <header className={styles.header}>
+          <h1 className={useClassThemeToggler(styles.title, styles.dark)}>Planet search</h1>
+          <div className={styles.controlBlock}>
+            <SearchBlock />
+            <ThemeTogler />
+          </div>
+        </header>
+        <main className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
+          {mainContent()}
+          <div className={styles.detailed_wrapper}>
+            {isDetailedVisible && <Outlet context={{ handleClickVisible }} />}
+          </div>
+        </main>
+        <footer className={styles.footer}>
+          {isLoading || isFetching || (
+            <PaginationBlock
+              state={pageState}
+              setState={setPageState}
+              searchParams={searchParams}
+              handleClickVisible={handleClickVisible}
+            />
+          )}
+          <FlyoutPanel />
+        </footer>
+      </div>
     </section>
   );
 };

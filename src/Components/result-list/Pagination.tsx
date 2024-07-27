@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import type { ReactNode } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
@@ -8,11 +7,12 @@ import type { IPagination } from '../../types/resultListTypes';
 const PaginationBlock = ({ state, setState, searchParams, handleClickVisible }: IPagination): ReactNode => {
   const navigate = useNavigate();
 
-  const handleStateLoader = (): void => {
+  const handleStateLoader = (pageNumber: number): void => {
     setState((prevState) => ({
       ...prevState,
-      isLoad: true,
+      currentPage: pageNumber,
     }));
+
     navigate(`/?${searchParams.toString()}`);
   };
 
@@ -22,12 +22,10 @@ const PaginationBlock = ({ state, setState, searchParams, handleClickVisible }: 
         <li key={elem}>
           <NavLink
             to={`?q=${searchParams.get('q') || ''}&page=${elem}`}
-            className={classNames(styles.pagination_btn, {
-              [styles.active]: +(searchParams.get('page') || 1) === elem,
-            })}
+            className={`${styles.pagination_btn} ${+(searchParams.get('page') || 1) === elem ? styles.active : ''}`}
             onClick={(e) => {
               e.stopPropagation();
-              handleStateLoader();
+              handleStateLoader(elem);
               handleClickVisible(e);
             }}
           >

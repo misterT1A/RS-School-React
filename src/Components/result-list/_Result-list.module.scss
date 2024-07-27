@@ -1,5 +1,5 @@
 .wrapper_load {
-  min-width: 100px;
+  min-width: 150px;
 }
 
 .list_center {
@@ -21,34 +21,48 @@
   overflow-y: auto;
 }
 
+.favoriteBtn {
+  background-color: transparent;
+  font-size: 30px;
+  color: #eeb004;
+
+  cursor: pointer;
+}
+
 .list_item {
   padding: 5px;
   display: flex;
   align-items: center;
-  flex-direction: column;
+  justify-content: space-between;
+  flex-direction: row;
   gap: 5px;
   border: 1px solid #fff;
   border-radius: 10px;
-  background-color: rgb(85, 85, 85);
+  background-color: rgb(158, 158, 158);
 
   cursor: pointer;
 
+  &:hover {
+    background-color: #ffffff;
+  }
+
   &.active {
-    background-color: rgb(153, 153, 153);
+    background-color: rgb(106, 106, 106);
   }
 
   &.pending {
-    background-color: rgb(24, 24, 24);
+    background-color: rgb(106, 106, 106);
   }
-}
-
-.list_item:hover {
-  background-color: #949494;
 }
 
 .title {
   font-size: 20px;
   color: #000000;
+}
+
+.title.dark {
+  color: #f7c900;
+  transition: color 0.2s;
 }
 
 .pagination {

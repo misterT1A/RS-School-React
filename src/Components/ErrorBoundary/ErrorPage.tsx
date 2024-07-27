@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './_Error-page.module.scss';
-import btnStyles from '../../utils/button/_button.module.scss';
+import btnStyles from '../../UI/button/_button.module.scss';
 
 const ErrorPage = (): ReactNode => {
   const navigate = useNavigate();

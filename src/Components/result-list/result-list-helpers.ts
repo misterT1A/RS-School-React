@@ -10,7 +10,7 @@ const getClassName = ({ isActive, isPending }: { isActive: boolean; isPending: b
     return `${styles.list_item} ${styles.active}`;
   }
   if (isPending) {
-    return `${styles.list_item} ${styles.actpendingve}`;
+    return `${styles.list_item} ${styles.pending}`;
   }
   return styles.list_item;
 };

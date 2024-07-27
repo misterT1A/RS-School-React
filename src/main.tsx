@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
+import { Provider } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import DetailedBlock from './Components/detailed-block/Detailed-block';
-import detailedLoader from './Components/detailed-block/Detailed-block-helpers';
 import ErrorPage from './Components/ErrorBoundary/ErrorPage';
+import { ThemeProvider } from './context';
 import NotFoundPage from './routes/not-found-page/NotFoundPage';
 import Root from './routes/root/root';
+import store from './store/store';
 
 const router = createBrowserRouter([
   {
@@ -18,7 +20,6 @@ const router = createBrowserRouter([
       {
         path: 'planets/:productId',
         element: <DetailedBlock />,
-        loader: detailedLoader,
       },
     ],
   },
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>,
 );
