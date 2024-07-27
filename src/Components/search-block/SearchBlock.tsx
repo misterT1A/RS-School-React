@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './_SearchBlock.module.scss';
 import { useSetToLS } from '../../hooks';
-import btnStyles from '../../utils/button/_button.module.scss';
+import btnStyles from '../../UI/button/_button.module.scss';
 
 const SearchBlock = (): ReactNode => {
   const navigate = useNavigate();

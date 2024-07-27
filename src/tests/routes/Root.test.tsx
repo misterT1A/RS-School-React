@@ -10,7 +10,7 @@ import Root from '../../routes/root/root';
 import { deletePlanet } from '../../store/detailedSlice';
 import store from '../../store/store';
 
-jest.mock('../../utils/loader/loader', () => (): ReactNode => <div data-testid="loader">Loader</div>);
+jest.mock('../../UI/loader/loader', () => (): ReactNode => <div data-testid="loader">Loader</div>);
 
 describe('Root Component', () => {
   const spy = jest.spyOn(store, 'dispatch');

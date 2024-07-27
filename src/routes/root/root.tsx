@@ -11,7 +11,7 @@ import { useAppDispatch, useGetPlanets } from '../../hooks';
 import useClassThemeToggler from '../../hooks/useClassThemTogler';
 import { deletePlanet } from '../../store/detailedSlice';
 import type { IPageState } from '../../types/rootTypes';
-import Loader from '../../utils/loader/loader';
+import Loader from '../../UI/loader/loader';
 
 const Root = (): ReactNode => {
   const location = useLocation();
@@ -22,7 +22,7 @@ const Root = (): ReactNode => {
   const [pageState, setPageState] = useState<IPageState>({ currentPage: 1, maxPage: 1 });
   const [isDetailedVisible, setIsDetailedVisible] = useState<boolean>(!!location.pathname.slice(1));
 
-  const [planets, isLoading, isFetching] = useGetPlanets(setPageState);
+  const [planets, isLoading, isFetching, isError] = useGetPlanets(setPageState);
 
   const handleWKeyDown = useCallback(
     (event: React.KeyboardEvent): void => {
@@ -38,6 +38,7 @@ const Root = (): ReactNode => {
   const handleClickVisibleWithEvent = useCallback(
     (event: React.MouseEvent): void => {
       const target = event.target as HTMLElement;
+
       if (
         !target.closest('#detailed') &&
         !target.closest('#planets') &&
@@ -58,6 +59,19 @@ const Root = (): ReactNode => {
     dispatch(deletePlanet());
   }, [navigate, searchParams, dispatch]);
 
+  const mainContent = (): ReactNode => {
+    if (isError || !planets) return <div>Fetch Error</div>;
+    if (isLoading || isFetching) return <Loader />;
+    return (
+      <ResultList
+        planets={planets.results}
+        searchParams={searchParams}
+        isDetailedVisible={isDetailedVisible}
+        setIsDetailedVisible={setIsDetailedVisible}
+      />
+    );
+  };
+
   return (
     <section
       className={useClassThemeToggler(styles.wrapper, styles.dark)}
@@ -76,19 +90,7 @@ const Root = (): ReactNode => {
           </div>
         </header>
         <main className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
-          {isLoading || isFetching ? (
-            <Loader />
-          ) : (
-            planets && (
-              <ResultList
-                planets={planets.results}
-                searchParams={searchParams}
-                isDetailedVisible={isDetailedVisible}
-                setIsDetailedVisible={setIsDetailedVisible}
-              />
-            )
-          )}
-
+          {mainContent()}
           <div className={styles.detailed_wrapper}>
             {isDetailedVisible && <Outlet context={{ handleClickVisible }} />}
           </div>

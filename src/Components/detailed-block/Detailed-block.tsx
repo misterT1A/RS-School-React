@@ -6,9 +6,9 @@ import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import useClassThemeToggler from '../../hooks/useClassThemTogler';
 import useGetCurrentPlanet from '../../hooks/useGetCurrentPlanet';
 import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
-import btnStyles from '../../utils/button/_button.module.scss';
+import btnStyles from '../../UI/button/_button.module.scss';
+import Loader from '../../UI/loader/loader';
 import filterPlanet from '../../utils/filterPlanet';
-import Loader from '../../utils/loader/loader';
 
 const DetailedBlock = (): ReactNode => {
   const { productId } = useParams();

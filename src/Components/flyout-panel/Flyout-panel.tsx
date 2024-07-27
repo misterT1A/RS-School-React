@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import styles from './Flyout-panel.module.scss';
 import { useAppSelector } from '../../hooks/storeHooks';
 import { deleteAllFavorites } from '../../store/favoriteSlice';
-import btnStyles from '../../utils/button/_button.module.scss';
+import btnStyles from '../../UI/button/_button.module.scss';
 
 const FlyoutPanel = (): ReactNode => {
   const favoritePlanets = useAppSelector((state) => state.favorite.planets);

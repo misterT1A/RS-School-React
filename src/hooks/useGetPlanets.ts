@@ -8,9 +8,11 @@ import { useGetPlanetsQuery } from '../store/apiSlice';
 import { setPlanets } from '../store/planetsSlice';
 import type { IPageState, IResponse, ISearchParams } from '../types/rootTypes';
 
-const useGetPlanets = (
+type useGetPlanet = (
   setPageState: React.Dispatch<React.SetStateAction<IPageState>>,
-): [IResponse | undefined, boolean, boolean] => {
+) => [IResponse | undefined, boolean, boolean, boolean];
+
+const useGetPlanets: useGetPlanet = (setPageState) => {
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
   const fetchParam: ISearchParams = useMemo(
@@ -21,7 +23,7 @@ const useGetPlanets = (
     [searchParams],
   );
 
-  const { data, isLoading, isFetching } = useGetPlanetsQuery(fetchParam);
+  const { data, isLoading, isFetching, isError } = useGetPlanetsQuery(fetchParam);
 
   useEffect(() => {
     if (data?.results) {
@@ -30,7 +32,7 @@ const useGetPlanets = (
     }
   }, [data, dispatch, setPageState]);
 
-  return [data, isLoading, isFetching];
+  return [data, isLoading, isFetching, isError];
 };
 
 export default useGetPlanets;
