@@ -1,15 +1,16 @@
-import { useAppDispatch, useGetPlanets } from '@/hooks';
+import { useAppDispatch, useGetPlanets, useSearchUrl } from '@/hooks';
 import { deletePlanet } from '@/store/detailedSlice';
 import { IPageState } from '@/types/rootTypes';
 import Loader from '@/UI/loader/loader';
 import { useRouter } from 'next/router';
 import { ReactNode, useCallback, useState } from 'react';
 import styles from './_root.module.scss';
+import ResultList from '../result-list/Result-list';
 
 const Root = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  // const searchParams = useSearchUrl();
+  const searchParams = useSearchUrl();
 
   // const detailsId = router.query.details;
   const [pageState, setPageState] = useState<IPageState>({ currentPage: 1, maxPage: 1 });
@@ -27,13 +28,12 @@ const Root = () => {
       return <div>Fetch Error</div>;
     }
     return (
-      // <ResultList
-      //   planets={planets.results}
-      //   searchParams={searchParams}
-      //   isDetailedVisible={isDetailedVisible}
-      //   setIsDetailedVisible={setIsDetailedVisible}
-      // />
-      <h1> {planets.toString()}</h1>
+      <ResultList
+        planets={planets.results}
+        searchParams={searchParams}
+        isDetailedVisible={isDetailedVisible}
+        setIsDetailedVisible={setIsDetailedVisible}
+      />
     );
   };
 

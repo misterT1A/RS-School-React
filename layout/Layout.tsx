@@ -1,10 +1,10 @@
-// import Header from '@/Components/header/Header';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 import ThemeWrapper from './themeWrapper';
 import useClassThemeToggler from '@/hooks/useClassThemTogler';
 
 import styles from '@/components/root/_root.module.scss';
+import Header from '@/components/header/Header';
 
 interface LayoutProps {
   children: ReactNode;
@@ -19,7 +19,7 @@ export const Layout = ({ children }: LayoutProps) => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <ThemeWrapper>
-      {/* <Header /> */}
+      <Header />
       <main className={useClassThemeToggler(styles.app, styles.dark)}>{children}</main>
     </ThemeWrapper>
   </>
