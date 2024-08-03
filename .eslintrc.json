@@ -32,7 +32,7 @@
     "react/function-component-definition": "off",
     "no-debugger": "off",
     "no-console": [
-      "warn",
+      "off",
       {
         "allow": [
           "warn",
