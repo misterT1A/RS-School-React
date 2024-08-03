@@ -19,7 +19,7 @@ module.exports = {
   },
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   moduleFileExtensions: ['ts', 'js', 'tsx'],
-  setupFiles: ['./src/mock/fetchSetup.ts'],
-  setupFilesAfterEnv: ['./src/mock/setupTests.ts'],
-  collectCoverageFrom: ['./src/**', '!src/**/*.d.ts'],
+  setupFiles: ['./mock/fetchSetup.ts'],
+  setupFilesAfterEnv: ['./mock/setupTests.ts'],
+  // collectCoverageFrom: ["./src/**", "!src/**/*.d.ts"],
 };
