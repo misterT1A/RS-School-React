@@ -6,13 +6,16 @@ import { useRouter } from 'next/router';
 import { ReactNode, useCallback, useState } from 'react';
 import styles from './_root.module.scss';
 import ResultList from '../result-list/Result-list';
+import PaginationBlock from '../result-list/Pagination';
+import FlyoutPanel from '../flyout-panel/Flyout-panel';
+import DetailedBlock from '../detailed-block/Detailed-block';
 
 const Root = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchUrl();
 
-  // const detailsId = router.query.details;
+  const detailsId = router.query.details;
   const [pageState, setPageState] = useState<IPageState>({ currentPage: 1, maxPage: 1 });
   console.log(pageState);
   const [isDetailedVisible, setIsDetailedVisible] = useState<boolean>(!!router.query.details?.toString() || false);
@@ -66,10 +69,10 @@ const Root = () => {
     [dispatch, router],
   );
 
-  // const handleClickVisible = useCallback((): void => {
-  //   setIsDetailedVisible(false);
-  //   dispatch(deletePlanet());
-  // }, [searchParams, dispatch]);
+  const handleClickVisible = useCallback((): void => {
+    setIsDetailedVisible(false);
+    dispatch(deletePlanet());
+  }, [dispatch]);
 
   return (
     <section
@@ -81,12 +84,12 @@ const Root = () => {
       <section className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
         {mainContent()}
         <div className={styles.detailed_wrapper}>
-          {/* {isDetailedVisible && detailsId && <DetailedBlock handleClickVisible={setIsDetailedVisible} />} */}
+          {isDetailedVisible && detailsId && <DetailedBlock handleClickVisible={setIsDetailedVisible} />}
         </div>
       </section>
       <footer className={styles.footer}>
-        {/* <PaginationBlock state={pageState} setState={setPageState} handleClickVisible={handleClickVisible} />
-          <FlyoutPanel /> */}
+        <PaginationBlock state={pageState} setState={setPageState} handleClickVisible={handleClickVisible} />
+        <FlyoutPanel />
       </footer>
     </section>
   );
