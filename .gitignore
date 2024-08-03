@@ -1,3 +1,7 @@
+# Next.js
+.next/
+out/
+
 # Logs
 logs
 *.log
@@ -7,16 +11,25 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Node modules
 node_modules
+
+# Build output
 dist
-coverage
 dist-ssr
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Temporary local files
 *.local
+
+# Lock files
 *.lock
 bun.lockb
 
 # Editor directories and files
-.vscode/*
+.vscode/
 !.vscode/extensions.json
 .idea
 .DS_Store
