@@ -16,7 +16,7 @@ const SearchBlock = (): ReactNode => {
     const query = new FormData(form).get('q') as string;
     setSearchValueLS(() => query);
 
-    const newSearchParams = { ...searchParams, q: query };
+    const newSearchParams = { ...searchParams, q: query, page: 1 };
     if (searchParams.q === query) {
       return;
     }

@@ -17,17 +17,15 @@ const Root = () => {
 
   const detailsId = router.query.details;
   const [pageState, setPageState] = useState<IPageState>({ currentPage: 1, maxPage: 1 });
-  console.log(pageState);
   const [isDetailedVisible, setIsDetailedVisible] = useState<boolean>(!!router.query.details?.toString() || false);
 
   const [planets, isLoading, isFetching, isError] = useGetPlanets(setPageState);
-  console.log(isError);
 
   const mainContent = (): ReactNode => {
     if (isLoading || isFetching) {
       return <Loader />;
     }
-    if (!planets) {
+    if (!planets || isError) {
       return <div>Fetch Error</div>;
     }
     return (
