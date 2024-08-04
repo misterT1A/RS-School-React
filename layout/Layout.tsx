@@ -1,16 +1,17 @@
 import Head from 'next/head';
-import { ReactNode } from 'react';
-import ThemeWrapper from './themeWrapper';
+import type { ReactNode } from 'react';
+
+import Header from '@/components/header/Header';
+import styles from '@/components/root/_root.module.scss';
 import useClassThemeToggler from '@/hooks/useClassThemTogler';
 
-import styles from '@/components/root/_root.module.scss';
-import Header from '@/components/header/Header';
+import ThemeWrapper from './themeWrapper';
 
-interface LayoutProps {
+interface ILayoutProps {
   children: ReactNode;
 }
 
-export const Layout = ({ children }: LayoutProps) => (
+const Layout = ({ children }: ILayoutProps): ReactNode => (
   <>
     <Head>
       <title> Next App</title>
@@ -24,3 +25,5 @@ export const Layout = ({ children }: LayoutProps) => (
     </ThemeWrapper>
   </>
 );
+
+export default Layout;

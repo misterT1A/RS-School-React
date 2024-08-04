@@ -15,4 +15,4 @@ const extractLastNumber = (url: string): string => {
 //   return styles.list_item;
 // };
 
-export { extractLastNumber };
+export default extractLastNumber;

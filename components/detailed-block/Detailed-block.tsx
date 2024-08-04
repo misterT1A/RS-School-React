@@ -1,4 +1,5 @@
-import { Dispatch, type ReactNode } from 'react';
+import { useRouter } from 'next/router';
+import type { Dispatch, ReactNode } from 'react';
 
 import styles from './_Detailed-block.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
@@ -8,7 +9,6 @@ import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
 import btnStyles from '../../UI/button/_button.module.scss';
 import Loader from '../../UI/loader/loader';
 import filterPlanet from '../../utils/filterPlanet';
-import { useRouter } from 'next/router';
 
 const DetailedBlock = ({
   handleClickVisible,
@@ -23,7 +23,7 @@ const DetailedBlock = ({
   const [planet, isFetching] = useGetCurrentPlanet(productId);
 
   const isFavoritePlanet = useAppSelector(
-    (state) => !!state.favorite.planets.find((elem) => elem.name === planet?.name),
+    (state) => !!state.favorite.planets.find((elem: { name: string | undefined }) => elem.name === planet?.name),
   );
 
   if (isFetching) {

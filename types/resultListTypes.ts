@@ -1,8 +1,9 @@
 import type { Dispatch } from 'react';
 import type React from 'react';
 
+import type { ISearchUrlParams } from '@/hooks';
+
 import type { IPageState, IPlanet } from './rootTypes';
-import { ISearchUrlParams } from '@/hooks';
 
 export interface IResultListProps {
   planets: IPlanet[];

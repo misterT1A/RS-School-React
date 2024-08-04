@@ -1,16 +1,20 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+import { useRouter } from 'next/router';
+import type { ReactNode } from 'react';
+import { useCallback, useState } from 'react';
+
 import { useAppDispatch, useGetPlanets, useSearchUrl } from '@/hooks';
 import { deletePlanet } from '@/store/detailedSlice';
-import { IPageState } from '@/types/rootTypes';
+import type { IPageState } from '@/types/rootTypes';
 import Loader from '@/UI/loader/loader';
-import { useRouter } from 'next/router';
-import { ReactNode, useCallback, useState } from 'react';
-import styles from './_root.module.scss';
-import ResultList from '../result-list/Result-list';
-import PaginationBlock from '../result-list/Pagination';
-import FlyoutPanel from '../flyout-panel/Flyout-panel';
-import DetailedBlock from '../detailed-block/Detailed-block';
 
-const Root = () => {
+import styles from './_root.module.scss';
+import DetailedBlock from '../detailed-block/Detailed-block';
+import FlyoutPanel from '../flyout-panel/Flyout-panel';
+import PaginationBlock from '../result-list/Pagination';
+import ResultList from '../result-list/Result-list';
+
+const Root = (): ReactNode => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchUrl();

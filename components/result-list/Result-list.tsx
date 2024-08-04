@@ -1,16 +1,15 @@
+import { useRouter } from 'next/router';
 import { useContext, type ReactNode } from 'react';
 // import { NavLink } from 'react-router-dom';
 
-import styles from './_Result-list.module.scss';
+import extractLastNumber from '@/utils/result-list-helpers';
 
+import styles from './_Result-list.module.scss';
 import { ThemeContext, ThemeEnum } from '../../context';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
 import type { IResultListProps } from '../../types/resultListTypes';
 import type { IPlanet } from '../../types/rootTypes';
-
-import { useRouter } from 'next/router';
-import { extractLastNumber } from '@/utils/result-list-helpers';
 
 const ResultList = ({
   planets,
@@ -24,7 +23,8 @@ const ResultList = ({
   const { theme } = useContext(ThemeContext);
   const favoritePlanets = useAppSelector((state) => state.favorite.planets);
 
-  const isFavorite = (planetName: string): boolean => favoritePlanets.some((planet) => planet.name === planetName);
+  const isFavorite = (planetName: string): boolean =>
+    favoritePlanets.some((planet: { name: string }) => planet.name === planetName);
 
   const addToFavorite = (e: React.MouseEvent, planet: IPlanet): void => {
     e.stopPropagation();

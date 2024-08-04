@@ -1,9 +1,9 @@
+import { useRouter } from 'next/router';
 import { type ReactNode } from 'react';
 
 import styles from './_SearchBlock.module.scss';
 import { useSearchUrl, useSetToLS } from '../../hooks';
 import btnStyles from '../../UI/button/_button.module.scss';
-import { useRouter } from 'next/router';
 
 const SearchBlock = (): ReactNode => {
   const searchParams = useSearchUrl();

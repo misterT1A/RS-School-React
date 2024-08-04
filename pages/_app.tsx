@@ -1,10 +1,10 @@
-import { ThemeProvider } from '@/context';
-import { Layout } from '@/layout/Layout';
+import type { AppProps } from 'next/app';
 
+import { ThemeProvider } from '@/context';
+import Layout from '@/layout/Layout';
 import { wrapper } from '@/store/store';
 import '@/styles/globals.scss';
 
-import type { AppProps } from 'next/app';
 import Wrapper from './wrapper';
 
 const AppComponent = ({ Component, pageProps }: AppProps) => {

@@ -1,12 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
+import type { ReactNode } from 'react';
 
-import { wrapper } from '@/store/store';
-import { apiSlice } from '@/store/apiSlice';
 import Root from '@/components/root/Root';
+import { apiSlice } from '@/store/apiSlice';
+import { wrapper } from '@/store/store';
 
-const Home = () => {
-  return <Root />;
-};
+const Home = (): ReactNode => <Root />;
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
   const { q = '', page = 1, details } = context.query;

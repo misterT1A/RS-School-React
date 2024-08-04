@@ -1,9 +1,10 @@
+import Link from 'next/link';
 import type { ReactNode } from 'react';
+
+import { useSearchUrl } from '@/hooks';
 
 import styles from './_Result-list.module.scss';
 import type { IPagination } from '../../types/resultListTypes';
-import Link from 'next/link';
-import { useSearchUrl } from '@/hooks';
 
 const PaginationBlock = ({ state, setState, handleClickVisible }: IPagination): ReactNode => {
   const searchParams = useSearchUrl();
