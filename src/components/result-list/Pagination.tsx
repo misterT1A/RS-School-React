@@ -14,21 +14,6 @@ const PaginationBlock = ({ state, setState, handleClickVisible }: IPagination): 
       ...prevState,
       currentPage: pageNumber,
     }));
-
-    // const newSearchParams = { ...searchParams, page: pageNumber };
-    // // console.log('pagination', newSearchParams);
-    // // router.push(`/?q=${newSearchParams.q}&page=${newSearchParams.page}`);
-    // const { details, ...queryMain } = router.query;
-    // const newQuery = { ...queryMain, page: pageNumber };
-
-    // // router.replace(
-    // //   {
-    // //     pathname: router.pathname,
-    // //     query: newQuery,
-    // //   },
-    // //   // undefined,
-    // //   // { shallow: true },
-    // // );
   };
 
   return (

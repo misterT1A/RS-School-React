@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import { useContext } from 'react';
-// import { NavLink } from 'react-router-dom';
 
 import extractLastNumber from '@/utils/result-list-helpers';
 
@@ -47,9 +46,6 @@ const ResultList = ({
             {planets.map((elem) => (
               <li id="planets" key={elem.url}>
                 <div
-                  // type="button"
-                  // href={`planets/${extractLastNumber(elem.url ? elem.url : '')}?q=${searchParams.q || ''}&page=${searchParams.page || '1'}`}
-                  // href={`/?q=${searchParams.q || ''}&page=${searchParams.page || '1'}&details=${extractLastNumber(elem.url ? elem.url : '')}`}
                   className={
                     details === extractLastNumber(elem.url ? elem.url : '')
                       ? `${styles.list_item} ${styles.active}`

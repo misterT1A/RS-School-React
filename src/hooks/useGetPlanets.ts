@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import type React from 'react';
 import { useEffect, useMemo } from 'react';
 
-// import { useSearchParams } from 'react-router-dom';
 import { getCurrentPage, getMaxPage } from '@/utils/root-helpers';
 
 import { useAppDispatch } from './storeHooks';
@@ -16,7 +15,6 @@ type IUseGetPlanet = (
 
 const useGetPlanets: IUseGetPlanet = (setPageState) => {
   const dispatch = useAppDispatch();
-  // const [searchParams] = useSearchParams();
   const router = useRouter();
   const fetchParam: ISearchParams = useMemo(() => {
     const { q } = router.query;
@@ -32,7 +30,6 @@ const useGetPlanets: IUseGetPlanet = (setPageState) => {
 
   useEffect(() => {
     if (data?.results) {
-      // console.log(data?.results);
       dispatch(setPlanets(data.results));
       setPageState((prev) => ({ ...prev, currentPage: getCurrentPage(data), maxPage: getMaxPage(data.count) }));
     }

@@ -63,7 +63,6 @@ const DetailedBlock = ({
 
             const { query } = router;
             const { details, ...newQuery } = query;
-            console.log(details);
             router.push(
               {
                 pathname: router.pathname,

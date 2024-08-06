@@ -49,7 +49,6 @@
     }
   },
   "rules": {
-    // "ignoreTranspilerName": "true",
     "no-param-reassign": "off",
     "import/no-extraneous-dependencies": [
       "error",

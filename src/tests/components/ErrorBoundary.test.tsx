@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
 
 const ProblematicComponent = () => {
-  throw new Error('Test Error');
+  throw new Error('Test Error Error boundary');
 };
 
 const SafeComponent = () => <div>Safe Component</div>;

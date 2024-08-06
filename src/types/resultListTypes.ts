@@ -7,7 +7,6 @@ import type { IPageState, IPlanet } from './rootTypes';
 
 export interface IResultListProps {
   planets: IPlanet[];
-  // searchParams: URLSearchParams;
   searchParams: ISearchUrlParams;
   isDetailedVisible: boolean;
   setIsDetailedVisible: Dispatch<React.SetStateAction<boolean>>;
@@ -16,6 +15,5 @@ export interface IResultListProps {
 export interface IPagination {
   state: IPageState;
   setState: React.Dispatch<React.SetStateAction<IPageState>>;
-  // searchParams: URLSearchParams;
   handleClickVisible: (event: React.MouseEvent) => void;
 }

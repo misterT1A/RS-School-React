@@ -52,7 +52,6 @@ const Root = (): ReactElement => {
         !target.closest('#themeTogler')
       ) {
         const { details, ...newQuery } = router.query;
-        console.log(details);
         router.replace(
           {
             pathname: router.pathname,
@@ -62,7 +61,6 @@ const Root = (): ReactElement => {
           { shallow: true },
         );
 
-        console.log('aaa');
         setIsDetailedVisible(false);
         dispatch(deletePlanet());
       }
