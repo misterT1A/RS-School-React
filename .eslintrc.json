@@ -2,7 +2,8 @@
   "root": true,
   "env": {
     "browser": true,
-    "es2022": true
+    "es2022": true,
+    "jest": true
   },
   "extends": [
     "airbnb",
@@ -19,7 +20,8 @@
     "dist",
     ".eslintrc.cjs",
     "next.config.js",
-    "commitlint.config.js"
+    "commitlint.config.js",
+    "jest.config.cjs"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -47,15 +49,8 @@
     }
   },
   "rules": {
-    "no-param-reassign": [
-      "error",
-      {
-        "props": true,
-        "ignorePropertyModificationsFor": [
-          "state"
-        ]
-      }
-    ],
+    // "ignoreTranspilerName": "true",
+    "no-param-reassign": "off",
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -70,33 +65,16 @@
     "react-compiler/react-compiler": "error",
     "no-console": 0,
     "@typescript-eslint/no-explicit-any": "error",
+    "react-refresh/only-export-components": "off",
     "max-lines": [
       "error",
       300
     ],
     "@typescript-eslint/no-inferrable-types": "error",
     "prettier/prettier": "error",
-    "react-refresh/only-export-components": [
-      "warn",
-      {
-        "allowConstantExport": true
-      }
-    ],
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "react/jsx-no-bind": "off",
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "": "never",
-        "js": "never",
-        "jsx": "never",
-        "ts": "never",
-        "tsx": "never",
-        "mjs": "never"
-      }
-    ],
     "import/named": "error",
     "react/function-component-definition": [
       2,
@@ -126,155 +104,12 @@
         }
       }
     ],
-    "@typescript-eslint/naming-convention": [
-      "error",
-      {
-        "selector": "variable",
-        "types": [
-          "boolean"
-        ],
-        "format": [
-          "PascalCase"
-        ],
-        "prefix": [
-          "is",
-          "should",
-          "has",
-          "can",
-          "did",
-          "will"
-        ]
-      },
-      {
-        "selector": "interface",
-        "format": [
-          "PascalCase"
-        ],
-        "prefix": [
-          "I"
-        ]
-      }
-    ],
     "react/jsx-props-no-spreading": [
       "off"
     ],
     "jsx-a11y/no-static-element-interactions": "off",
-    "jsx-a11y/click-events-have-key-events": "off"
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/interactive-supports-focus": "off",
+    "react/display-name": "off"
   }
-  // "rules": {
-  //   "@typescript-eslint/no-unused-vars": "error",
-  //   "@typescript-eslint/no-explicit-any": "error",
-  //   "react/jsx-uses-react": "off",
-  //   "react/react-in-jsx-scope": "off",
-  //   "react/jsx-props-no-spreading": "off",
-  //   "react/require-default-props": "off",
-  //   "react/prefer-stateless-function": "off",
-  //   "jsx-a11y/click-events-have-key-events": "off",
-  //   "react-refresh/only-export-components": [
-  //     "warn",
-  //     {
-  //       "allowConstantExport": true
-  //     }
-  //   ],
-  //   "react/function-component-definition": "off",
-  //   "no-debugger": "off",
-  //   "no-console": [
-  //     "off",
-  //     {
-  //       "allow": [
-  //         "warn",
-  //         "error"
-  //       ]
-  //     }
-  //   ],
-  //   "class-methods-use-this": "off",
-  //   "import/extensions": "off",
-  //   "prettier/prettier": "error",
-  //   "import/prefer-default-export": "off",
-  //   "@typescript-eslint/no-inferrable-types": "off",
-  //   "@typescript-eslint/array-type": [
-  //     "error",
-  //     {
-  //       "default": "array"
-  //     }
-  //   ],
-  //   "max-lines-per-function": "off",
-  //   "@typescript-eslint/explicit-function-return-type": "off",
-  //   "@typescript-eslint/no-non-null-assertion": "error",
-  //   "curly": [
-  //     "error",
-  //     "all"
-  //   ],
-  //   "@typescript-eslint/lines-between-class-members": "off",
-  //   "@typescript-eslint/no-this-alias": [
-  //     "error",
-  //     {
-  //       "allowDestructuring": true,
-  //       "allowedNames": [
-  //         "context"
-  //       ]
-  //     }
-  //   ],
-  //   "import/no-extraneous-dependencies": [
-  //     "error",
-  //     {
-  //       "devDependencies": [
-  //         "**/*.test.ts",
-  //         "**/*.test.tsx"
-  //       ]
-  //     }
-  //   ],
-  //   "react/jsx-no-constructed-context-values": "off",
-  //   "no-param-reassign": [
-  //     "error",
-  //     {
-  //       "props": true,
-  //       "ignorePropertyModificationsFor": [
-  //         "state"
-  //       ]
-  //     }
-  //   ],
-  //   "react/jsx-no-useless-fragment": "error",
-  //   "no-unused-expressions": [
-  //     "error",
-  //     {
-  //       "allowShortCircuit": true,
-  //       "allowTernary": true,
-  //       "allowTaggedTemplates": true
-  //     }
-  //   ],
-  //   "react-compiler/react-compiler": "error",
-  //   "react/static-property-placement": "off",
-  //   "react/no-unescaped-entities": "off",
-  //   "jsx-a11y/interactive-supports-focus": [
-  //     "error",
-  //     {
-  //       "tabbable": [
-  //         "button",
-  //         "checkbox",
-  //         "link",
-  //         "searchbox",
-  //         "spinbutton",
-  //         "switch",
-  //         "textbox"
-  //       ]
-  //     }
-  //   ]
-  // }
 }
-// {
-//   "plugins": [
-//     "@typescript-eslint",
-//     "react-compiler",
-//     "react-refresh",
-//     "prettier"
-//   ],
-//   "extends": [
-//     "next/core-web-vitals",
-//     "plugin:@typescript-eslint/recommended",
-//     "prettier"
-//   ],
-//   "ignorePatterns": [
-//     ".next/",
-//     "node_modules/"
-//   ],
