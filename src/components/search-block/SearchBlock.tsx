@@ -1,13 +1,17 @@
-import { useRouter } from 'next/router';
+'use client';
+
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { ReactElement } from 'react';
 
 import styles from './_SearchBlock.module.scss';
-import { useSearchUrl, useSetToLS } from '../../hooks';
+import { useSetToLS } from '../../hooks';
 import btnStyles from '../../UI/button/_button.module.scss';
 
 const SearchBlock = (): ReactElement => {
-  const searchParams = useSearchUrl();
+  // const searchParams = useSearchUrl();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  console.log(searchParams.get('page'));
   const [valueLS, setSearchValueLS] = useSetToLS('Nextjs-Task');
 
   const handleSearchSubmit = (event: React.FormEvent): void => {
@@ -15,12 +19,12 @@ const SearchBlock = (): ReactElement => {
     const form = event.currentTarget as HTMLFormElement;
     const query = new FormData(form).get('q') as string;
 
-    const newSearchParams = { ...searchParams, q: query, page: 1 };
-    if (searchParams.q === query) {
+    const newSearchParams = new URLSearchParams({ query, page: '1' });
+    if (searchParams.get('q') === query) {
       return;
     }
     setSearchValueLS(() => query);
-    router.push({ query: newSearchParams });
+    router.push(`?${newSearchParams}`);
   };
 
   return (
@@ -31,7 +35,7 @@ const SearchBlock = (): ReactElement => {
         name="q"
         placeholder="Search"
         className={styles.input}
-        defaultValue={searchParams.q || valueLS || ''}
+        defaultValue={searchParams.get('q') || valueLS || ''}
       />
       <button className={btnStyles.button} type="submit">
         Search

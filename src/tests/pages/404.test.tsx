@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 
-import Custom404 from '@/pages/404';
+import Custom404 from '@/store/pages/404';
 import '@testing-library/jest-dom';
 import createMockRouter from 'mock/createMockRouter';
 

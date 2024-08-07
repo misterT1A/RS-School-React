@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import Document from '@/pages/_document';
+import Document from '@/store/pages/_document';
 
 jest.mock('next/document', () => ({
   Html: ({ children }: { children: React.ReactNode }) => <html lang="en">{children}</html>,

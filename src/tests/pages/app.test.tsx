@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import type { ReactNode } from 'react';
 
-import App from '@/pages/_app';
+import App from '@/store/pages/_app';
 import createMockRouter from 'mock/createMockRouter';
 
 jest.mock('../../layout/Layout.tsx', () => ({ children }: { children: ReactNode }) => <div>{children}</div>);

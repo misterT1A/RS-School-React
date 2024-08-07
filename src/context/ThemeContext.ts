@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import { ThemeEnum, type IThemeContextType } from './types';

@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode } from 'react';
 import { useCallback, useState } from 'react';
 
 import { useAppDispatch, useGetPlanets, useSearchUrl } from '@/hooks';
+import useClassThemeToggler from '@/hooks/useClassThemTogler';
 import { deletePlanet } from '@/store/detailedSlice';
 import type { IPageState } from '@/types/rootTypes';
 import Loader from '@/UI/loader/loader';
@@ -74,22 +75,26 @@ const Root = (): ReactElement => {
   }, [dispatch]);
 
   return (
-    <section
-      className={styles.rootSection}
-      data-testid="rootComponent"
-      role="button"
-      onClick={handleClickVisibleWithEvent}
-    >
-      <section className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
-        {mainContent()}
-        <div className={styles.detailed_wrapper}>
-          {isDetailedVisible && detailsId && <DetailedBlock handleClickVisible={setIsDetailedVisible} />}
+    <section className={useClassThemeToggler(styles.themeWrapper, styles.dark)}>
+      <section className={useClassThemeToggler(styles.app, styles.dark)}>
+        <div
+          className={styles.rootSection}
+          data-testid="rootComponent"
+          role="button"
+          onClick={handleClickVisibleWithEvent}
+        >
+          <section className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
+            {mainContent()}
+            <div className={styles.detailed_wrapper}>
+              {isDetailedVisible && detailsId && <DetailedBlock handleClickVisible={setIsDetailedVisible} />}
+            </div>
+          </section>
+          <footer className={styles.footer}>
+            <PaginationBlock state={pageState} setState={setPageState} handleClickVisible={handleClickVisible} />
+            <FlyoutPanel />
+          </footer>
         </div>
       </section>
-      <footer className={styles.footer}>
-        <PaginationBlock state={pageState} setState={setPageState} handleClickVisible={handleClickVisible} />
-        <FlyoutPanel />
-      </footer>
     </section>
   );
 };

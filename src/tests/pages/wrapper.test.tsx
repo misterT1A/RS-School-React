@@ -2,7 +2,7 @@ import { act, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Router from 'next/router';
 
-import Wrapper from '@/pages/wrapper';
+import Wrapper from '@/store/pages/wrapper';
 
 jest.mock('next/router', () => ({
   events: {
