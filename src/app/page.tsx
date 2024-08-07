@@ -1,19 +1,9 @@
-// import Image from 'next/image';
+// import Root from './(root)/Root';
+import RootWithLoader from '../components/root/RootWithLoader';
 
-// import styles from './page.module.css';
-async function getData() {
-  const res = await fetch('https://swapi.dev/api/planets');
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch data');
-  }
-
-  return res.json();
-}
-
-const Home = async () => {
-  const data = await getData();
-  return <div>page {data.results.toString()} </div>;
-};
+const Home = ({ searchParams }: { searchParams: { [key: string]: string } }) => (
+  <RootWithLoader searchParams={searchParams} />
+  // <Root searchParams={searchParams} />
+);
 
 export default Home;

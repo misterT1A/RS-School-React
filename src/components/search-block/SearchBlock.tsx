@@ -8,10 +8,8 @@ import { useSetToLS } from '../../hooks';
 import btnStyles from '../../UI/button/_button.module.scss';
 
 const SearchBlock = (): ReactElement => {
-  // const searchParams = useSearchUrl();
   const router = useRouter();
   const searchParams = useSearchParams();
-  console.log(searchParams.get('page'));
   const [valueLS, setSearchValueLS] = useSetToLS('Nextjs-Task');
 
   const handleSearchSubmit = (event: React.FormEvent): void => {
@@ -24,7 +22,7 @@ const SearchBlock = (): ReactElement => {
       return;
     }
     setSearchValueLS(() => query);
-    router.push(`?${newSearchParams}`);
+    router.replace(`?${newSearchParams}`);
   };
 
   return (

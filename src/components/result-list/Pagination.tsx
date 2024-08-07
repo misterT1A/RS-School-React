@@ -1,33 +1,37 @@
-import Link from 'next/link';
-import type { ReactElement } from 'react';
+'use client';
 
-import { useSearchUrl } from '@/hooks';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import type { ReactElement } from 'react';
 
 import styles from './_Result-list.module.scss';
 import type { IPagination } from '../../types/resultListTypes';
 
-const PaginationBlock = ({ state, setState, handleClickVisible }: IPagination): ReactElement => {
-  const searchParams = useSearchUrl();
+const PaginationBlock = ({ maxPage }: IPagination): ReactElement => {
+  // const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const handleStateLoader = (pageNumber: number): void => {
-    setState((prevState) => ({
-      ...prevState,
-      currentPage: pageNumber,
-    }));
+  const handleStateLoader = (pageNumber: number): string => {
+    const newSearchParam = new URLSearchParams({
+      query: searchParams.get('query')?.toString() || '',
+      page: pageNumber.toString() || '1',
+    });
+    // router.replace(`/?${newSearchParam.toString()}`);
+    return `/?${newSearchParam.toString()}`;
   };
 
   return (
     <div className={styles.pagination}>
-      {Array.from({ length: state.maxPage }, (_, i) => i + 1).map((elem) => (
+      {Array.from({ length: maxPage }, (_, i) => i + 1).map((elem) => (
         <li key={elem}>
           <Link
-            href={`?q=${searchParams.q || ''}&page=${elem}`}
-            className={`${styles.pagination_btn} ${+(searchParams.page || 1) === elem ? styles.active : ''}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleStateLoader(elem);
-              handleClickVisible(e);
-            }}
+            href={handleStateLoader(elem)}
+            // type="button"
+            className={`${styles.pagination_btn} ${+(searchParams.get('page') || 1) === elem ? styles.active : ''}`}
+            // onClick={(e) => {
+            //   e.stopPropagation();
+            //   handleStateLoader(elem);
+            // }}
           >
             {elem}
           </Link>

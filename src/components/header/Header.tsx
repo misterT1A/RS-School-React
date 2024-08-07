@@ -3,8 +3,8 @@
 import type { ReactElement } from 'react';
 
 import useClassThemeToggler from '@/hooks/useClassThemTogler';
+import styles from '@/styles/_root.module.scss';
 
-import styles from '../root/_root.module.scss';
 import SearchBlock from '../search-block/SearchBlock';
 import ThemeTogler from '../theme-button/Theme-button';
 

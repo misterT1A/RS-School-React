@@ -1,101 +1,88 @@
-import { useRouter } from 'next/router';
-import type { ReactElement, ReactNode } from 'react';
-import { useCallback, useState } from 'react';
+import FlyoutPanel from '@/components/flyout-panel/Flyout-panel';
+import PaginationBlock from '@/components/result-list/Pagination';
+import ResultList from '@/components/result-list/Result-list';
+import type { ISearchUrlParams } from '@/hooks';
+import styles from '@/styles/_root.module.scss';
+import type { IResponse } from '@/types/rootTypes';
+import { getMaxPage } from '@/utils/root-helpers';
 
-import { useAppDispatch, useGetPlanets, useSearchUrl } from '@/hooks';
-import useClassThemeToggler from '@/hooks/useClassThemTogler';
-import { deletePlanet } from '@/store/detailedSlice';
-import type { IPageState } from '@/types/rootTypes';
-import Loader from '@/UI/loader/loader';
+import ThemeWrapper from './themeWrapper';
+import PageWithLoader from '../detailed-block/DetailsWithLoader';
 
-import styles from './_root.module.scss';
-import DetailedBlock from '../detailed-block/Detailed-block';
-import FlyoutPanel from '../flyout-panel/Flyout-panel';
-import PaginationBlock from '../result-list/Pagination';
-import ResultList from '../result-list/Result-list';
+const getPlanets = async (searchParams: ISearchUrlParams): Promise<IResponse> => {
+  const res = await fetch(`https://swapi.dev/api/planets/?search=${searchParams.q}&page=${searchParams.page}`);
 
-const Root = (): ReactElement => {
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  const searchParams = useSearchUrl();
+  if (!res.ok) {
+    throw new Error('Failed to fetch data');
+  }
 
-  const detailsId = router.query.details;
-  const [pageState, setPageState] = useState<IPageState>({ currentPage: 1, maxPage: 1 });
-  const [isDetailedVisible, setIsDetailedVisible] = useState<boolean>(!!router.query.details?.toString() || false);
+  return res.json();
+};
 
-  const [planets, isLoading, isFetching, isError] = useGetPlanets(setPageState);
+const Root = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
+  const searchParamsUrl = { q: searchParams.query || '', page: +searchParams.page || 1 };
+  const response = await getPlanets(searchParamsUrl);
+  const maxPage = getMaxPage(response.count);
+  const isDetailedVisible = !!searchParams.details || false;
 
-  const mainContent = (): ReactNode => {
-    if (isLoading || isFetching) {
-      return <Loader />;
-    }
-    if (!planets || isError) {
-      return <div>Fetch Error</div>;
-    }
-    return (
-      <ResultList
-        planets={planets.results}
-        searchParams={searchParams}
-        isDetailedVisible={isDetailedVisible}
-        setIsDetailedVisible={setIsDetailedVisible}
-      />
-    );
-  };
+  // const handleClickVisibleWithEvent = useCallback(
+  //   (event: React.MouseEvent): void => {
+  //     const target = event.target as HTMLElement;
+  //     if (
+  //       !target.closest('#detailed') &&
+  //       !target.closest('#planets') &&
+  //       !target.closest('#input') &&
+  //       !target.closest('#flyout') &&
+  //       !target.closest('#themeTogler')
+  //     ) {
+  //       const { details, ...newQuery } = router.query;
+  //       router.replace(
+  //         {
+  //           pathname: router.pathname,
+  //           query: newQuery,
+  //         },
+  //         undefined,
+  //         { shallow: true },
+  //       );
 
-  const handleClickVisibleWithEvent = useCallback(
-    (event: React.MouseEvent): void => {
-      const target = event.target as HTMLElement;
-      if (
-        !target.closest('#detailed') &&
-        !target.closest('#planets') &&
-        !target.closest('#input') &&
-        !target.closest('#flyout') &&
-        !target.closest('#themeTogler')
-      ) {
-        const { details, ...newQuery } = router.query;
-        router.replace(
-          {
-            pathname: router.pathname,
-            query: newQuery,
-          },
-          undefined,
-          { shallow: true },
-        );
+  //       setIsDetailedVisible(false);
+  //       dispatch(deletePlanet());
+  //     }
+  //   },
+  //   [dispatch, router],
+  // );
 
-        setIsDetailedVisible(false);
-        dispatch(deletePlanet());
-      }
-    },
-    [dispatch, router],
-  );
-
-  const handleClickVisible = useCallback((): void => {
-    setIsDetailedVisible(false);
-    dispatch(deletePlanet());
-  }, [dispatch]);
+  // const handleClickVisible = useCallback((): void => {
+  //   setIsDetailedVisible(false);
+  //   dispatch(deletePlanet());
+  // }, [dispatch]);
 
   return (
-    <section className={useClassThemeToggler(styles.themeWrapper, styles.dark)}>
-      <section className={useClassThemeToggler(styles.app, styles.dark)}>
-        <div
-          className={styles.rootSection}
-          data-testid="rootComponent"
-          role="button"
-          onClick={handleClickVisibleWithEvent}
-        >
-          <section className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
-            {mainContent()}
-            <div className={styles.detailed_wrapper}>
-              {isDetailedVisible && detailsId && <DetailedBlock handleClickVisible={setIsDetailedVisible} />}
-            </div>
-          </section>
-          <footer className={styles.footer}>
-            <PaginationBlock state={pageState} setState={setPageState} handleClickVisible={handleClickVisible} />
-            <FlyoutPanel />
-          </footer>
-        </div>
-      </section>
-    </section>
+    <ThemeWrapper>
+      <div
+        className={styles.rootSection}
+        data-testid="rootComponent"
+        role="button"
+        // onClick={handleClickVisibleWithEvent}
+      >
+        <section className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
+          {response.results && (
+            <ResultList
+              planets={response.results}
+              searchParams={searchParamsUrl}
+              isDetailedVisible={isDetailedVisible}
+            />
+          )}
+          <div className={styles.detailed_wrapper}>
+            {isDetailedVisible && <PageWithLoader detailed={searchParams.details} />}
+          </div>
+        </section>
+        <footer className={styles.footer}>
+          <PaginationBlock maxPage={maxPage} />
+          <FlyoutPanel />
+        </footer>
+      </div>
+    </ThemeWrapper>
   );
 };
 

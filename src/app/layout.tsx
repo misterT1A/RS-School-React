@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import '../styles/globals.scss';
-import type { ReactElement } from 'react';
+import { type ReactElement } from 'react';
 
 import Header from '@/components/header/Header';
 import { ThemeProvider } from '@/context';

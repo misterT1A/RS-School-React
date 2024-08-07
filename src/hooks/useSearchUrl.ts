@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 export interface ISearchUrlParams {
   q: string;
   page: number;
+  details?: number;
 }
 
 const useSearchUrl = (): ISearchUrlParams => {

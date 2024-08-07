@@ -1,3 +1,5 @@
+'use client';
+
 import type { ReactElement } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -17,9 +19,7 @@ const FlyoutPanel = (): ReactElement => {
   const downloadCSV = (): string => {
     if (favoritePlanets.length) {
       const headers = Object.keys(favoritePlanets[0]);
-      const data = favoritePlanets.map((planet: { [s: string]: unknown } | ArrayLike<unknown>) =>
-        Object.values(planet),
-      );
+      const data = favoritePlanets.map((planet) => Object.values(planet));
       const csvContent = [headers.join(';'), ...data.map((row: string[]) => row.join(';'))].join('\n');
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
