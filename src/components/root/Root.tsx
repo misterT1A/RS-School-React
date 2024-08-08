@@ -10,8 +10,9 @@ import ThemeWrapper from './themeWrapper';
 import PageWithLoader from '../detailed-block/DetailsWithLoader';
 
 const getPlanets = async (searchParams: ISearchUrlParams): Promise<IResponse> => {
-  const res = await fetch(`https://swapi.dev/api/planets/?search=${searchParams.q}&page=${searchParams.page}`);
-
+  const res = await fetch(`https://swapi.dev/api/planets/?search=${searchParams.q}&page=${searchParams.page}`, {
+    method: 'GET',
+  });
   if (!res.ok) {
     throw new Error('Failed to fetch data');
   }
@@ -25,46 +26,9 @@ const Root = async ({ searchParams }: { searchParams: { [key: string]: string } 
   const maxPage = getMaxPage(response.count);
   const isDetailedVisible = !!searchParams.details || false;
 
-  // const handleClickVisibleWithEvent = useCallback(
-  //   (event: React.MouseEvent): void => {
-  //     const target = event.target as HTMLElement;
-  //     if (
-  //       !target.closest('#detailed') &&
-  //       !target.closest('#planets') &&
-  //       !target.closest('#input') &&
-  //       !target.closest('#flyout') &&
-  //       !target.closest('#themeTogler')
-  //     ) {
-  //       const { details, ...newQuery } = router.query;
-  //       router.replace(
-  //         {
-  //           pathname: router.pathname,
-  //           query: newQuery,
-  //         },
-  //         undefined,
-  //         { shallow: true },
-  //       );
-
-  //       setIsDetailedVisible(false);
-  //       dispatch(deletePlanet());
-  //     }
-  //   },
-  //   [dispatch, router],
-  // );
-
-  // const handleClickVisible = useCallback((): void => {
-  //   setIsDetailedVisible(false);
-  //   dispatch(deletePlanet());
-  // }, [dispatch]);
-
   return (
     <ThemeWrapper>
-      <div
-        className={styles.rootSection}
-        data-testid="rootComponent"
-        role="button"
-        // onClick={handleClickVisibleWithEvent}
-      >
+      <div className={styles.rootSection} data-testid="rootComponent">
         <section className={isDetailedVisible ? styles.main_detailed : styles.main_center}>
           {response.results && (
             <ResultList

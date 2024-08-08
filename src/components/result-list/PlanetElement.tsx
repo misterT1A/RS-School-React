@@ -24,18 +24,12 @@ const PlanetElement = ({ planet, details }: { planet: IPlanet; details: string }
       }
       onClick={(e) => {
         e.stopPropagation();
-        // router.replace(
-        //   `/?q=${searchParams.q || ''}&page=${searchParams.page || '1'}&details=${extractLastNumber(elem.url ? elem.url : '')}`,
-        //   undefined,
-        //   { shallow: true },
-        // );
-        // setIsDetailedVisible(true);
         const newSearchParam = new URLSearchParams({
           query: searchParams.get('query')?.toString() || '',
           page: searchParams.get('page')?.toString() || '1',
           details: extractLastNumber(planet.url ? planet.url : ''),
         });
-        router.replace(`?${newSearchParam}`);
+        router.push(`?${newSearchParam}`);
       }}
     >
       <p className={theme === ThemeEnum.Light ? styles.title : `${styles.title} ${styles.dark}`}>{planet.name}</p>

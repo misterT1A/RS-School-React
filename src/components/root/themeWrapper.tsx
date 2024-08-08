@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactElement } from 'react';
+import { type ReactElement } from 'react';
 
 import useClassThemeToggler from '@/hooks/useClassThemTogler';
 import styles from '@/styles/_root.module.scss';

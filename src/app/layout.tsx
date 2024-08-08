@@ -1,15 +1,19 @@
 import type { Metadata } from 'next';
 import '../styles/globals.scss';
-import { type ReactElement } from 'react';
+import { Inter } from 'next/font/google';
+import { Suspense, type ReactElement } from 'react';
 
 import Header from '@/components/header/Header';
 import { ThemeProvider } from '@/context';
 import ClientProvider from '@/store/provider';
 
+import Wrapper from './wrapper';
+
+const inter = Inter({ subsets: ['latin'] });
+
 export const metadata: Metadata = {
   title: 'Next App',
   description: 'Create next app',
-  icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
 
 const RootLayout = ({
@@ -18,13 +22,17 @@ const RootLayout = ({
   children: ReactElement;
 }>) => (
   <html lang="en">
-    <body>
+    <body className={inter.className}>
       <ClientProvider>
         <ThemeProvider>
-          <>
-            <Header />
-            <main>{children}</main>
-          </>
+          <Wrapper>
+            <>
+              <Suspense>
+                <Header />
+              </Suspense>
+              <main>{children}</main>
+            </>
+          </Wrapper>
         </ThemeProvider>
       </ClientProvider>
     </body>

@@ -14,9 +14,11 @@ const CloseButton = () => {
       name="close"
       type="button"
       onClick={() => {
-        const newUrl = new URLSearchParams(searchParams);
-
-        router.replace(`?${newUrl.delete('details')}`);
+        const newUrl = new URLSearchParams({
+          query: searchParams.get('query')?.toString() || '',
+          page: searchParams.get('page')?.toString() || '1',
+        });
+        router.push(`?${newUrl}`);
       }}
     >
       Close

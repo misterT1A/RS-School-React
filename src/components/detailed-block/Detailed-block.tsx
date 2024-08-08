@@ -1,15 +1,8 @@
-// import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 
 import type { IPlanet } from '@/types/rootTypes';
 
 import styles from './_Detailed-block.module.scss';
-// import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-// import useClassThemeToggler from '../../hooks/useClassThemTogler';
-// import useGetCurrentPlanet from '../../hooks/useGetCurrentPlanet';
-// import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
-// import btnStyles from '../../UI/button/_button.module.scss';
-// import Loader from '../../UI/loader/loader';
 import CloseButton from './Close-Button';
 import filterPlanet from '../../utils/filterPlanet';
 import FavoriteButton from '../favorite-button/FavoriteButton';
@@ -26,15 +19,6 @@ const getCurrentPlanet = async (planetId: string): Promise<IPlanet> => {
 
 const DetailedBlock = async ({ detailed }: { detailed: string }): Promise<ReactElement> => {
   const planet = await getCurrentPlanet(detailed);
-  //   const dispatch = useAppDispatch();
-  //   const router = useRouter();
-  //   const wrapperClass = useClassThemeToggler(styles.wrapper, styles.dark);
-
-  // const [planet, isFetching] = useGetCurrentPlane(productId);
-
-  //   const isFavoritePlanet = useAppSelector(
-  //     (state) => !!state.favorite.planets.find((elem: { name: string | undefined }) => elem.name === planet?.name),
-  //   );
 
   const filteredData = filterPlanet(planet);
 

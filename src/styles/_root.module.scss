@@ -1,3 +1,9 @@
+.wrapper {
+  width: 100%;
+  min-height: 100vh;
+  @include flex(flex-start, flex-start, column);
+}
+
 .themeWrapper {
   width: 100%;
   flex: 1;
