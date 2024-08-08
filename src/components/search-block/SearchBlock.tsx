@@ -18,7 +18,7 @@ const SearchBlock = (): ReactElement => {
     const query = new FormData(form).get('q') as string;
 
     const newSearchParams = new URLSearchParams({ query, page: '1' });
-    if (searchParams.get('q') === query) {
+    if (searchParams.get('query') === query) {
       return;
     }
     setSearchValueLS(() => query);
@@ -33,7 +33,7 @@ const SearchBlock = (): ReactElement => {
         name="q"
         placeholder="Search"
         className={styles.input}
-        defaultValue={searchParams.get('q') || valueLS || ''}
+        defaultValue={searchParams.get('query') || valueLS || ''}
       />
       <button className={btnStyles.button} type="submit">
         Search

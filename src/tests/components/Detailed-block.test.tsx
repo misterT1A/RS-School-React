@@ -1,82 +1,69 @@
-// import type { RenderResult } from '@testing-library/react';
-// import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-// import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
-// import { Provider } from 'react-redux';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
 
-// import '@testing-library/jest-dom';
-// import DetailedBlock from '@/components/detailed-block/Detailed-block';
-// import createMockRouter from 'mock/createMockRouter';
-// import mockStore from 'mock/mockStore';
+import '@testing-library/jest-dom';
+import CloseButton from '@/components/detailed-block/Close-Button';
+import DetailedBlock from '@/components/detailed-block/Detailed-block';
 
-// import { mockPlanet } from '../../../mock/handlers';
-// import { ThemeProvider } from '../../context';
-// import { addFavorite } from '../../store/favoriteSlice';
-// import type { IPlanet } from '../../types/rootTypes';
+import { mockPlanet } from '../../../mock/handlers';
+import type { IPlanet } from '../../types/rootTypes';
 
-// jest.mock('next/router', () => ({
-//   useRouter: jest.fn().mockImplementation(() => ({
-//     query: { details: '1' },
-//     replace: jest.fn(),
-//     push: jest.fn(),
-//   })),
-// }));
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn().mockImplementation(() => ({
+    replace: jest.fn(),
+    push: jest.fn(),
+  })),
+  useSearchParams: jest.fn().mockReturnValue(new URLSearchParams({ query: 'ta', page: '1', details: '1' })),
+}));
 
-// describe('DetailedBlock Component', () => {
-//   const handler = jest.fn();
-//   const setup = (): RenderResult =>
-//     render(
-//       <RouterContext.Provider value={createMockRouter({})}>
-//         <ThemeProvider>
-//           <Provider store={mockStore}>
-//             <DetailedBlock handleClickVisible={handler} />
-//           </Provider>
-//         </ThemeProvider>
-//       </RouterContext.Provider>,
-//     );
+jest.mock('../../components/favorite-button/FavoriteButton.tsx', () => () => (
+  <button type="button">FavoriteButton</button>
+));
 
-//   it('should display loading indicator', () => {
-//     setup();
-//     expect(screen.getByTestId('loader')).toBeInTheDocument();
-//   });
+describe('DetailedBlock Component', () => {
+  const setup = async () =>
+    render(
+      await (async () => {
+        const jsx = await DetailedBlock({ detailed: '1' });
+        return jsx;
+      })(),
+    );
 
-//   it('should render the component', async () => {
-//     setup();
-//     await waitFor(() => expect(screen.getByText('name: ------Tatooine')).toBeInTheDocument());
-//   });
+  it('should display details', async () => {
+    setup();
+    await waitFor(() => {
+      expect(screen.getByText('name: ------Tatooine')).toBeInTheDocument();
+    });
+  });
 
-//   it('renders product details correctly', async () => {
-//     setup();
-//     const productKeys = Object.keys(mockPlanet).filter((key) => !['residents', 'films', 'url'].includes(key));
-//     await waitFor(() =>
-//       productKeys.forEach((key) => {
-//         const valueElement = screen.getByText(new RegExp(`${key}: ------${mockPlanet[key as keyof IPlanet]}`, 'i'));
-//         expect(valueElement).toBeInTheDocument();
-//       }),
-//     );
-//   });
+  it('renders product details correctly', async () => {
+    setup();
+    const productKeys = Object.keys(mockPlanet).filter((key) => !['residents', 'films', 'url'].includes(key));
+    await waitFor(() =>
+      productKeys.forEach((key) => {
+        const valueElement = screen.getByText(new RegExp(`${key}: ------${mockPlanet[key as keyof IPlanet]}`, 'i'));
+        expect(valueElement).toBeInTheDocument();
+      }),
+    );
+  });
+});
 
-//   it('should add planet to favorites', async () => {
-//     setup();
-//     await waitFor(() => expect(screen.getByText('name: ------Tatooine')));
-//     const favoriteButton = screen.getByRole('button', { name: '☆' });
-//     fireEvent.click(favoriteButton);
-//     await waitFor(() => expect(favoriteButton).toHaveTextContent('★'));
-//   });
+describe('CloseButton', () => {
+  const router = useRouter();
+  it('renders the button correctly', () => {
+    render(<CloseButton />);
+    const button = screen.getByRole('button', { name: /close/i });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveTextContent('Close');
+  });
 
-//   it('should remove planet from favorites', async () => {
-//     mockStore.dispatch(addFavorite(mockPlanet));
-//     setup();
-//     await waitFor(() => expect(screen.getByText('name: ------Tatooine')));
-//     const favoriteButton = screen.getByRole('button', { name: '★' });
-//     fireEvent.click(favoriteButton);
-//     await waitFor(() => expect(favoriteButton).toHaveTextContent('☆'));
-//   });
+  it('calls router.push with correct query parameters when clicked', () => {
+    render(<CloseButton />);
 
-//   it('should call handleClickVisible on close button click', async () => {
-//     setup();
-//     await waitFor(() => expect(screen.getByText('name: ------Tatooine')));
-//     const closeButton = screen.getByRole('button', { name: 'Close' });
-//     fireEvent.click(closeButton);
-//     expect(handler).toHaveBeenCalled();
-//   });
-// });
+    const button = screen.getByRole('button', { name: /close/i });
+    fireEvent.click(button);
+    waitFor(() => {
+      expect(router.push).toHaveBeenCalled();
+    });
+  });
+});

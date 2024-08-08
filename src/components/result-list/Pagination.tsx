@@ -23,6 +23,7 @@ const PaginationBlock = ({ maxPage }: IPagination): ReactElement => {
       {Array.from({ length: maxPage }, (_, i) => i + 1).map((elem) => (
         <li key={elem}>
           <button
+            role="link"
             type="button"
             className={`${styles.pagination_btn} ${+(searchParams.get('page') || 1) === elem ? styles.active : ''}`}
             onClick={(e) => {
