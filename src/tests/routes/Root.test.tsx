@@ -1,61 +1,26 @@
-// import type { RenderResult } from '@testing-library/react';
-// import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-// import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
-// import { Provider } from 'react-redux';
+import { render, screen, waitFor } from '@testing-library/react';
 
-// import '@testing-library/jest-dom';
-// import Root from '@/components/root/Root';
-// import createMockRouter from 'mock/createMockRouter';
-// import mockStore from 'mock/mockStore';
+import '@testing-library/jest-dom';
 
-// import { ThemeProvider } from '../../context';
-// import { deletePlanet } from '../../store/detailedSlice';
+import Root from '@/components/root/Root';
 
-// describe('Root Component', () => {
-//   const spy = jest.spyOn(mockStore, 'dispatch');
+jest.mock('../../components/flyout-panel/Flyout-panel.tsx', () => () => <div>FlyoutPanel</div>);
+jest.mock('../../components/result-list/Pagination.tsx', () => () => <div>Pagination</div>);
+jest.mock('../../components/result-list/Result-list.tsx', () => () => <div>result</div>);
 
-//   const renderRoot = (): RenderResult =>
-//     render(
-//       <RouterContext.Provider value={createMockRouter({})}>
-//         <Provider store={mockStore}>
-//           <ThemeProvider>
-//             <Root />
-//           </ThemeProvider>
-//         </Provider>
-//         ,
-//       </RouterContext.Provider>,
-//     );
+describe('Root Component', () => {
+  const setup = async () =>
+    render(
+      await (async () => {
+        const jsx = await Root({ searchParams: { query: 'test', page: '1', detailed: '1' } });
+        return jsx;
+      })(),
+    );
 
-//   it('should display list of planets after data is fetched', async () => {
-//     renderRoot();
-//     expect(await screen.findByText(/test/i)).toBeInTheDocument();
-//   });
-
-//   it('hides detailed view on Enter or Space keydown', async () => {
-//     renderRoot();
-
-//     const rootComponent = screen.getByTestId('rootComponent');
-//     rootComponent.focus();
-//     fireEvent.keyDown(rootComponent, { key: 'Enter' });
-
-//     await waitFor(() => {
-//       expect(screen.queryByText('test')).toBeVisible();
-//     });
-
-//     fireEvent.keyDown(rootComponent, { key: ' ' });
-
-//     await waitFor(() => {
-//       expect(screen.queryByText('test')).toBeVisible();
-//     });
-//   });
-
-//   it('calls navigate and dispatch when clicking outside specific elements', () => {
-//     renderRoot();
-
-//     const rootComponent = screen.getByTestId('rootComponent');
-
-//     fireEvent.click(rootComponent);
-
-//     expect(spy).toHaveBeenCalledWith(deletePlanet());
-//   });
-// });
+  it('should display list of planets after data is fetched', async () => {
+    setup();
+    await waitFor(() => {
+      expect(screen.getByTestId('rootComponent')).toBeInTheDocument();
+    });
+  });
+});

@@ -18,25 +18,35 @@ export const metadata: Metadata = {
 
 const RootLayout = ({
   children,
+  withoutHtmlBody = false,
 }: Readonly<{
   children: ReactElement;
-}>) => (
-  <html lang="en">
-    <body className={inter.className}>
-      <ClientProvider>
-        <ThemeProvider>
-          <Wrapper>
-            <>
-              <Suspense>
-                <Header />
-              </Suspense>
-              <main>{children}</main>
-            </>
-          </Wrapper>
-        </ThemeProvider>
-      </ClientProvider>
-    </body>
-  </html>
-);
+  withoutHtmlBody?: boolean;
+}>): JSX.Element => {
+  const layoutContent = (
+    <ClientProvider>
+      <ThemeProvider>
+        <Wrapper>
+          <>
+            <Suspense key="header">
+              <Header />
+            </Suspense>
+            <main>{children}</main>
+          </>
+        </Wrapper>
+      </ThemeProvider>
+    </ClientProvider>
+  );
+
+  return withoutHtmlBody ? (
+    layoutContent
+  ) : (
+    <html lang="en">
+      <body className={inter.className}>
+        <Suspense>{layoutContent}</Suspense>
+      </body>
+    </html>
+  );
+};
 
 export default RootLayout;

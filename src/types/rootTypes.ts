@@ -40,3 +40,9 @@ export interface IPlanet {
   terrain: string;
   url?: string;
 }
+
+export interface ISearchUrlParams {
+  query: string;
+  page: number;
+  details?: number;
+}

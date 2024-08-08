@@ -27,7 +27,7 @@ const Wrapper = ({ children }: { children: ReactElement }) => {
   };
 
   return (
-    <section className={styles.wrapper} onClick={handleClickVisibleWithEvent}>
+    <section data-testid="wrapperComponent" className={styles.wrapper} onClick={handleClickVisibleWithEvent}>
       {children}
     </section>
   );

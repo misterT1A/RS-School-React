@@ -32,7 +32,7 @@ describe('ResultList', () => {
   const planet1 = { ...mockPlanet, url: '/planets/1/1/' };
   const planet2 = { ...mockPlanet, name: 'test' };
   const planets = [planet1, planet2];
-  const searchParams = { q: 'test', page: 1 };
+  const searchParams = { query: 'test', page: 1 };
   let isDetailedVisible = false;
 
   const mockDispatch = jest.fn();

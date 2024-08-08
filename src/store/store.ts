@@ -6,7 +6,6 @@ const store = configureStore({
   reducer: {
     favorite: favoriteReducer,
   },
-  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

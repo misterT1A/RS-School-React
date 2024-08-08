@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
-import styles from '@/components/ErrorBoundary/_Error-page.module.scss';
+import styles from '@/styles/_Error-page.module.scss';
 import btnStyles from '@/UI/button/_button.module.scss';
 
 const Custom404 = (): ReactNode => (
