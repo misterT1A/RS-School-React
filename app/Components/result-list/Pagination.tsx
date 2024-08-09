@@ -1,36 +1,76 @@
-import type { ReactNode } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+// import type { ReactNode } from 'react';
+// import { NavLink, useNavigate } from 'react-router-dom';
+
+// import styles from './_Result-list.module.scss';
+// import type { IPagination } from '../../types/resultListTypes';
+
+// const PaginationBlock = ({ state, setState, searchParams, handleClickVisible }: IPagination): ReactNode => {
+//   const navigate = useNavigate();
+
+//   const handleStateLoader = (pageNumber: number): void => {
+//     setState((prevState) => ({
+//       ...prevState,
+//       currentPage: pageNumber,
+//     }));
+
+//     navigate(`/?${searchParams.toString()}`);
+//   };
+
+//   return (
+//     <div className={styles.pagination}>
+//       {Array.from({ length: state.maxPage }, (_, i) => i + 1).map((elem) => (
+//         <li key={elem}>
+//           <NavLink
+//             to={`?q=${searchParams.get('q') || ''}&page=${elem}`}
+//             className={`${styles.pagination_btn} ${+(searchParams.get('page') || 1) === elem ? styles.active : ''}`}
+//             onClick={(e) => {
+//               e.stopPropagation();
+//               handleStateLoader(elem);
+//               handleClickVisible(e);
+//             }}
+//           >
+//             {elem}
+//           </NavLink>
+//         </li>
+//       ))}
+//     </div>
+//   );
+// };
+
+// export default PaginationBlock;
+
+import type { ReactElement } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import styles from './_Result-list.module.scss';
 import type { IPagination } from '../../types/resultListTypes';
 
-const PaginationBlock = ({ state, setState, searchParams, handleClickVisible }: IPagination): ReactNode => {
-  const navigate = useNavigate();
+const PaginationBlock = ({ maxPage }: IPagination): ReactElement => {
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleStateLoader = (pageNumber: number): void => {
-    setState((prevState) => ({
-      ...prevState,
-      currentPage: pageNumber,
-    }));
-
-    navigate(`/?${searchParams.toString()}`);
+    const newSearchParam = new URLSearchParams({
+      query: searchParams.get('query')?.toString() || '',
+      page: pageNumber.toString() || '1',
+    });
+    setSearchParams(() => newSearchParam);
   };
 
   return (
     <div className={styles.pagination}>
-      {Array.from({ length: state.maxPage }, (_, i) => i + 1).map((elem) => (
+      {Array.from({ length: maxPage }, (_, i) => i + 1).map((elem) => (
         <li key={elem}>
-          <NavLink
-            to={`?q=${searchParams.get('q') || ''}&page=${elem}`}
+          <button
+            role="link"
+            type="button"
             className={`${styles.pagination_btn} ${+(searchParams.get('page') || 1) === elem ? styles.active : ''}`}
             onClick={(e) => {
               e.stopPropagation();
               handleStateLoader(elem);
-              handleClickVisible(e);
             }}
           >
             {elem}
-          </NavLink>
+          </button>
         </li>
       ))}
     </div>

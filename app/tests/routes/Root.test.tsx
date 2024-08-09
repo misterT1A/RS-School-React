@@ -6,7 +6,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import '@testing-library/jest-dom';
 import { ThemeProvider } from '../../context';
-import Root from '../../routes/root/root';
+import Root from '../../routes/root/Home';
 import { deletePlanet } from '../../store/detailedSlice';
 import store from '../../store/store';
 

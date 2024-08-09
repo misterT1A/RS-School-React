@@ -1,5 +1,4 @@
 import { vitePlugin as remix } from '@remix-run/dev';
-import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
@@ -8,7 +7,6 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
     eslint(),
     viteStaticCopy({
       targets: [
@@ -19,7 +17,7 @@ export default defineConfig({
       ],
     }),
     remix({
-      ignoredRouteFiles: ['**/*.css', '**/*.scss'],
+      ignoredRouteFiles: ['**/*.css'],
     }),
     tsconfigPaths(),
   ],

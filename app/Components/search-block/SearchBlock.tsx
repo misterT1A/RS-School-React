@@ -1,27 +1,26 @@
 import { type ReactNode } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import styles from './_SearchBlock.module.scss';
 import { useSetToLS } from '../../hooks';
 import btnStyles from '../../UI/button/_button.module.scss';
 
 const SearchBlock = (): ReactNode => {
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [, setSearchValueLS] = useSetToLS('Task');
 
   const handleSearchSubmit = (event: React.FormEvent): void => {
     event.preventDefault();
     const form = event.currentTarget as HTMLFormElement;
-    const query = new FormData(form).get('q') as string;
+    const query = new FormData(form).get('query') as string;
     setSearchValueLS(() => query);
 
     setSearchParams((prevSearchParams) => {
       const updatedParams = new URLSearchParams(prevSearchParams);
-      updatedParams.set('q', query);
+      updatedParams.set('query', query);
       updatedParams.set('page', '1');
 
-      navigate(`/?${searchParams.toString()}`);
+      // navigate(`/?${searchParams.toString()}`);
       return updatedParams;
     });
   };
@@ -31,7 +30,7 @@ const SearchBlock = (): ReactNode => {
       <input
         id="input"
         type="search"
-        name="q"
+        name="query"
         placeholder="Search"
         className={styles.input}
         defaultValue={searchParams.get('q') || ''}
