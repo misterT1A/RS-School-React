@@ -40,20 +40,20 @@
 // export default PaginationBlock;
 
 import type { ReactElement } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './_Result-list.module.scss';
 import type { IPagination } from '../../types/resultListTypes';
 
 const PaginationBlock = ({ maxPage }: IPagination): ReactElement => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const handleStateLoader = (pageNumber: number): void => {
-    const newSearchParam = new URLSearchParams({
-      query: searchParams.get('query')?.toString() || '',
-      page: pageNumber.toString() || '1',
-    });
-    setSearchParams(() => newSearchParam);
+    const query = searchParams.get('query')?.toString() || '';
+    const page = pageNumber.toString() || '1';
+
+    navigate(`/?query=${query}&page=${page}`);
   };
 
   return (

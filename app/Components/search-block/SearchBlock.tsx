@@ -7,22 +7,23 @@ import btnStyles from '../../UI/button/_button.module.scss';
 
 const SearchBlock = (): ReactNode => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [, setSearchValueLS] = useSetToLS('Task');
+  const [value, setValue] = useSetToLS('Task');
 
   const handleSearchSubmit = (event: React.FormEvent): void => {
     event.preventDefault();
     const form = event.currentTarget as HTMLFormElement;
     const query = new FormData(form).get('query') as string;
-    setSearchValueLS(() => query);
 
-    setSearchParams((prevSearchParams) => {
-      const updatedParams = new URLSearchParams(prevSearchParams);
-      updatedParams.set('query', query);
-      updatedParams.set('page', '1');
+    const updatedParams = new URLSearchParams(searchParams);
+    updatedParams.set('query', query);
+    updatedParams.set('page', '1');
 
-      // navigate(`/?${searchParams.toString()}`);
-      return updatedParams;
-    });
+    if (searchParams.get('query') === query) {
+      return;
+    }
+    setSearchParams(() => updatedParams);
+
+    setValue(() => query);
   };
 
   return (
@@ -33,7 +34,7 @@ const SearchBlock = (): ReactNode => {
         name="query"
         placeholder="Search"
         className={styles.input}
-        defaultValue={searchParams.get('q') || ''}
+        defaultValue={searchParams.get('query') || value || ''}
       />
       <button className={btnStyles.button} type="submit">
         Search

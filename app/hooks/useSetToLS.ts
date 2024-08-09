@@ -1,21 +1,25 @@
-// import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-// function useSetToLS(key: string): readonly [string, React.Dispatch<React.SetStateAction<string>>] {
-//   const [value, setValue] = useState<string>(() => localStorage[key] || '');
+// const useSetToLS = (key: string): readonly [(value: string) => void, () => string | null] => {
+//   const setValue = (value: string): void => {
+//     if (typeof window !== 'undefined') {
+//       localStorage.setItem(key, value);
+//     }
+//   };
 
-//   useEffect(() => {
-//     localStorage[key] = value;
-//   }, [value, key]);
+//   const getValue = (): string | null => {
+//     if (typeof window !== 'undefined') {
+//       localStorage.getItem(key);
+//     }
+//     return null;
+//   };
 
-//   return [value, setValue] as const;
-// }
+//   return [setValue, getValue] as const;
+// };
 
 // export default useSetToLS;
 
-import { useEffect, useState } from 'react';
-
 function useSetToLS(key: string): readonly [string, React.Dispatch<React.SetStateAction<string>>] {
-  // Инициализируем значение из localStorage (если доступен window)
   const [value, setValue] = useState<string>(() => {
     if (typeof window !== 'undefined') {
       const item = localStorage.getItem(key);
@@ -25,7 +29,6 @@ function useSetToLS(key: string): readonly [string, React.Dispatch<React.SetStat
   });
 
   useEffect(() => {
-    // Обновляем значение в localStorage (если доступен window)
     if (typeof window !== 'undefined') {
       localStorage.setItem(key, value);
     }

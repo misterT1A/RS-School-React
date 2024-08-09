@@ -10,7 +10,7 @@ import PaginationBlock from './Components/result-list/Pagination';
 import ResultList from './Components/result-list/Result-list';
 import SearchBlock from './Components/search-block/SearchBlock';
 import ThemeTogler from './Components/theme-button/Theme-button';
-import useClassThemeToggler from './hooks/useClassThemTogler';
+import { useClassThemeToggler } from './hooks';
 import styles from './routes/root/_root.module.scss';
 import { getMaxPage } from './routes/root/root-helpers';
 import Wrapper from './routes/root/wrapper';
@@ -30,11 +30,8 @@ export const loader = async ({
   const url = new URL(request.url);
   const search = url.searchParams.get('query') || '';
   const page = search ? '1' : url.searchParams.get('page') || '1';
-  const response = await fetch(`https://swapi.dev/api/planets/?search=${search}&page=${page}`, {
-    cache: 'force-cache',
-  });
+  const response = await fetch(`https://swapi.dev/api/planets/?search=${search}&page=${page}`);
   const data: IResponse = await response.json();
-
   return json({ response: data });
 };
 
@@ -48,7 +45,6 @@ export const Layout = ({ children }: { children: ReactElement }): ReactElement =
     </head>
     <body>
       <Wrapper>{children}</Wrapper>
-
       <ScrollRestoration />
       <Scripts />
     </body>
@@ -73,9 +69,10 @@ const App = (): ReactElement => {
     if (
       !target.closest('#detailed') &&
       !target.closest('#planets') &&
-      !target.closest('#input') &&
+      !target.closest('#search-form') &&
       !target.closest('#flyout') &&
-      !target.closest('#themeTogler')
+      !target.closest('#themeTogler') &&
+      isDetailedVisible
     ) {
       const query = searchParams.get('query')?.toString() || '';
       const page = searchParams.get('page')?.toString() || '1';
@@ -111,7 +108,6 @@ const App = (): ReactElement => {
 
           <div className={styles.detailed_wrapper}>{isDetailedVisible && <Outlet />}</div>
         </main>
-
         <footer className={styles.footer}>
           {isLoading || <PaginationBlock maxPage={maxPage} />}
 
