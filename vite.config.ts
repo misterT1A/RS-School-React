@@ -1,7 +1,9 @@
+import { vitePlugin as remix } from '@remix-run/dev';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,6 +18,10 @@ export default defineConfig({
         },
       ],
     }),
+    remix({
+      ignoredRouteFiles: ['**/*.css', '**/*.scss'],
+    }),
+    tsconfigPaths(),
   ],
   resolve: {
     alias: [
@@ -30,9 +36,9 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: `
-        @import "./src/styles/_vars.scss";
-        @import "./src/styles/_mixins.scss";
-        @import "./src/styles/_globals.scss";
+        @import "./app/styles/_vars.scss";
+        @import "./app/styles/_mixins.scss";
+        @import "./app/styles/_globals.scss";
         `,
       },
     },
