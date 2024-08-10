@@ -1,98 +1,45 @@
+import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-
 import '@testing-library/jest-dom';
+import { useNavigate } from 'react-router-dom';
+
 import styles from '../../Components/result-list/_Result-list.module.scss';
 import PaginationBlock from '../../Components/result-list/Pagination';
 
+jest.mock('react-router-dom', () => ({
+  useNavigate: jest.fn().mockReturnValue(jest.fn()),
+  useSearchParams: jest.fn().mockReturnValue([new URLSearchParams({ query: 'test', page: '1' })]),
+}));
+
 describe('PaginationBlock', () => {
-  const mockState = { currentPage: 1, maxPage: 2 };
+  const navigate = useNavigate();
 
-  const mockSetState = jest.fn();
-  const mockSearchParams = new URLSearchParams('?q=test&page=1');
-  const mockHandleClickVisible = jest.fn();
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  const setup = (): RenderResult => render(<PaginationBlock maxPage={2} />);
 
   it('renders correct number of pagination links', () => {
-    render(
-      <MemoryRouter>
-        <PaginationBlock
-          state={mockState}
-          setState={mockSetState}
-          searchParams={mockSearchParams}
-          handleClickVisible={mockHandleClickVisible}
-        />
-      </MemoryRouter>,
-    );
+    setup();
 
     const paginationLinks = screen.getAllByRole('link');
 
-    expect(paginationLinks).toHaveLength(mockState.maxPage);
+    expect(paginationLinks).toHaveLength(2);
 
     paginationLinks.forEach((link, index) => {
       expect(link).toHaveTextContent(`${index + 1}`);
     });
   });
 
-  it('generates correct NavLink URLs', () => {
-    render(
-      <MemoryRouter>
-        <PaginationBlock
-          state={mockState}
-          setState={mockSetState}
-          searchParams={mockSearchParams}
-          handleClickVisible={mockHandleClickVisible}
-        />
-      </MemoryRouter>,
-    );
-
-    const paginationLinks = screen.getAllByRole('link');
-
-    paginationLinks.forEach((link, index) => {
-      expect(link).toHaveAttribute('href', `/?q=${mockSearchParams.get('q')}&page=${index + 1}`);
-    });
-  });
-
   it('calls handleStateLoader and handleClickVisible on NavLink click', () => {
-    render(
-      <MemoryRouter>
-        <PaginationBlock
-          state={mockState}
-          setState={mockSetState}
-          searchParams={mockSearchParams}
-          handleClickVisible={mockHandleClickVisible}
-        />
-      </MemoryRouter>,
-    );
+    setup();
 
     const paginationLink = screen.getAllByRole('link')[0];
 
     fireEvent.click(paginationLink);
 
-    expect(mockSetState).toHaveBeenCalled();
-
-    expect(mockHandleClickVisible).toHaveBeenCalled();
-
-    expect(paginationLink).toHaveAttribute(
-      'href',
-      `/?q=${mockSearchParams.get('q')}&page=${paginationLink.textContent}`,
-    );
+    expect(navigate).toHaveBeenCalled();
   });
 
   it('generates classname for nav link', () => {
-    render(
-      <MemoryRouter>
-        <PaginationBlock
-          state={mockState}
-          setState={mockSetState}
-          searchParams={mockSearchParams}
-          handleClickVisible={mockHandleClickVisible}
-        />
-      </MemoryRouter>,
-    );
+    setup();
 
     const paginationLink = screen.getAllByRole('link')[0];
     const paginationLink2 = screen.getAllByRole('link')[1];

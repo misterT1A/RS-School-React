@@ -1,78 +1,88 @@
-// import type { RenderResult } from '@testing-library/react';
-// import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-// import type { ReactNode } from 'react';
-// import { Provider } from 'react-redux';
-// import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { useLoaderData } from '@remix-run/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import type { ReactElement } from 'react';
+import { useLocation, useNavigate, useSearchParams, useNavigation } from 'react-router-dom';
 
-// import '@testing-library/jest-dom';
-// import { ThemeProvider } from '../../context';
-// import Root from '../../routes/root/Home';
-// import { deletePlanet } from '../../store/detailedSlice';
-// import store from '../../store/store';
+import App from '../../root';
+import type { IResponse } from '../../types/rootTypes';
 
-// jest.mock('../../UI/loader/loader', () => (): ReactNode => <div data-testid="loader">Loader</div>);
+jest.mock('@remix-run/react', () => ({
+  useLoaderData: jest.fn(),
+  useRouteError: jest.fn(),
+}));
 
-// describe('Root Component', () => {
-//   const spy = jest.spyOn(store, 'dispatch');
+jest.mock('react-router-dom', () => ({
+  useLocation: jest.fn(),
+  useSearchParams: jest.fn(),
+  useNavigate: jest.fn(),
+  useNavigation: jest.fn(),
+  Outlet: (): ReactElement => <div>Outlet</div>,
+  ScrollRestoration: (): ReactElement => <div>ScrollRestoration</div>,
+}));
 
-//   const renderRoot = (): RenderResult =>
-//     render(
-//       <Provider store={store}>
-//         <ThemeProvider>
-//           <MemoryRouter initialEntries={['/']}>
-//             <Routes>
-//               <Route path="/" element={<Root />} />
-//             </Routes>
-//           </MemoryRouter>
-//         </ThemeProvider>
-//       </Provider>,
-//     );
+jest.mock('../../hooks/index.ts', () => ({
+  useClassThemeToggler: jest.fn((defaultClass: string, darkClass: string) => `${defaultClass} ${darkClass}`),
+}));
 
-//   it('should render the title', () => {
-//     renderRoot();
-//     expect(screen.getByText(/Planet search/i)).toBeInTheDocument();
-//   });
+jest.mock('../../utils/root-helpers.ts', () => ({
+  getMaxPage: jest.fn().mockReturnValue(5),
+}));
 
-//   it('should display list of planets after data is fetched', async () => {
-//     renderRoot();
-//     expect(await screen.findByText(/test/i)).toBeInTheDocument();
-//   });
+jest.mock('../../Components/result-list/Result-list.tsx', () => (): ReactElement => <div>ResultList</div>);
+jest.mock('../../UI/loader/loader.tsx', () => (): ReactElement => <div>Loader</div>);
+jest.mock('../../Components/search-block/SearchBlock.tsx', () => (): ReactElement => <div>SearchBlock</div>);
+jest.mock('../../Components/theme-button/Theme-button.tsx', () => (): ReactElement => <div>ThemeTogler</div>);
+jest.mock('../../Components/flyout-panel/Flyout-panel.tsx', () => (): ReactElement => <div>FlyoutPanel</div>);
+jest.mock('../../Components/result-list/Pagination.tsx', () => (): ReactElement => <div>PaginationBlock</div>);
+jest.mock('../../Components/not-found-page/NotFoundPage.tsx', () => (): ReactElement => <div>NotFoundPage</div>);
+jest.mock('../../Components/ErrorBoundary/ErrorPage.tsx', () => (): ReactElement => <div>ErrorPage</div>);
 
-//   it('hides detailed view on Enter or Space keydown', async () => {
-//     renderRoot();
+describe('App Component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-//     const rootComponent = screen.getByTestId('rootComponent');
-//     rootComponent.focus();
-//     fireEvent.keyDown(rootComponent, { key: 'Enter' });
+  it('renders correctly and handles loading state', () => {
+    (useLoaderData as jest.Mock).mockReturnValue({ response: { results: [], count: 0 } });
+    (useNavigation as jest.Mock).mockReturnValue({ state: 'loading' });
+    (useSearchParams as jest.Mock).mockReturnValue([new URLSearchParams()]);
+    (useLocation as jest.Mock).mockReturnValue({ pathname: '/' });
 
-//     await waitFor(() => {
-//       expect(screen.queryByText('test')).toBeVisible();
-//     });
+    render(<App />);
 
-//     fireEvent.keyDown(rootComponent, { key: ' ' });
+    expect(screen.getByText('Planet search')).toBeInTheDocument();
+    expect(screen.getByText('Loader')).toBeInTheDocument();
+  });
 
-//     await waitFor(() => {
-//       expect(screen.queryByText('test')).toBeVisible();
-//     });
-//   });
+  it('displays results when not loading', async () => {
+    const mockResponse = { results: [{ name: 'Tatooine' }], count: 1 } as IResponse;
+    (useLoaderData as jest.Mock).mockReturnValue({ response: mockResponse });
+    (useNavigation as jest.Mock).mockReturnValue({ state: 'idle' });
+    (useSearchParams as jest.Mock).mockReturnValue([new URLSearchParams()]);
+    (useLocation as jest.Mock).mockReturnValue({ pathname: '/' });
 
-//   it('calls navigate and dispatch when clicking outside specific elements', () => {
-//     renderRoot();
+    render(<App />);
 
-//     const rootComponent = screen.getByTestId('rootComponent');
+    await waitFor(() => {
+      expect(screen.getByText('ResultList')).toBeInTheDocument();
+      expect(screen.queryByText('Loader')).not.toBeInTheDocument();
+    });
+  });
 
-//     fireEvent.click(rootComponent);
+  it('navigates away from detailed view when clicking outside', async () => {
+    const mockResponse = { results: [{ name: 'Tatooine' }], count: 1 } as IResponse;
+    (useLoaderData as jest.Mock).mockReturnValue({ response: mockResponse });
+    const navigate = jest.fn();
+    (useNavigate as jest.Mock).mockReturnValue(navigate);
+    (useSearchParams as jest.Mock).mockReturnValue([new URLSearchParams('query=test&page=1')]);
+    (useLocation as jest.Mock).mockReturnValue({ pathname: '/details/1' });
+    (useNavigation as jest.Mock).mockReturnValue({ state: 'idle' });
 
-//     expect(spy).toHaveBeenCalledWith(deletePlanet());
-//   });
+    render(<App />);
 
-//   it('does not call navigate and dispatch when clicking on specific elements', () => {
-//     renderRoot();
-
-//     fireEvent.click(screen.getByPlaceholderText('Search'));
-//     fireEvent.click(screen.getByText('0 items are selected'));
-//     fireEvent.click(screen.getByTestId('theme-toggle-button'));
-
-//     expect(spy).not.toHaveBeenCalledWith(deletePlanet());
-//   });
-// });
+    fireEvent.click(screen.getByTestId('rootComponent'));
+    await waitFor(() => {
+      expect(navigate).toHaveBeenCalledWith('/?query=test&page=1');
+    });
+  });
+});

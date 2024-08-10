@@ -1,111 +1,159 @@
-// import type { RenderResult } from '@testing-library/react';
-// import { fireEvent, render, screen } from '@testing-library/react';
-// import { Provider } from 'react-redux';
-// import { MemoryRouter } from 'react-router-dom';
+import type { RenderResult } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import type { ReactElement } from 'react';
+import { Provider } from 'react-redux';
+import '@testing-library/jest-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-// import styles from '../../Components/result-list/_Result-list.module.scss';
-// import ResultList from '../../Components/result-list/Result-list';
-// import '@testing-library/jest-dom';
-// import { getClassName } from '../../utils/result-list-helpers';
-// import { ThemeContext, ThemeEnum } from '../../context';
-// import { mockPlanet } from '../../mock/handlers';
-// import { addFavorite, deleteFavorite } from '../../store/favoriteSlice';
-// import store from '../../store/store';
-// import type { IPlanet } from '../../types/rootTypes';
+import styles from '../../components/result-list/_Result-list.module.scss';
+import PlanetElement from '../../Components/result-list/PlanetElement';
+import ResultList from '../../Components/result-list/Result-list';
+import { ThemeContext, ThemeEnum } from '../../context';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { mockPlanet } from '../../mock/handlers';
+import store from '../../store/store';
+import type { IPlanet } from '../../types/rootTypes';
 
-// describe('ResultList', () => {
-//   const planet1 = { ...mockPlanet, url: '/planets/1' };
-//   const planet2 = { ...mockPlanet, name: 'test', url: '/planets/2' };
-//   const planets = [planet1, planet2];
-//   const searchParams = new URLSearchParams();
-//   const isDetailedVisible = false;
-//   const setIsDetailedVisible = jest.fn();
+jest.mock('../../hooks', () => ({
+  useSearchUrl: jest.fn().mockReturnValue({ q: 'test', page: 1 }),
+}));
 
-//   const spy = jest.spyOn(store, 'dispatch');
+jest.mock('../../hooks', () => ({
+  useAppDispatch: jest.fn(),
+  useAppSelector: jest.fn(),
+}));
+jest.mock('react-router-dom', () => ({
+  useLocation: jest.fn().mockReturnValue({ pathname: '/details/1' }),
+  useNavigate: jest.fn().mockReturnValue(jest.fn()),
+  useSearchParams: jest.fn().mockReturnValue([new URLSearchParams({ query: 'ta', page: '1' })]),
+}));
 
-//   beforeEach(() => {
-//     jest.clearAllMocks();
-//   });
+describe('ResultList', () => {
+  const planet1 = { ...mockPlanet, url: '/planets/1/1/' };
+  const planet2 = { ...mockPlanet, name: 'test' };
+  const planets = [planet1, planet2];
+  const searchParams = { query: 'test', page: 1 };
+  let isDetailedVisible = false;
 
-//   const setup = (planetsArray: IPlanet[]): RenderResult =>
-//     render(
-//       <Provider store={store}>
-//         <MemoryRouter>
-//           <ThemeContext.Provider value={{ theme: ThemeEnum.Light, setTheme: jest.fn() }}>
-//             <ResultList
-//               planets={planetsArray}
-//               searchParams={searchParams}
-//               isDetailedVisible={isDetailedVisible}
-//               setIsDetailedVisible={setIsDetailedVisible}
-//             />
-//           </ThemeContext.Provider>
-//         </MemoryRouter>
-//       </Provider>,
-//     );
+  const mockDispatch = jest.fn();
 
-//   it('renders a list of planets', () => {
-//     setup(planets);
+  beforeEach(() => {
+    (useAppDispatch as jest.Mock).mockReturnValue(mockDispatch);
+    (useAppSelector as jest.Mock).mockReturnValue([]);
+  });
 
-//     expect(screen.getByText('Tatooine')).toBeInTheDocument();
-//     expect(screen.getByText('test')).toBeInTheDocument();
-//   });
+  const setup = (planetsArray: IPlanet[]): RenderResult =>
+    render(
+      <Provider store={store}>
+        <ThemeContext.Provider value={{ theme: ThemeEnum.Light, setTheme: jest.fn() }}>
+          <ResultList planets={planetsArray} searchParams={searchParams} isDetailedVisible={isDetailedVisible} />
+        </ThemeContext.Provider>
+      </Provider>,
+    );
 
-//   it('renders "No results" when no planets are provided', () => {
-//     setup([]);
+  it('renders a list of planets', () => {
+    setup(planets);
 
-//     expect(screen.getByText('No results')).toBeInTheDocument();
-//   });
+    expect(screen.getByText('Tatooine')).toBeInTheDocument();
+    expect(screen.getByText('test')).toBeInTheDocument();
+  });
 
-//   it('calls setIsDetailedVisible when a planet is clicked', () => {
-//     setup(planets);
+  it('renders "No results" when no planets are provided', () => {
+    setup([]);
 
-//     const planetLink = screen.getByText('Tatooine').closest('a') as HTMLAnchorElement;
-//     fireEvent.click(planetLink);
+    expect(screen.getByText('No results')).toBeInTheDocument();
+  });
 
-//     expect(setIsDetailedVisible).toHaveBeenCalledWith(true);
-//   });
+  it('changes classname for list when detailed is not show', () => {
+    setup(planets);
 
-//   it('dispatches addFavorite action when the favorite button is clicked', () => {
-//     setup(planets);
+    const ul = screen.getByText('Tatooine').closest('ul') as HTMLUListElement;
 
-//     const addFavoriteButton = screen.getAllByRole('button')[0];
-//     fireEvent.click(addFavoriteButton);
+    expect(ul).toHaveClass(styles.list_center);
+  });
 
-//     expect(store.getState().favorite.planets).toContainEqual(mockPlanet);
-//     expect(spy).toHaveBeenCalledWith(addFavorite(planet1));
-//   });
+  it('changes classname for list when detailed is show', () => {
+    isDetailedVisible = true;
+    setup(planets);
 
-//   it('dispatches deleteFavorite action when the favorite button is clicked', () => {
-//     store.dispatch(addFavorite(mockPlanet));
+    const ul = screen.getByText('Tatooine').closest('ul') as HTMLUListElement;
 
-//     setup(planets);
+    expect(ul).toHaveClass(styles.list_column);
+    isDetailedVisible = false;
+  });
+});
 
-//     const removeFavoriteButton = screen.getAllByRole('button')[0];
-//     fireEvent.click(removeFavoriteButton);
+jest.mock(
+  '../../Components/favorite-button/Favorite-button.tsx',
+  () => (): ReactElement => <button type="button">FavoriteButton</button>,
+);
 
-//     expect(store.getState().favorite.planets).not.toContainEqual(mockPlanet);
-//     expect(spy).toHaveBeenCalledWith(deleteFavorite(planet1));
-//   });
-// });
+describe('PlanetElement', () => {
+  const mockPush = jest.fn();
+  beforeEach(() => {
+    (useNavigate as jest.Mock).mockReturnValue(mockPush);
+    (useSearchParams as jest.Mock).mockReturnValue([new URLSearchParams({ query: 'earth', page: '1' })]);
+  });
 
-// describe('getClassName', () => {
-//   it('should return the correct class when isActive is true', () => {
-//     const className = getClassName({ isActive: true, isPending: false });
-//     expect(className).toBe(`${styles.list_item} ${styles.active}`);
-//   });
+  const planet = {
+    name: 'Tatooine',
+    url: 'https://swapi.dev/api/planets/1/',
+  } as IPlanet;
 
-//   it('should return the correct class when isPending is true', () => {
-//     const className = getClassName({ isActive: false, isPending: true });
-//     expect(className).toBe(`${styles.list_item} ${styles.pending}`);
-//   });
+  test('renders the planet name', () => {
+    render(<PlanetElement planet={planet} details="1" />);
 
-//   it('should return the default class when both isActive and isPending are false', () => {
-//     const className = getClassName({ isActive: false, isPending: false });
-//     expect(className).toBe(styles.list_item);
-//   });
+    expect(screen.getByText('Tatooine')).toBeInTheDocument();
+  });
 
-//   it('should prioritize isActive over isPending', () => {
-//     const className = getClassName({ isActive: true, isPending: true });
-//     expect(className).toBe(`${styles.list_item} ${styles.active}`);
-//   });
-// });
+  test('applies active class when the planet is selected', () => {
+    render(<PlanetElement planet={planet} details="1" />);
+
+    const planetElement = screen.getByText('Tatooine').closest('div');
+    expect(planetElement).toHaveClass('active');
+  });
+
+  test('does not apply active class when the planet is not selected', () => {
+    render(<PlanetElement planet={planet} details="2" />);
+
+    const planetElement = screen.getByText('Tatooine').closest('div');
+    expect(planetElement).not.toHaveClass('active');
+  });
+
+  test('pushes new search params when planet is clicked', () => {
+    render(<PlanetElement planet={planet} details="2" />);
+
+    const planetElement = screen.getByText('Tatooine').closest('div');
+    fireEvent.click(planetElement!);
+
+    expect(mockPush).toHaveBeenCalledWith('/details/1?query=earth&page=1');
+  });
+
+  test('renders the favorite button', () => {
+    render(<PlanetElement planet={planet} details="1" />);
+
+    expect(screen.getByText('FavoriteButton')).toBeInTheDocument();
+  });
+
+  test('renders the planet name with dark class when theme is dark', () => {
+    render(
+      <ThemeContext.Provider value={{ theme: ThemeEnum.Dark, setTheme: jest.fn() }}>
+        <PlanetElement planet={planet} details="1" />
+      </ThemeContext.Provider>,
+    );
+
+    const planetName = screen.getByText('Tatooine');
+    expect(planetName).toHaveClass('dark');
+  });
+
+  test('renders the planet name without dark class when theme is light', () => {
+    render(
+      <ThemeContext.Provider value={{ theme: ThemeEnum.Light, setTheme: jest.fn() }}>
+        <PlanetElement planet={planet} details="1" />
+      </ThemeContext.Provider>,
+    );
+
+    const planetName = screen.getByText('Tatooine');
+    expect(planetName).not.toHaveClass('dark');
+  });
+});

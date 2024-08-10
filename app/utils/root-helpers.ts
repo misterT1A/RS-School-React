@@ -1,4 +1,4 @@
-import { extractLastNumber } from './result-list-helpers';
+import extractLastNumber from './result-list-helpers';
 import type { IResponse } from '../types/rootTypes';
 
 const getCurrentPage = (data: IResponse): number => {

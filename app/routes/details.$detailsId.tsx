@@ -35,9 +35,9 @@ const DetailedBlock = (): ReactElement => {
     return <h2>No data</h2>;
   }
 
-  const filteredData = filterPlanet(planet);
   if (isLoading) return <Loader />;
 
+  const filteredData = filterPlanet(planet);
   return (
     <div id="detailed" className={styles.wrapper}>
       <ul className={styles.list}>

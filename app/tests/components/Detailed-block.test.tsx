@@ -1,84 +1,56 @@
-import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { MemoryRouter, Routes, Route, useOutletContext } from 'react-router-dom';
+import { useLoaderData, useNavigation } from '@remix-run/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import type { ReactElement } from 'react';
 
-import '@testing-library/jest-dom';
-import DetailedBlock from '../../Components/detailed-block/Detailed-block';
-import { ThemeProvider } from '../../context';
-import { mockPlanet } from '../../mock/handlers';
-import { addFavorite } from '../../store/favoriteSlice';
-import store from '../../store/store';
+import DetailedBlock from '../../routes/details.$detailsId';
 import type { IPlanet } from '../../types/rootTypes';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useOutletContext: jest.fn(),
+jest.mock('@remix-run/react', () => ({
+  useLoaderData: jest.fn(),
+  useNavigation: jest.fn(),
 }));
 
-const mockHandleClickVisible = jest.fn();
+jest.mock('../../utils/filterPlanet.ts', () => jest.fn().mockReturnValue([['Name', 'Tatooine']]));
 
-describe('DetailedBlock Component', () => {
-  const renderWithProviders = (ui: React.ReactElement): RenderResult =>
-    render(
-      <Provider store={store}>
-        <ThemeProvider>
-          <MemoryRouter initialEntries={['/planet/1']}>
-            <Routes>
-              <Route path="/planet/:productId" element={ui} />
-            </Routes>
-          </MemoryRouter>
-        </ThemeProvider>
-      </Provider>,
-    );
+jest.mock(
+  '../../Components/favorite-button/Favorite-button.tsx',
+  () => (): ReactElement => <button type="button">FavoriteButton</button>,
+);
 
+jest.mock('../..//UI/button/Close-button.tsx', () => (): ReactElement => <button type="button">closeButton</button>);
+
+describe('DetailedBlock', () => {
   beforeEach(() => {
-    (useOutletContext as jest.Mock).mockReturnValue({ handleClickVisible: mockHandleClickVisible });
+    jest.clearAllMocks();
   });
 
-  it('should display loading indicator', () => {
-    renderWithProviders(<DetailedBlock />);
+  it('displays loader when loading', () => {
+    (useNavigation as jest.Mock).mockReturnValue({ state: 'loading' });
+    (useLoaderData as jest.Mock).mockReturnValue({ planet: ['test'] });
+
+    render(<DetailedBlock />);
+
     expect(screen.getByTestId('loader')).toBeInTheDocument();
   });
 
-  it('should render the component', async () => {
-    renderWithProviders(<DetailedBlock />);
-    await waitFor(() => expect(screen.getByText('name: ------Tatooine')).toBeInTheDocument());
+  it('displays "No data" if planet data is not available', () => {
+    (useNavigation as jest.Mock).mockReturnValue({ state: 'idle' });
+    (useLoaderData as jest.Mock).mockReturnValue({ planet: null });
+
+    render(<DetailedBlock />);
+
+    expect(screen.getByText('No data')).toBeInTheDocument();
   });
 
-  it('renders product details correctly', async () => {
-    renderWithProviders(<DetailedBlock />);
-    const productKeys = Object.keys(mockPlanet).filter((key) => !['residents', 'films', 'url'].includes(key));
-    await waitFor(() =>
-      productKeys.forEach((key) => {
-        const valueElement = screen.getByText(new RegExp(`${key}: ------${mockPlanet[key as keyof IPlanet]}`, 'i'));
-        expect(valueElement).toBeInTheDocument();
-      }),
-    );
-  });
+  it('displays the planet details after loading', async () => {
+    const mockPlanet = { name: 'Tatooine', climate: 'arid', population: '200000' } as IPlanet;
+    (useNavigation as jest.Mock).mockReturnValue({ state: 'idle' });
+    (useLoaderData as jest.Mock).mockReturnValue({ planet: mockPlanet });
 
-  it('should add planet to favorites', async () => {
-    renderWithProviders(<DetailedBlock />);
-    await waitFor(() => expect(screen.getByText('name: ------Tatooine')));
-    const favoriteButton = screen.getByRole('button', { name: '☆' });
-    fireEvent.click(favoriteButton);
-    await waitFor(() => expect(favoriteButton).toHaveTextContent('★'));
-  });
+    render(<DetailedBlock />);
 
-  it('should remove planet from favorites', async () => {
-    store.dispatch(addFavorite(mockPlanet));
-    renderWithProviders(<DetailedBlock />);
-    await waitFor(() => expect(screen.getByText('name: ------Tatooine')));
-    const favoriteButton = screen.getByRole('button', { name: '★' });
-    fireEvent.click(favoriteButton);
-    await waitFor(() => expect(favoriteButton).toHaveTextContent('☆'));
-  });
-
-  it('should call handleClickVisible on close button click', async () => {
-    renderWithProviders(<DetailedBlock />);
-    await waitFor(() => expect(screen.getByText('name: ------Tatooine')));
-    const closeButton = screen.getByRole('button', { name: 'Close' });
-    fireEvent.click(closeButton);
-    expect(mockHandleClickVisible).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(screen.getByText('Name: ------Tatooine')).toBeInTheDocument();
+    });
   });
 });
