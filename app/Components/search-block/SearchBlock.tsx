@@ -1,12 +1,13 @@
 import { type ReactNode } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styles from './_SearchBlock.module.scss';
 import { useSetToLS } from '../../hooks';
 import btnStyles from '../../UI/button/_button.module.scss';
 
 const SearchBlock = (): ReactNode => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [value, setValue] = useSetToLS('Task');
 
   const handleSearchSubmit = (event: React.FormEvent): void => {
@@ -14,15 +15,11 @@ const SearchBlock = (): ReactNode => {
     const form = event.currentTarget as HTMLFormElement;
     const query = new FormData(form).get('query') as string;
 
-    const updatedParams = new URLSearchParams(searchParams);
-    updatedParams.set('query', query);
-    updatedParams.set('page', '1');
-
     if (searchParams.get('query') === query) {
       return;
     }
-    setSearchParams(() => updatedParams);
 
+    navigate(`/?query=${query}&page=1`);
     setValue(() => query);
   };
 

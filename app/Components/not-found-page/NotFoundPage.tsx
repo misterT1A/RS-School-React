@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import styles from '../../Components/ErrorBoundary/_Error-page.module.scss';
 import btnStyles from '../../UI/button/_button.module.scss';
+import styles from '../ErrorBoundary/_Error-page.module.scss';
 
 const NotFoundPage = (): ReactNode => {
   const navigate = useNavigate();

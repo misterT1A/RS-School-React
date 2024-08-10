@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
-import NotFoundPage from '../../routes/not-found-page/NotFoundPage';
+import NotFoundPage from '../../Components/not-found-page/NotFoundPage';
 
 describe('NotFoundPage', () => {
   test('renders 404 message', () => {

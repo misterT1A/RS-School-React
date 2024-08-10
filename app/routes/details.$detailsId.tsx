@@ -4,10 +4,10 @@ import { useLoaderData, useNavigation } from '@remix-run/react';
 import type { ReactElement } from 'react';
 import type { LoaderFunctionArgs } from 'react-router-dom';
 
-import styles from '../Components/detailed-block/_Detailed-block.module.scss';
-import CloseButton from '../Components/detailed-block/Close-button';
 import FavoriteButton from '../Components/favorite-button/Favorite-button';
+import styles from '../styles/_Detailed-block.module.scss';
 import type { IPlanet } from '../types/rootTypes';
+import CloseButton from '../UI/button/Close-button';
 import Loader from '../UI/loader/loader';
 import filterPlanet from '../utils/filterPlanet';
 

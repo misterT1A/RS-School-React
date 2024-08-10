@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import btnStyles from '../../UI/button/_button.module.scss';
+import btnStyles from './_button.module.scss';
 
 const CloseButton = (): ReactElement => {
   const navigate = useNavigate();

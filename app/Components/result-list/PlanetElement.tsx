@@ -2,9 +2,9 @@ import { useNavigate, useSearchParams } from '@remix-run/react';
 import type { ReactElement } from 'react';
 
 import styles from './_Result-list.module.scss';
-import { extractLastNumber } from './result-list-helpers';
 import useClassThemeToggler from '../../hooks/useClassThemTogler';
 import type { IPlanet } from '../../types/rootTypes';
+import { extractLastNumber } from '../../utils/result-list-helpers';
 import FavoriteButton from '../favorite-button/Favorite-button';
 
 const PlanetElement = ({ planet, details }: { planet: IPlanet; details: string }): ReactElement => {
