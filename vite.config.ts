@@ -1,20 +1,17 @@
-import react from '@vitejs/plugin-react';
+import { vitePlugin as remix } from '@remix-run/dev';
 import { defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
     eslint(),
-    viteStaticCopy({
-      targets: [
-        {
-          src: 'netlify.toml',
-          dest: '',
-        },
-      ],
+    remix({
+      ignoredRouteFiles: ['**/*.css'],
+      future: {
+        v3_fetcherPersist: true,
+        v3_relativeSplatPath: true,
+        v3_throwAbortReason: true,
+      },
     }),
   ],
   resolve: {
@@ -30,9 +27,9 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: `
-        @import "./src/styles/_vars.scss";
-        @import "./src/styles/_mixins.scss";
-        @import "./src/styles/_globals.scss";
+        @import "./app/styles/_vars.scss";
+        @import "./app/styles/_mixins.scss";
+        @import "./app/styles/_globals.scss";
         `,
       },
     },

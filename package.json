@@ -1,5 +1,7 @@
 {
   "name": "app",
+  "private": true,
+  "sideEffects": false,
   "description": "",
   "version": "1.0.0",
   "type": "module",
@@ -8,8 +10,9 @@
     "name": "Artem Taraskin"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "remix vite:build",
+    "dev": "remix vite:dev",
+    "start": "remix-serve build/server/index.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "format:fix": "prettier .  --write",
@@ -28,6 +31,10 @@
     ]
   },
   "dependencies": {
+    "@remix-run/node": "^2.11.1",
+    "@remix-run/react": "^2.11.1",
+    "@remix-run/serve": "^2.11.1",
+    "isbot": "^4.1.0",
     "@reduxjs/toolkit": "^2.2.6",
     "classnames": "^2.5.1",
     "react": "^18.2.0",
@@ -36,6 +43,7 @@
     "react-router-dom": "^6.24.0"
   },
   "devDependencies": {
+    "@remix-run/dev": "^2.11.1",
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
     "@jest/globals": "^29.7.0",
@@ -77,8 +85,12 @@
     "typescript": "^5.3.3",
     "util": "^0.12.5",
     "vite": "^5.0.0",
+    "vite-tsconfig-paths": "^4.3.1",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-static-copy": "^1.0.6",
     "whatwg-fetch": "^3.6.20"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }

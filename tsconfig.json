@@ -5,7 +5,6 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "esModuleInterop": true,
@@ -13,20 +12,28 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["@testing-library/jest-dom"],
-    /* Absolute Imports */
+    "types": ["@remix-run/node", "vite/client", "@testing-library/jest-dom"],
     "baseUrl": "./",
     "paths": {
-      "@/Assets/*": ["*", "src/Assets/*"],
-      "@/Components/*": ["*", "src/Components/*"]
+      "@/Assets/*": ["*", "app/Assets/*"],
+      "@/Components/*": ["*", "app/Components/*"]
     }
   },
-  "include": ["src", "vite.config.ts", "jest.config.cjs"],
+  "include": [
+    "app",
+    "vite.config.ts",
+    "jest.config.cjs",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/.server/**/*.ts",
+    "**/.server/**/*.tsx",
+    "**/.client/**/*.ts",
+    "**/.client/**/*.tsx"
+  ],
   "references": [
     {
       "path": "./tsconfig.node.json"
