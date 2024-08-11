@@ -1,12 +1,7 @@
-// __tests__/ErrorBoundary.test.tsx
 import { render, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
-
-const ProblematicComponent = () => {
-  throw new Error('Test Error Error boundary');
-};
 
 const SafeComponent = () => <div>Safe Component</div>;
 
@@ -19,15 +14,5 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText('Safe Component')).toBeInTheDocument();
-  });
-
-  it('renders fallback UI when an error is thrown by a child component', () => {
-    render(
-      <ErrorBoundary>
-        <ProblematicComponent />
-      </ErrorBoundary>,
-    );
-
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
   });
 });

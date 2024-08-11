@@ -44,7 +44,7 @@ const ResultList = ({
         <nav className={styles.wrapper_load}>
           <ul className={isDetailedVisible ? styles.list_column : styles.list_center}>
             {planets.map((elem) => (
-              <li id="planets" key={elem.url}>
+              <li id="planets" key={elem.name}>
                 <div
                   className={
                     details === extractLastNumber(elem.url ? elem.url : '')
