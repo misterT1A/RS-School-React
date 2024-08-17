@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: $main_background_color;
+  font-weight: 400;
+  font-size: 14px;
+  width: 100%;
+  min-height: 100vh;
+  @include flex(center, flex-start, column);
+}
+
+main {
+  width: 100%;
+  flex: 1;
+  @include flex(center, center, column);
+  background-color: rgb(138, 138, 138);
+}
+
+#root {
+  max-width: 1200px;
+  width: 100%;
+  flex: 1;
+  @include flex(center, flex-start, column);
+  gap: 10px;
+}
