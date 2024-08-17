@@ -1,9 +1,6 @@
 .wrapper {
   @include flex(center, flex-start, column);
-  background-color: #323437;
-  border: 2px solid #646669;
-  border-radius: 10px;
-  color: #d1d0c5;
+  background-color: bisque;
   padding: 5px;
   border: 1px solid black;
 }
@@ -86,7 +83,7 @@
   top: 100%;
   left: 0;
   z-index: 1;
-  color: #e2b714;
+  color: red;
   font-size: 15px;
   text-align: center;
 }

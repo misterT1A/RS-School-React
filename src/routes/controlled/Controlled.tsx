@@ -3,32 +3,15 @@ import type { ReactElement } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { Controller, useForm, useFormState } from 'react-hook-form';
 
-import PassStrength from './Pass-strength';
 import SelectCountries from './Select-countries';
 import { useAppDispatch } from '../../hooks';
 import { addControlledForm } from '../../store/controlledSlice';
 import styles from '../../styles/form.module.scss';
+import type { IFormValues } from '../../types/formTypes';
 import stylesBtn from '../../UI/button/_button.module.scss';
+import { PassStrength } from '../../UI/Pass-strength';
+import convertToBase64 from '../../utils/convertToBase64';
 import validationSchema from '../../utils/validation';
-
-export interface IFormValues {
-  name: string;
-  age: string;
-  pass: string;
-  confirmPass: string;
-  gender: string;
-  agreement: boolean;
-  image: FileList;
-  country: string;
-}
-
-const convertToBase64 = (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (): void => resolve(reader.result as string);
-    reader.onerror = (error): void => reject(error);
-  });
 
 const Controlled = (): ReactElement => {
   const dispatch = useAppDispatch();
