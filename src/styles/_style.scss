@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@400;700&display=swap');
 
 body {
-  font-family: 'Roboto', sans-serif;
-  background-color: $main_background_color;
+  font-family: 'Roboto mono', sans-serif;
+  background-color: #242424;
   font-weight: 400;
   font-size: 14px;
   width: 100%;
@@ -14,11 +14,11 @@ main {
   width: 100%;
   flex: 1;
   @include flex(center, center, column);
-  background-color: rgb(138, 138, 138);
 }
 
 #root {
-  max-width: 1200px;
+  padding: 0 5px;
+  max-width: 800px;
   width: 100%;
   flex: 1;
   @include flex(center, flex-start, column);

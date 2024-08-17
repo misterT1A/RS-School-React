@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import ErrorPage from './Components/ErrorBoundary/ErrorPage';
 import Layout from './Components/layout/Layout';
+import Controlled from './routes/controlled/Controlled';
 import NotFoundPage from './routes/not-found-page/NotFoundPage';
 import Root from './routes/root/root';
 import store from './store/store';
@@ -19,6 +20,11 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Root />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: '/controlled',
+        element: <Controlled />,
         errorElement: <ErrorPage />,
       },
     ],

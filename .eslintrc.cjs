@@ -26,8 +26,8 @@ module.exports = {
       },
     ],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
-    '@typescript-eslint/consistent-type-exports': 'error', // Ensures consistent use of type exports
-    '@typescript-eslint/consistent-type-imports': 'error', // Enforces consistent style for importing types
+    '@typescript-eslint/consistent-type-exports': 'error',
+    '@typescript-eslint/consistent-type-imports': 'error',
     'no-underscore-dangle': 'off',
     '@typescript-eslint/explicit-function-return-type': 'error',
     'react/prefer-stateless-function': 'off',
@@ -62,7 +62,6 @@ module.exports = {
       },
     ],
     'import/order': [
-      // Enforces a consistent order for import declarations
       'error',
       {
         groups: ['builtin', 'external', 'internal', ['sibling', 'parent'], 'index', 'unknown'],
@@ -74,19 +73,23 @@ module.exports = {
       },
     ],
     '@typescript-eslint/naming-convention': [
-      // Enforces naming conventions for variables and interfaces
       'error',
       {
         selector: 'variable',
         types: ['boolean'],
         format: ['PascalCase'],
-        prefix: ['is', 'should', 'has', 'can', 'did', 'will'], // Allows specific prefixes for boolean variables
+        prefix: ['is', 'should', 'has', 'can', 'did', 'will'],
       },
       {
         selector: 'interface',
         format: ['PascalCase'],
-        prefix: ['I'], // Requires interfaces to start with 'I'
+        prefix: ['I'],
       },
     ],
+    'jsx-a11y/no-static-element-interactions': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
+    'jsx-a11y/interactive-supports-focus': 'off',
+    'jsx-a11y/no-noninteractive-element-interactions': 'off',
+    'react/jsx-props-no-spreading': 'off',
   },
 };
