@@ -1,0 +1,121 @@
+.wrapper {
+  @include flex(center, flex-start, column);
+  background-color: #323437;
+  border: 2px solid #646669;
+  border-radius: 10px;
+  color: #d1d0c5;
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.form {
+  @include flex(center, flex-start, column);
+  gap: 30px;
+  font-size: 20px;
+}
+
+.text_label {
+  width: 80%;
+  position: relative;
+  text-align: center;
+  @include flex(center, flex-start, column);
+  gap: 5px;
+
+  & input {
+    width: 100%;
+  }
+}
+
+.countries {
+  position: relative;
+}
+
+.dropdown_list {
+  width: 100%;
+  max-height: 500%;
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  z-index: 2;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: white;
+  overflow: auto;
+}
+
+.dropdown_item {
+  cursor: pointer;
+  color: #646669;
+
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgb(177, 177, 177);
+  }
+
+  &:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+}
+
+.search_input {
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.input {
+  padding: 3px;
+  font-size: 15px;
+}
+
+.gender_wrapper {
+  position: relative;
+  width: 80%;
+  display: grid;
+  grid-template-columns: 2;
+  grid-template-rows: 2;
+}
+
+.gender_title {
+  grid-column: span 2;
+  text-align: center;
+}
+
+.error {
+  width: 100%;
+  position: absolute;
+  top: 101%;
+  left: 0;
+  z-index: 1;
+  color: #e2b714;
+  font-size: 15px;
+  text-align: center;
+}
+
+.pass_indicator_wrapper {
+  width: 100%;
+  height: 10px;
+  @include flex(center, flex-start, row);
+}
+
+.pass_indicator_item {
+  width: 25%;
+  height: 10px;
+}
+
+.pass_indicator_red {
+  background-color: red;
+}
+
+.pass_indicator_orange {
+  background-color: orange;
+}
+
+.pass_indicator_yellow {
+  background-color: yellow;
+}
+
+.pass_indicator_green {
+  background-color: green;
+}

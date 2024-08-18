@@ -1,0 +1,9 @@
+.wrapper {
+  @include flex(center, center, column);
+  gap: 30px;
+}
+
+.title {
+  font-size: 30px;
+  color: #fff;
+}

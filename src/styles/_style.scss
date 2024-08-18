@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@400;700&display=swap');
+
+body {
+  font-family: 'Roboto mono', sans-serif;
+  background-color: #2c2e31;
+  font-weight: 400;
+  font-size: 14px;
+  width: 100%;
+  min-height: 100vh;
+  @include flex(center, flex-start, column);
+}
+
+main {
+  width: 100%;
+  flex: 1;
+  @include flex(center, center, column);
+}
+
+#root {
+  padding: 0 5px;
+  max-width: 800px;
+  width: 100%;
+  flex: 1;
+  @include flex(center, flex-start, column);
+  gap: 10px;
+}
