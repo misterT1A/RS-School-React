@@ -24,6 +24,7 @@ const Controlled = (): ReactElement => {
     defaultValues: {
       name: '',
       age: '',
+      email: '',
       pass: '',
       confirmPass: '',
       gender: '',
@@ -59,6 +60,11 @@ const Controlled = (): ReactElement => {
           Age
           <input {...register('age')} className={styles.input} type="text" />
           {errors.age && <p className={styles.error}>{errors.age.message}</p>}
+        </label>
+        <label className={styles.text_label} htmlFor="email">
+          Email
+          <input {...register('email')} className={styles.input} type="email" />
+          {errors.email && <p className={styles.error}>{errors.email.message}</p>}
         </label>
         <label className={styles.text_label} htmlFor="pass">
           Password

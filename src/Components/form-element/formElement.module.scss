@@ -8,6 +8,7 @@
   border: 2px solid #e2b714;
   border-radius: 10px;
   @include flex(center, flex-start, column);
+  overflow: hidden;
 
   &:last-child {
     border-color: red;

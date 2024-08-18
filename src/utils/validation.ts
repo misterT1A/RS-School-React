@@ -36,6 +36,7 @@ const validationSchema = Yup.object({
       const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
       return !Number.isNaN(parsedValue) && parsedValue > 0 && Number.isInteger(parsedValue) && !hasSpecialChar;
     }),
+  email: Yup.string().email('Invalid email address').required('Email is required'),
   pass: Yup.string()
     .required('Password is required')
     .test('strength', 'Password is too weak', (value) => {

@@ -28,6 +28,7 @@ const Uncontrolled = (): ReactElement => {
     const formValues = {
       name: (formData.get('name') as string) || '',
       age: (formData.get('age') as string) || '',
+      email: (formData.get('email') as string) || '',
       pass: (formData.get('pass') as string) || '',
       confirmPass: (formData.get('confirmPass') as string) || '',
       gender: (formData.get('gender') as string) || '',
@@ -69,6 +70,11 @@ const Uncontrolled = (): ReactElement => {
           Age
           <input className={styles.input} type="text" name="age" />
           {errors.age && <p className={styles.error}>{errors.age}</p>}
+        </label>
+        <label className={styles.text_label} htmlFor="email">
+          Email
+          <input className={styles.input} type="text" name="email" />
+          {errors.email && <p className={styles.error}>{errors.email}</p>}
         </label>
         <label className={styles.text_label} htmlFor="pass">
           Password
