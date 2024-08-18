@@ -1,4 +1,5 @@
 export interface IForm {
+  id: string;
   form: string;
   name: string;
   age: string;

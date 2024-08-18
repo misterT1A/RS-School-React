@@ -1,9 +1,10 @@
 import { useRef, useState, type ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import SelectCountries from './Select-countries';
 import { useAppDispatch } from '../../hooks';
-import { addForm } from '../../store/controlledSlice';
+import { addForm } from '../../store/formsSlice';
 import styles from '../../styles/form.module.scss';
 import stylesBtn from '../../UI/button/_button.module.scss';
 import { PassStrengthWithRef } from '../../UI/Pass-strength';
@@ -13,6 +14,7 @@ import validationSchema from '../../utils/validation';
 const Uncontrolled = (): ReactElement => {
   const formRef = useRef<HTMLFormElement>(null);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -37,10 +39,11 @@ const Uncontrolled = (): ReactElement => {
     try {
       await validationSchema.validate(formValues, { abortEarly: false });
       const base64 = await convertToBase64(file);
-      const NewValues = { form: 'Uncontrolled form', ...formValues, image: base64 };
+      const NewValues = { id: crypto.randomUUID(), form: 'Uncontrolled form', ...formValues, image: base64 };
 
       dispatch(addForm(NewValues));
       setErrors({});
+      navigate('/');
     } catch (validationErrors) {
       if (validationErrors instanceof Yup.ValidationError) {
         const validationErrorsObject: Record<string, string> = {};

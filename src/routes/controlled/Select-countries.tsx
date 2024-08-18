@@ -2,9 +2,9 @@ import { useState, type FC, type ReactElement } from 'react';
 import type { FieldErrors } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
-import type { IFormValues } from './Controlled';
 import type { RootState } from '../../store/store';
 import styles from '../../styles/form.module.scss';
+import type { IFormValues } from '../../types/formTypes';
 
 interface IProps {
   onChange: (value: string) => void;

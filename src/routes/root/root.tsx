@@ -9,11 +9,15 @@ const Root = (): ReactElement => {
   const forms = useSelector((state: RootState) => state.forms.forms);
   return (
     <section className={styles.wrapper}>
-      <ul className={styles.list}>
-        {forms.map((form) => (
-          <FormElement form={form} />
-        ))}
-      </ul>
+      {forms.length ? (
+        <ul className={styles.list}>
+          {forms.map((form) => (
+            <FormElement form={form} key={form.id} />
+          ))}
+        </ul>
+      ) : (
+        <p className={styles.title}>No Forms</p>
+      )}
     </section>
   );
 };

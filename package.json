@@ -15,7 +15,6 @@
     "format:fix": "prettier .  --write",
     "preview": "vite preview",
     "test": "jest --config ./jest.config.cjs",
-    "deploy": "npm run build && npx gh-pages -d dist -e class-components",
     "prepare": "husky install"
   },
   "lint-staged": {

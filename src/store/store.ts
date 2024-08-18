@@ -1,13 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
-import formsReducer from './controlledSlice';
 import countriesReducer from './countriesSlice';
-// import uncontrolledReducer from './uncontrolledSlice';
+import formsReducer from './formsSlice';
 
 const store = configureStore({
   reducer: {
-    // uncontrolled: uncontrolledReducer,
     forms: formsReducer,
     countries: countriesReducer,
   },

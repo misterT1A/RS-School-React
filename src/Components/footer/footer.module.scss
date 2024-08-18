@@ -4,4 +4,15 @@
   padding: 10px;
   background-color: #e2b714;
   border-radius: 10px;
+  @include flex(flex-start, space-between, row);
+
+  & img {
+    width: 50px;
+    height: auto;
+  }
+
+  & span {
+    @include flex(center, center, row);
+    color: #646669;
+  }
 }

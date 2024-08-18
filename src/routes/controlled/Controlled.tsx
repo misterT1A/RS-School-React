@@ -2,10 +2,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import type { ReactElement } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { Controller, useForm, useFormState } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import SelectCountries from './Select-countries';
 import { useAppDispatch } from '../../hooks';
-import { addForm } from '../../store/controlledSlice';
+import { addForm } from '../../store/formsSlice';
 import styles from '../../styles/form.module.scss';
 import type { IFormValues } from '../../types/formTypes';
 import stylesBtn from '../../UI/button/_button.module.scss';
@@ -14,6 +15,7 @@ import convertToBase64 from '../../utils/convertToBase64';
 import validationSchema from '../../utils/validation';
 
 const Controlled = (): ReactElement => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const { control, register, handleSubmit, reset } = useForm<IFormValues>({
@@ -38,10 +40,11 @@ const Controlled = (): ReactElement => {
     const file = data.image[0];
     if (file) {
       const base64 = await convertToBase64(file);
-      const newData = { form: 'Controlled form', ...data, image: base64 };
+      const newData = { id: crypto.randomUUID(), form: 'Controlled form', ...data, image: base64 };
       dispatch(addForm(newData));
     }
     reset();
+    navigate('/');
   };
 
   return (
