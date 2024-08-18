@@ -1,29 +1,19 @@
-import { type ReactNode } from 'react';
+import type { ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
-import styles from './_root.module.scss';
+import FormElement from '../../Components/form-element/FormElement';
 import type { RootState } from '../../store/store';
+import styles from '../../styles/_root.module.scss';
 
-const Root = (): ReactNode => {
-  const controlledForms = useSelector((state: RootState) => state.controlled.forms);
+const Root = (): ReactElement => {
+  const forms = useSelector((state: RootState) => state.forms.forms);
   return (
     <section className={styles.wrapper}>
-      <ul className={styles.left_block}>
-        {controlledForms.map((form) => (
-          <li key={form.name}>
-            {Object.entries(form).map(([key, value]) =>
-              key === 'image' ? (
-                <img src={value} alt="pict" />
-              ) : (
-                <p>
-                  {key} ..... {value}
-                </p>
-              ),
-            )}
-          </li>
+      <ul className={styles.list}>
+        {forms.map((form) => (
+          <FormElement form={form} />
         ))}
       </ul>
-      <ul className={styles.right_block} />
     </section>
   );
 };

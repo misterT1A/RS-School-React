@@ -1,20 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
-interface IForm {
-  name: string;
-  age: string;
-  pass: string;
-  confirmPass: string;
-  gender: string;
-  agreement: boolean;
-  image: string;
-  country: string;
-}
-
-interface IInitialState {
-  forms: IForm[];
-}
+import type { IForm, IInitialState } from '../types/storeTypes';
 
 const initialState: IInitialState = {
   forms: [],

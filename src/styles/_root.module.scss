@@ -1,0 +1,35 @@
+.wrapper {
+  padding: 10px;
+  flex: 1;
+  width: 100%;
+  background-color: #323437;
+  border: 2px solid #646669;
+  border-radius: 10px;
+  // @include flex(flex-start, center, row);
+  // display: flex;
+  // flex-direction: row;
+  // gap: 10px;
+  // flex-wrap: wrap;
+  // display: grid;
+  // grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  // gap: 10px; /* Расстояние между элементами */
+}
+
+.list {
+  width: 100%;
+  @include flex(flex-start, center, row);
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.left_block,
+.right_block {
+  flex: 1;
+  width: 50%;
+  padding: 10px;
+
+  // & img {
+  //   width: 100px;
+  //   height: auto;
+  // }
+}

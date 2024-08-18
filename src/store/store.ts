@@ -1,14 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
-import controlledReducer from './controlledSlice';
+import formsReducer from './controlledSlice';
 import countriesReducer from './countriesSlice';
-import uncontrolledReducer from './uncontrolledSlice';
+// import uncontrolledReducer from './uncontrolledSlice';
 
 const store = configureStore({
   reducer: {
-    uncontrolled: uncontrolledReducer,
-    controlled: controlledReducer,
+    // uncontrolled: uncontrolledReducer,
+    forms: formsReducer,
     countries: countriesReducer,
   },
 });

@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 
 import SelectCountries from './Select-countries';
 import { useAppDispatch } from '../../hooks';
-import { addUncontrolledForm } from '../../store/uncontrolledSlice';
+import { addForm } from '../../store/controlledSlice';
 import styles from '../../styles/form.module.scss';
 import stylesBtn from '../../UI/button/_button.module.scss';
 import { PassStrengthWithRef } from '../../UI/Pass-strength';
@@ -37,9 +37,9 @@ const Uncontrolled = (): ReactElement => {
     try {
       await validationSchema.validate(formValues, { abortEarly: false });
       const base64 = await convertToBase64(file);
-      const NewValues = { ...formValues, image: base64 };
+      const NewValues = { form: 'Uncontrolled form', ...formValues, image: base64 };
 
-      dispatch(addUncontrolledForm(NewValues));
+      dispatch(addForm(NewValues));
       setErrors({});
     } catch (validationErrors) {
       if (validationErrors instanceof Yup.ValidationError) {

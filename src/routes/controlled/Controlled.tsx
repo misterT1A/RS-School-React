@@ -5,7 +5,7 @@ import { Controller, useForm, useFormState } from 'react-hook-form';
 
 import SelectCountries from './Select-countries';
 import { useAppDispatch } from '../../hooks';
-import { addControlledForm } from '../../store/controlledSlice';
+import { addForm } from '../../store/controlledSlice';
 import styles from '../../styles/form.module.scss';
 import type { IFormValues } from '../../types/formTypes';
 import stylesBtn from '../../UI/button/_button.module.scss';
@@ -38,8 +38,8 @@ const Controlled = (): ReactElement => {
     const file = data.image[0];
     if (file) {
       const base64 = await convertToBase64(file);
-      const newData = { ...data, image: base64 };
-      dispatch(addControlledForm(newData));
+      const newData = { form: 'Controlled form', ...data, image: base64 };
+      dispatch(addForm(newData));
     }
     reset();
   };
